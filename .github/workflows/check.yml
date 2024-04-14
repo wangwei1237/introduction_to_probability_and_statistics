@@ -1,0 +1,30 @@
+name: Build Book
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    env:
+      MY_SECRET   : ${{secrets.GH_ACCESS_TOKEN}}
+
+    steps:
+      - name: Setup Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.3.450
+      - name: Checkout main source
+        uses: actions/checkout@v4
+      - name: Install Quarto Extensions
+        working-directory: ${{ github.workspace }}
+        run: |
+          quarto add --no-prompt quarto-ext/include-code-files
+          quarto install --no-prompt tinytex
+      - name: Render and Publish
+        run: | 
+          quarto render

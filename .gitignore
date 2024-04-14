@@ -1,0 +1,13 @@
+# Prerequisites
+*.d
+.DS_Store
+
+# prj configuration
+.vscode
+
+#build temp
+public/*
+_book/*
+
+/.quarto/
+_extensions/*

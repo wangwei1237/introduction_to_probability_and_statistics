@@ -1,0 +1,58 @@
+project:
+  type: book
+  output-dir: public
+
+lang: zh
+
+book:
+  title: "Introduction to Probability and Statistics for Engineers and Scientists"
+  author: "Sheldon M. Ross"
+  reviewed-author: "Wang Wei"
+  open-graph: true
+  date: today
+  date-format: "YYYY-MM-DD"
+  cover-image: cover.png
+  repo-url: https://github.com/wangwei1237/introduction_to_probability_and_statistics
+  repo-actions: [edit, issue]
+  search: true
+  page-footer: Copyright Wang Wei. All Rights Reserved.
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - chapter_1/1.qmd
+    - references.qmd
+  site-url: https://wangwei1237.github.io/introduction_to_probability_and_statistics/
+  navbar:
+    search: true
+    left:
+      - text: "博客"
+        icon: "house-fill"
+        href: "https://wangwei1237.github.io/"
+      - text: "书籍"
+        icon: "bookshelf"
+        menu: 
+          - text: "动手学深度学习"
+            href: "https://zh.d2l.ai/"
+          - text: "Learn Prompting"
+            href: "https://learnprompting.org/zh-Hans/docs/intro"
+          - text: "Stabel Diffusion 提示词手册"
+            href: "https://pan.baidu.com/s/1dciwgbhO-lfKyRo8lOqW9Q?pwd=cm9q"
+      - text: "关于"
+        icon: "person-badge-fill"
+        href: "https://wangwei1237.github.io/aboutme/"
+
+bibliography: references.bib
+csl: acm-sig-proceedings.csl
+
+format:
+  html:
+    theme: 
+      light: [cosmo, theme.scss]
+    code-copy: true
+    code-overflow: wrap
+    cover-image: cover.png
+
+comments:
+  utterances:
+    repo: wangwei1237/introduction_to_probability_and_statistics
+    label: comment
