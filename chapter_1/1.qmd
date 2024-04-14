@@ -1,5 +1,13 @@
-# test
+# 统计学简介
 
 {{< include 1_1.qmd >}}
 
 {{< include 1_2.qmd >}}
+
+{{< include 1_3.qmd >}}
+
+{{< include 1_4.qmd >}}
+
+{{< include 1_5.qmd >}}
+
+## 问题 {.unnumbered}
