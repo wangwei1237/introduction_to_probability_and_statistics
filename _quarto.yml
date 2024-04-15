@@ -6,8 +6,8 @@ lang: zh
 
 book:
   title: "Introduction to Probability and Statistics for Engineers and Scientists"
-  author: "Sheldon M. Ross"
-  reviewed-author: "Wang Wei"
+  favicon: favicon.png
+  author: "王伟（17哥）"
   open-graph: true
   date: today
   date-format: "YYYY-MM-DD"
@@ -24,6 +24,7 @@ book:
   site-url: https://wangwei1237.github.io/introduction_to_probability_and_statistics/
   navbar:
     search: true
+    logo: favicon.png
     left:
       - text: "博客"
         icon: "house-fill"
