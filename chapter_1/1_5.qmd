@@ -1,1 +1,58 @@
 ## 统计学简史
+
+在文艺复兴时期，意大利的威尼斯和佛罗伦萨开始对人口和经济方面的数据进行系统化的收集。**统计学**（*statistics*） 一词来源于国家（*state*）这个单词，通常用来描述和国家有关的数据收集。这种收集数据的想法不断从意大利传播到西欧的其他国家。事实上，在 16 世纪上半叶，欧洲国家的政府普遍要求教区居民登记出生、婚姻和死亡情况。由于公共卫生条件差，政府尤其关注居民登记的死亡信息统计。
+
+::: {.callout-note title="statistics 一词的来源"}
+在 [Statistics, History of](https://doi.org/10.1007/978-3-642-04898-2_639) 这篇论文中，作者提到了 statistics 一词的来源。
+
+> It is widely believed that the term statistics originated from the Latin Status (situation, condition) of population and economics; in late Latin, the same term meant State. Another root of the term comes from the Italian word stato (state), and a statista (a person who deals with affairs of state). 
+> 
+> According to Kendall (1960:447) the first use of the word statistics “occurs in a work by an Italian historian Girolamo Ghilini, who in 1589 refers to an account of civile, politica, statistica e militare scienza.” 
+:::
+
+19 世纪之前，欧洲的高死亡率主要源自流行病、战争和饥荒。对于流行病而言，最严重的是瘟疫。从 1348 年的黑死病开始，瘟疫在近 400 年的时间里频繁在欧洲发生。1562 年，为了让英国的王室成员意识到需要搬迁到乡下，伦敦市开始每周公布死亡人数。最初，这些死亡人数的清单中会列出死亡地点以及是否因瘟疫而死亡。从 1625 年开始，该清单中的信息扩展到所有的死亡原因。
+
+1662 年，英国商人 John Graunt 出版了一本名为 *Natural and Political Observations Made upon the Bills of Mortality* 的书。@tbl-death_england 摘录了该书中所列出的英格兰五个不同瘟疫年份的总死亡人数和因瘟疫死亡的人数。
+
+| 年份 | 死亡人数 | 瘟疫致死人数 | 
+| --- | --- | --- |
+| 1592 | 25,886 | 11,503 |
+| 1593 | 17,844 | 10,662 |
+| 1603 | 37,294 | 30,561 |
+| 1625 | 51,758 | 35,417 |
+| 1636 | 23,359 | 10,400 |
+
+: 不同年份的英格兰死亡人数表 {#tbl-death_england}
+
+Graunt 利用伦敦的死亡人数来估算该市的人口总数。例如，为了估算 1660 年伦敦的人口，Graunt 对伦敦某些教区 (或社区) 家庭进行了调查，并发现平均每 88 人中大约有 3 人死亡。这意味着平均每 88/3 个人就会有 1 个人死亡。伦敦的死亡人数清单显示 1660 年伦敦有 13200 人死亡，所以 Graunt 估计当年伦敦的人口大约为：
+
+$$
+13200 × 88/3 = 387200
+$$
+
+Graunt 利用这种估计方法来预测整个英格兰的人口数量。他在书中指出，政府会对这些数据感兴趣，因为这些数据可以作为应征入伍人数和应纳税人数的指标。
+
+Graunt 还利用伦敦的死亡人数清单，以及关于何种疾病会导致何人、在什么年龄死亡的一些合理猜测，来推断死亡年龄。(回想一下，前面提到的死亡人数清单只列出了死亡原因和地点，其并没有列出死者的年龄。) 然后，格兰特利用这些信息计算出不同年龄段的死亡人口比例。@tbl-mortality_jg 是 Graunt 计算的死亡率表之一。例如，@tbl-mortality_jg 指出，在 100 名新生儿中，有 36 人将在 6 岁之前死亡，24 人将在 6~15 岁之间死亡，……
+
+| 死亡年龄 | 每 100 新生儿中的死亡人数 |
+| --- | --- | 
+| 0-6 | 36 |
+| 6-16 | 24 |
+| 16-26 | 15 |
+| 26-36 | 9 |
+| 36-46 | 6 |
+| 46-56 | 4 |
+| 56-66 | 3 |
+| 66-76 | 2 |
+| >=76 | 1 |
+
+: John Graunt 的死亡率表 {#tbl-mortality_jg}
+
+从事 **年金** 行业的人对 Graunt 的死亡年龄表非常感兴趣。**年金** 与人寿保险不同，人们会一次性支付一笔款项作为投资，然后在有生之年定期从 **年金** 中获得收益。
+
+::: {.callout-note title="年金"}
+年金（*annuity*）是一种金融产品，通常由保险公司或金融机构提供。年金是一种长期投资工具，旨在为购买者提供一定期间内的收入。购买者通常向保险公司或金融机构支付一笔或多笔资金，而作为回报，购买者将在未来的一段时间内获得一定的收益。
+:::
+
+受到 Graunt 死亡率表的启发，1693 年，Edmund Halley 又做了更进一步的工作。Halley 是哈雷彗星的发现者（同时，Halley 也是对《自然哲学的数学原理》一书的出版贡献最大的人，他不但鼓励牛顿把自己的发现编写成书，更是为该书的出版提供了资金支持），他利用死亡率表来计算任何年龄段的人活到任何特定年龄的概率。Halley 说服了当时的保险公司，让他们相信年度人寿保险保费应该取决于被保险人的年龄。
+

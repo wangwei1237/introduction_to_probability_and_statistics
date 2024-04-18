@@ -5,7 +5,7 @@ project:
 lang: zh
 
 book:
-  title: "Introduction to Probability and Statistics for Engineers and Scientists"
+  title: "Introduction to Probability and Statistics for Engineers and Scientists（中文版）"
   favicon: favicon.png
   author: "王伟（17哥）"
   open-graph: true
