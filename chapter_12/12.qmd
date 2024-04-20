@@ -1,0 +1,13 @@
+# Nonparametric hypothesis tests {#sec-12}
+
+{{< include 12_1.qmd >}}
+
+{{< include 12_2.qmd >}}
+
+{{< include 12_3.qmd >}}
+
+{{< include 12_4.qmd >}}
+
+{{< include 12_5.qmd >}}
+
+{{< include 12_6.qmd >}} 

@@ -1,4 +1,4 @@
-# 统计学简介
+# 统计学简介 {#sec-1}
 
 {{< include 1_1.qmd >}}
 
@@ -10,4 +10,4 @@
 
 {{< include 1_5.qmd >}}
 
-{{< include 1_6.qmd >}} 
+{{< include 1_6.qmd >}}

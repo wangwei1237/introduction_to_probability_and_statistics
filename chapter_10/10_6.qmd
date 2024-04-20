@@ -1,0 +1,1 @@
+## Two-way analysis of variance with interaction

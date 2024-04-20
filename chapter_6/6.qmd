@@ -1,0 +1,15 @@
+# Distributions of sampling statistics {#sec-6}
+
+{{< include 6_1.qmd >}}
+
+{{< include 6_2.qmd >}}
+
+{{< include 6_3.qmd >}}
+
+{{< include 6_4.qmd >}}
+
+{{< include 6_5.qmd >}}
+
+{{< include 6_6.qmd >}} 
+
+{{< include 6_7.qmd >}}

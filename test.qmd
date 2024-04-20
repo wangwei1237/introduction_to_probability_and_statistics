@@ -1,0 +1,15 @@
+# 测试脚本
+
+@fig-airquality 展示了对温度和臭氧水平之间的进一步研究.
+
+```{r}
+#| label: fig-airquality
+#| fig-cap: "温度和臭氧水平"
+#| warning: false
+
+library(ggplot2)
+
+ggplot(airquality, aes(Temp, Ozone)) + 
+  geom_point() + 
+  geom_smooth(method = "loess")
+```

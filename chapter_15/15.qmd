@@ -1,0 +1,17 @@
+# Simulation, bootstrap statistical methods, and permutation tests {#sec-15}
+
+{{< include 15_1.qmd >}}
+
+{{< include 15_2.qmd >}}
+
+{{< include 15_3.qmd >}}
+
+{{< include 15_4.qmd >}}
+
+{{< include 15_5.qmd >}}
+
+{{< include 15_6.qmd >}} 
+
+{{< include 15_7.qmd >}}
+
+{{< include 15_8.qmd >}}

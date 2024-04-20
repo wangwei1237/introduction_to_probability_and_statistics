@@ -1,0 +1,15 @@
+# Analysis of variance {#sec-10}
+
+{{< include 10_1.qmd >}}
+
+{{< include 10_2.qmd >}}
+
+{{< include 10_3.qmd >}}
+
+{{< include 10_4.qmd >}}
+
+{{< include 10_5.qmd >}}
+
+{{< include 10_6.qmd >}} 
+
+{{< include 10_7.qmd >}}

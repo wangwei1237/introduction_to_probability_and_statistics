@@ -1,0 +1,19 @@
+# Elements of probability {#sec-3}
+
+{{< include 3_1.qmd >}}
+
+{{< include 3_2.qmd >}}
+
+{{< include 3_3.qmd >}}
+
+{{< include 3_4.qmd >}}
+
+{{< include 3_5.qmd >}}
+
+{{< include 3_6.qmd >}} 
+
+{{< include 3_7.qmd >}}
+
+{{< include 3_8.qmd >}}
+
+{{< include 3_9.qmd >}}

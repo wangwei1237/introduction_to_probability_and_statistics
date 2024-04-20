@@ -1,0 +1,19 @@
+# Descriptive statistics {#sec-2}
+
+{{< include 2_1.qmd >}}
+
+{{< include 2_2.qmd >}}
+
+{{< include 2_3.qmd >}}
+
+{{< include 2_4.qmd >}}
+
+{{< include 2_5.qmd >}}
+
+{{< include 2_6.qmd >}} 
+
+{{< include 2_7.qmd >}}
+
+{{< include 2_8.qmd >}}
+
+{{< include 2_9.qmd >}}

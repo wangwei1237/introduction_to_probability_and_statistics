@@ -1,0 +1,25 @@
+# Regression {#sec-9}
+
+{{< include 9_1.qmd >}}
+
+{{< include 9_2.qmd >}}
+
+{{< include 9_3.qmd >}}
+
+{{< include 9_4.qmd >}}
+
+{{< include 9_5.qmd >}}
+
+{{< include 9_6.qmd >}} 
+
+{{< include 9_7.qmd >}}
+
+{{< include 9_8.qmd >}}
+
+{{< include 9_9.qmd >}}
+
+{{< include 9_10.qmd >}} 
+
+{{< include 9_11.qmd >}}
+
+{{< include 9_12.qmd >}}

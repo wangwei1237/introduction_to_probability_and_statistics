@@ -1,0 +1,1 @@
+## Goodness of fit tests when all parameters are specified

@@ -1,0 +1,1 @@
+## Confidence interval of the mean of the exponential distribution

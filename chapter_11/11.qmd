@@ -1,0 +1,15 @@
+# Goodness of fit tests and categorical data analysis {#sec-11}
+
+{{< include 11_1.qmd >}}
+
+{{< include 11_2.qmd >}}
+
+{{< include 11_3.qmd >}}
+
+{{< include 11_4.qmd >}}
+
+{{< include 11_5.qmd >}}
+
+{{< include 11_6.qmd >}} 
+
+{{< include 11_7.qmd >}}

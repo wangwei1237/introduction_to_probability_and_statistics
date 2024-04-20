@@ -1,0 +1,17 @@
+# Hypothesis testing {#sec-8}
+
+{{< include 8_1.qmd >}}
+
+{{< include 8_2.qmd >}}
+
+{{< include 8_3.qmd >}}
+
+{{< include 8_4.qmd >}}
+
+{{< include 8_5.qmd >}}
+
+{{< include 8_6.qmd >}} 
+
+{{< include 8_7.qmd >}}
+
+{{< include 8_8.qmd >}}

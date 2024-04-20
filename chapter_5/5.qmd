@@ -1,0 +1,23 @@
+# Special random variables {#sec-5}
+
+{{< include 5_1.qmd >}}
+
+{{< include 5_2.qmd >}}
+
+{{< include 5_3.qmd >}}
+
+{{< include 5_4.qmd >}}
+
+{{< include 5_5.qmd >}}
+
+{{< include 5_6.qmd >}} 
+
+{{< include 5_7.qmd >}}
+
+{{< include 5_8.qmd >}}
+
+{{< include 5_9.qmd >}}
+
+{{< include 5_10.qmd >}}
+
+{{< include 5_11.qmd >}}

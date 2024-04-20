@@ -56,3 +56,30 @@ Graunt 还利用伦敦的死亡人数清单，以及关于何种疾病会导致�
 
 受到 Graunt 死亡率表的启发，1693 年，Edmund Halley 又做了更进一步的工作。Halley 是哈雷彗星的发现者（同时，Halley 也是对《自然哲学的数学原理》一书的出版贡献最大的人，他不但鼓励牛顿把自己的发现编写成书，更是为该书的出版提供了资金支持），他利用死亡率表来计算任何年龄段的人活到任何特定年龄的概率。Halley 说服了当时的保险公司，让他们相信年度人寿保险保费应该取决于被保险人的年龄。
 
+继 Graunt 和 Halley 之后，从 17 世纪末到 18 世纪，对数据的收集呈现稳步增长的趋势。例如，1667年，巴黎开始收集死亡人数清单；到 1730 年时，在欧洲，记录死亡年龄已成为一件非常普遍的事情。
+
+18 世纪之前，“statistics” 这个词被用作对国家或地区进行描述性分析的科学方法的简称。从 1800 年左右开始，西欧国家和美国政府开始系统地收集和公布类似的人口普查数据，这积累了大量的、可用的人口普查记录和相关的表格数据，这也导致了 “statistics” 一词在含义上发生了变化。19 世纪时，“statistics” 越来越多地与数字联系在一起，到 19 世纪 30 年代，在英国和法国，人们普遍将 “statistics” 一词与社会“数字科学”（*numerical science*）视为同等含义。
+
+贯穿整个 19 世纪，在 Jacob Bernoulli、Karl Friedrich Gauss 和 Pierre Simon Laplace 等数学家的推动下，尽管 **概率论** 已经发展起来，但在研究统计结果方面，**概率论** 几乎没有任何应用。此中的原因在于，当时的大多数社会统计学家都满足于让数据自己说话。特别是，当时的统计学家对个体推断并不感兴趣，他们更关心整个社会。因此，在当时，统计学家并不关心抽样，而是试图获得全部的人口普查数据。因此，在 19 世纪的社会统计学中，通过样本来推断总体概率的事情几乎没有发生过。
+
+直到 19 世纪末，统计学才开始关注如何从数值数据中推断结论。**推断统计** 这一运动始于 Francis Galton 关于 [遗传天才](https://baike.baidu.com/item/%E9%81%97%E4%BC%A0%E7%9A%84%E5%A4%A9%E6%89%8D/55137162) 的分析工作，在这项分析中， Francis Galton 使用了我们现在所说的回归分析和相关性分析（@sec-9）。Francis Galton 的工作极大的推动了 Karl Pearson 为统计学所做的贡献。Karl Pearson 是卡方检验（@sec-11）的发明者，也是由 Francis Galton 于1904 年资助建立的高尔顿实验室的第一任负责人。在高尔顿实验室，Karl Pearson 发起了一个旨在发明一种用统计数据进行推断的新方法的研究项目。Pearson 邀请科学和工业领域的高年级学生到实验室来学习统计方法，然后将对应的方法应用于各自的领域。化学家 W.S. Gosset 是高尔顿实验室最早的访问学者之一，他以 “Student” 的名义出版了自己的研究发现，并以此表达了对皮尔逊的敬意。（有一个比较有名的故事是说，Gosset 害怕他所在的吉尼斯酿酒厂的老板在发现他们的一位化学家正在做统计学研究时会不高兴，因此不敢以自己的名义出版著作）。Gosset 因为他所发明的 t 检验而名声大振（@sec-8）。
+
+20 世纪初，群体生物学（*population biology*）和农业是应用统计学的两个最重要的领域。统计学这这些领域的应用主要源自 Pearson 和他的实验室的其他人的研究，也源自英国科学家 Ronald A. Fisher 在统计学中的显著成就。在如上所介绍的先驱者以及其他研究者（例如， Karl Pearson 的儿子 Egon 和出生于波兰的数理统计学家 Jerzy Neyman 等）的推动下，他们所发明的推理理论已经通用到可以处理广泛的量化问题和实践问题。因此，在 20 世纪初之后的几年里，越来越多的科学家、商人和政界人士开始将统计学视为能够为科学问题和实践问题提供定量解决方案的工具（见 @tbl-statistics_change）。
+
+| 时间 | 定义 |
+| --- | --- |
+| Quetelet, 1849 | Statistics has then for its object that of presenting a faithful representation of a state at a determined epoch. | 
+| Galton, 1889 | Statistics are the only tools by which an opening can be cut through the formidable thicket of difficulties that bars the path of those who pursue the Science of man. | 
+| Fisher, 1925 | Statistics may be regarded (i) as the study of populations, (ii) as the study of variation, and (iii) as the study of methods of the reduction of data. | 
+| E. Pearson, 1936 | Statistics is a scientific discipline concerned with collection, analysis, and interpretation of data obtained from observation or experiment. The subject has a coherent structure based on the theory of Probability and includes many different procedures which contribute to research and development throughout the whole of Science and Technology. | 
+| Weaver, 1952 | Statistics is the name for that science and art which deals with uncertain inferences — which uses numbers to find out something about nature and experience. | 
+| Porter, 1986 | Statistics has become known in the 20th century as the mathematical tool for analyzing experimental and observational data. | 
+| this book, 2020 | Statistics is the art of learning from data. | 
+
+: Statistics 定义的变化 {#tbl-statistics_change}
+
+如今，统计学的思想无处不在。在每一份报纸和杂志上，**描述统计学** 的特点都有所体现。在公共卫生、医学研究、工程研究、科学研究、市场营销、质量控制、教育、会计、经济、气象预报、投票和调查、体育、保险、赌博以及所有声称是科学的研究领域，**统计推断** 都是不可或缺的。的确，统计学已经深深植根于人类的知识遗产（*intellectual heritage*）之中。
+
+::: {.callout-note title="知识遗产"}
+知识遗产（*intellectual heritage*）是指社会所拥有的知识、思想、传统、技能和价值观的集合，这些资源被传承下来并世代相传。知识遗产包括各种形式的人类智慧，如文学作品、艺术品、哲学理论、科学发现、宗教信仰、法律体系、技术创新等。知识遗产不仅仅是一种资产，更是一种社会、文化和历史的遗产，它反映了人类的智慧、经验和创造力，对于塑造社会的认同感、价值观和意识形态具有重要意义。
+:::

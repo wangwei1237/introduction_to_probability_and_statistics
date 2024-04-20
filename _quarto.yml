@@ -18,9 +18,28 @@ book:
   page-footer: Copyright Wang Wei. All Rights Reserved.
   chapters:
     - index.qmd
-    - intro.qmd
+    - preface_17.qmd
+    - preface.qmd
     - chapter_1/1.qmd
+    - chapter_2/2.qmd
+    - chapter_3/3.qmd
+    - chapter_4/4.qmd
+    - chapter_5/5.qmd
+    - chapter_6/6.qmd
+    - chapter_7/7.qmd
+    - chapter_8/8.qmd
+    - chapter_9/9.qmd
+    - chapter_10/10.qmd
+    - chapter_11/11.qmd
+    - chapter_12/12.qmd
+    - chapter_13/13.qmd
+    - chapter_14/14.qmd
+    - chapter_15/15.qmd
+    - chapter_16/16.qmd
+    - test.qmd
     - references.qmd
+  appendices: 
+    - appendices.qmd
   site-url: https://wangwei1237.github.io/introduction_to_probability_and_statistics/
   navbar:
     search: true
@@ -51,6 +70,7 @@ format:
       light: [cosmo, theme.scss]
     code-copy: true
     code-overflow: wrap
+    code-fold: true
     cover-image: cover.png
 
 comments:

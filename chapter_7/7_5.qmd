@@ -1,0 +1,1 @@
+## Approximate confidence interval for the mean of a Bernoulli random variable

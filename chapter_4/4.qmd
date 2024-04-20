@@ -1,0 +1,21 @@
+# Random variables and expectation {#sec-4}
+
+{{< include 4_1.qmd >}}
+
+{{< include 4_2.qmd >}}
+
+{{< include 4_3.qmd >}}
+
+{{< include 4_4.qmd >}}
+
+{{< include 4_5.qmd >}}
+
+{{< include 4_6.qmd >}} 
+
+{{< include 4_7.qmd >}}
+
+{{< include 4_8.qmd >}}
+
+{{< include 4_9.qmd >}}
+
+{{< include 4_10.qmd >}}

@@ -1,0 +1,13 @@
+# Life testing {#sec-14}
+
+{{< include 14_1.qmd >}}
+
+{{< include 14_2.qmd >}}
+
+{{< include 14_3.qmd >}}
+
+{{< include 14_4.qmd >}}
+
+{{< include 14_5.qmd >}}
+
+{{< include 14_6.qmd >}} 

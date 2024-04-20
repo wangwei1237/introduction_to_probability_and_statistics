@@ -1,0 +1,15 @@
+# Quality control {#sec-13}
+
+{{< include 13_1.qmd >}}
+
+{{< include 13_2.qmd >}}
+
+{{< include 13_3.qmd >}}
+
+{{< include 13_4.qmd >}}
+
+{{< include 13_5.qmd >}}
+
+{{< include 13_6.qmd >}} 
+
+{{< include 13_7.qmd >}}

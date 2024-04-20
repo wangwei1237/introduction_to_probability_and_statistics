@@ -1,0 +1,19 @@
+# Parameter estimation {#sec-7}
+
+{{< include 7_1.qmd >}}
+
+{{< include 7_2.qmd >}}
+
+{{< include 7_3.qmd >}}
+
+{{< include 7_4.qmd >}}
+
+{{< include 7_5.qmd >}}
+
+{{< include 7_6.qmd >}} 
+
+{{< include 7_7.qmd >}}
+
+{{< include 7_8.qmd >}}
+
+{{< include 7_9.qmd >}}
