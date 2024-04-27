@@ -13,3 +13,12 @@ ggplot(airquality, aes(Temp, Ozone)) +
   geom_point() + 
   geom_smooth(method = "loess")
 ```
+
+```{r}
+#| label: tbl-age
+#| tbl-cap: "年龄分布"
+#| warning: false
+library(knitr)
+df <- data.frame(Name = c("Alice", "Bob", "Charlie"), Age = c(25, 30, 35))  
+kable(df)
+```

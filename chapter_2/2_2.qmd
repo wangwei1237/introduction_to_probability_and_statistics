@@ -1,1 +1,158 @@
-## Describing data sets
+## 描述数据集 {#sec-2_2}
+应当用数据清晰、简洁的显示研究结果，以便研究者可以迅速把握数据的关键特征。多年来，人们发现，对于展示数据而言，表格和图是特别有用的方式。图表常常可以揭示数据的重要特征，如数据的范围、集中程度和对称性。本节将介绍一些常见的数据图表展示方式。
+
+### 频率表和图 {#sec-2_2_1}
+如果一个数据集中的数据差异较小，我们便可以以频率表（*frequency table*）的形式来方便的展现该数据集。例如，@tbl-StartingYearlySalaries 就是一个数据集的频率表，该数据集由 42 名最近毕业的电子工程专业的大学生的起始年薪（以千美元为单位，四舍五入）构成。@tbl-StartingYearlySalaries 告诉我们，最低起薪为 57000 美元，并且有四名毕业生的起薪为 57000 美元；最高起薪为 70000 美元，并且有一名学生的起薪为 70000 美元；最为普遍的起薪为 62000 美元，并且有 10 名学生拿到了 62000 美元的起薪。
+
+```{r}
+#| label: tbl-StartingYearlySalaries
+#| tbl-cap: "起薪分布"
+#| warning: false
+
+library(knitr)
+ss <- c(57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 70)
+f <- c(4, 1, 3, 5, 8, 10, 0, 5, 2, 3, 1)
+df <- data.frame("Starting Salary" = ss, "Frequency" = f)
+kable(df, align = "l")
+```
+
+可以用线图（*line graph*）来直观地显示频率表中的数据。如 @fig-StartingYearlySalaries1，在线图中，水平坐标轴用于绘制不同的数据值，而垂直直线的高度用于表示对应数据值出现的频率。
+
+```{r}
+#| label: fig-StartingYearlySalaries1
+#| fig-cap: "起薪线图"
+#| warning: false
+
+library(ggplot2)  
+
+df <- data.frame(  
+  salary = c(57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 70),  
+  value_end = c(4, 1, 3, 5, 8, 10, 0, 5, 2, 3, 1),  
+  value_start = rep(0, 11) 
+)  
+
+# 将类别转换为因子，以确保正确的顺序  
+df$salary <- factor(df$salary, levels = df$salary, ordered = TRUE)  
+ 
+ggplot(df, aes(x = salary, y = value_start, yend = value_end, color = salary)) +  
+  geom_segment(size = 2) +                    # 绘制水平线表示每个“条形”  
+  geom_point(aes(y = value_end), size = 3) +  # 在每个“条形”的末端添加点  
+  theme_minimal() +  
+  labs(x = "Starting Salary", y = "Frequency") +  
+  scale_y_continuous(breaks = seq(1, 10, by = 1)) +  
+  theme(legend.position = "none")           # 调整图例位置
+```
+
+当为 @fig-StartingYearlySalaries1 中的线条增加厚度时，@fig-StartingYearlySalaries1 就变成了 @fig-StartingYearlySalaries2 所示的条形图（*bar graph*）。
+
+```{r}
+#| label: fig-StartingYearlySalaries2
+#| fig-cap: "起薪条形图"
+#| warning: false
+
+library(ggplot2)  
+
+df <- data.frame(  
+  salary = c(57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 70),  
+  value = c(4, 1, 3, 5, 8, 10, 0, 5, 2, 3, 1)
+)  
+
+# 将类别转换为因子，以确保正确的顺序  
+df$salary <- factor(df$salary, levels = df$salary, ordered = TRUE)  
+ 
+ggplot(df, aes(x = salary, y = value)) +  
+  geom_bar(stat = "identity", fill = "steelblue") +  
+  theme_minimal() +  
+  xlab("Starting Salary") +  
+  ylab("Frequency") +
+  scale_y_continuous(breaks = seq(1, 10, by = 2))
+```
+
+另一种用于表示频数表的图形是折线图（*frequency polygon*），在折线图中，对于在数据集中出现的不同的数据值，其出现的次数为纵坐标，以此画出对应的点，然后用直线将这些点依次连接起来。@fig-StartingYearlySalaries3 给出了 @tbl-StartingYearlySalaries 对应的折线图。
+
+```{r}
+#| label: fig-StartingYearlySalaries3
+#| fig-cap: "起薪折线图"
+#| warning: false
+
+library(ggplot2)  
+
+df <- data.frame(  
+  salary = c(57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 70),  
+  value = c(4, 1, 3, 5, 8, 10, 0, 5, 2, 3, 1)
+)  
+
+ggplot(df, aes(x=salary, y=value)) +   
+  geom_line() +  
+  labs(x="Starting Salary", y="Frequency") + 
+  scale_y_continuous(breaks = seq(1, 10, by = 2)) + 
+  theme_minimal()
+```
+
+### 相对频率表和图 {#sec-2_2_2}
+一个数据集中有 $n$ 个值，如果 $f$ 是某个特定值的频率，那么$\frac{f}{n}$ 为该特定值的相对频率（*relative frequency*）。也就是说，一个值的相对频率是数据集中具有该值的数据所占的比例。可以用线图、条形图、折线图来表示相对频率。事实上，在相对频率图中，除了纵坐标的值是绝对频率图中的值除以数据点总数外，相对频率图看起来和绝对频率图没什么不同。
+
+::: {#exm-2_2_a}
+@tbl-StartingYearlySalaries2 是 @tbl-StartingYearlySalaries 的相对频率表。将 @tbl-StartingYearlySalaries 中相应的频率除以数据集的大小（42） 得到其对应的相对频率表。
+:::
+
+```{r}
+#| label: tbl-StartingYearlySalaries2
+#| tbl-cap: "起薪分布相对频率表"
+#| warning: false
+
+library(knitr)
+ss <- c(57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 70)
+f <- c(4, 1, 3, 5, 8, 10, 0, 5, 2, 3, 1)
+cnt = sum(f)
+f <- f / cnt
+
+df <- data.frame("Starting Salary" = ss, "Relative Frequency" = f)
+kable(df, align = "l")
+```
+
+当数据集中的数据不是数值型数据时，通常使用饼图（*pie chart*）来表示相对频率。首先画一个圆，然后将其切分成不同的扇形区域，每一个扇区对应数据集中的一种数据类型。在饼图中，扇区的面积表示数据值的相对频率，其面积等于圆的总面积乘以数据值的相对频率。
+
+::: {#exm-2_2_b}
+根据一家肿瘤专科诊所登记的最近 200 名患者的数据，得到了一个关于不同类型肿瘤患者数的数据集。@fig-piechartc 使用饼图的形式来显示如上的数据集。
+
+```{r}
+library(knitr)
+
+type <- c("Melanoma", "Bladder", "Colon", "Lung", "Breast", "Prostate")
+num <- c(9, 12, 32, 42, 50, 55)  
+value <- num / sum(num)
+
+df <- data.frame("Type of Cancer" = type, "Number of New Cases" = num, "Relative Frequency" = value)
+
+kable(df, align = "l")
+```
+:::
+
+```{r}
+#| label: fig-piechartc
+#| fig-cap: "诊所数据饼图"
+#| warning: false
+
+library(ggplot2)
+  
+# 提供的数据  
+type <- c("Melanoma", "Bladder", "Colon", "Lung", "Breast", "Prostate")
+num <- c(9, 12, 32, 42, 50, 55)  
+value <- num / sum(num)
+
+df <- data.frame(type = type, num = num, value = value)
+df$label <- paste(df$type, "\n", round(df$value * 100, 1), "%", sep="") 
+
+# 绘制饼图  
+ggplot(df, aes(x = "", y = value, fill = type)) +  
+  geom_bar(width = 1, stat = "identity") +  
+  coord_polar("y", start = 0) +  
+  theme_void() +  
+  theme(legend.title = element_blank()) +  
+  scale_fill_brewer(palette = "Pastel1") +  
+  labs(fill = "type") +  
+  geom_text(aes(label = label),   
+            position = position_stack(vjust = 0.5)) + # 添加百分比标签
+  theme(legend.position = "none")
+```

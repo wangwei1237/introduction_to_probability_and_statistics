@@ -1,4 +1,4 @@
-# Descriptive statistics {#sec-2}
+# 描述统计 {#sec-2}
 
 {{< include 2_1.qmd >}}
 
