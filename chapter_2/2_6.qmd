@@ -1,1 +1,201 @@
-## Paired data sets and the sample correlation coefficient
+## 成对数据集和样本相关系数 {#sec-2_6}
+我们经常关注由成对数据值构成的数据集，这些数据集中的成对数据之间存在着某种关系。在这样的数据集中，如果每个成对数据都有一个 $x$ 值和一个 $y$ 值，那么我们就用 $(x_i, y_i)$ 表示第 $i$ 个数据。例如，为了确定每天中午的温度（以摄氏度为单位）与当天生产的不合格零件数量之间的关系，一家公司记录了 @tbl-temp_defect 中的数据。对于这个数据集，$x_i$ 代表第 $i$ 天中午的摄氏温度，$y_i$ 代表第 $i$ 天生产的不合格零件数量。
+
+```{r}
+#| label: tbl-temp_defect
+#| tbl-cap: "天气温度和产品缺陷量数据"
+#| warning: false
+#| 
+library(knitr)
+df <- read.table("../misc/temp_defect.csv", header=TRUE, sep=",")
+kable(df, align="l")
+```
+
+在二维图上绘制成对数据集中的数据是一种表示成对数据集的有效方法，其中 $x$ 轴代表成对数据的 $x$ 值，$y$ 轴代表成对数据的 $y$ 值，这样的图称之为散点图（*scatter diagram*）。@fig-temp_defect 为 @tbl-temp_defect 中数据的散点图。
+
+```{r}
+#| label: fig-temp_defect
+#| fig-cap: "天气温度和产品缺陷量散点图"
+#| warning: false
+#| 
+library(ggplot2)
+df <- read.table("../misc/temp_defect.csv", header=TRUE, sep=",")
+ggplot(df, aes(x=Temperature, y=Number.of.Defects)) + 
+    geom_point()
+```
+
+对于成对数据集而言，一个有趣问题是，比较大的 $x$ 值是否倾向于与比较大的 $y$ 值配对，小的 $x$ 值是否与小的 $y$ 值配对？如果情况并非如此，那么我们可能会质疑其中一个变量的较大的值是否倾向于与另一个变量的较小的值配对。通常，可以通过散点图来大致回答这些问题。例如，@fig-temp_defect 表明，高温和缺陷产品数量高之间似乎存在某种联系。为了对成对数据之间的这种关系进行定量度量，我们需要开发一个新的统计指标，以衡量 $x$ 值与 $y$ 值之间的配对程度。
+
+假设数据集由 $\{(x_i, y_i)\}$ 组成，其中 $i = 1,...,n$，$\overline{x}$ 和 $\overline{y}$ 分别是 $x$ 和 $y$ 的样本均值。对于第 $i$ 对数据，使用 $x_i - \overline{x}$ 作为 $x_i$ 与其样本均值的偏差，使用 $y_i - \overline{y}$ 作为 $y_i$ 与其样本均值的偏差。如果 $x_i$ 的值比较大，那么 $x_i \gt \overline{x}$，所以 $x_i - \overline{x} \gt 0$。类似地， 如果 $x_i$ 的值比较小，那么 $x_i \lt \overline{x}$，所以 $x_i - \overline{x} \lt 0$。对于 $y_i$ 而言，同样如此。于是，我们可以得出以下结论：
+
+::: {.callout-important}
+当 $x$ 的较大值趋向于和 $y$ 的较大值相关联，$x$ 的较小值趋向于和 $y$ 的较小值相关联时，则 $x_i - \overline{x}$ 和 $y_i- \overline{y}$ 的符号（无论正负）都将趋于相同。
+:::
+
+如果 $x_i - \overline{x}$ 和 $y_i - \overline{y}$ 的符号相同（无论正负），那么它们的乘积 $(x_i - \overline{x})($y_i - \overline{y})$ 是正数。因此，当 $x$ 的较大值趋向于和 $y$ 的较大值相关联，$x$ 的较小值趋向于和 $y$ 的较小值相关联时，$\sum_{i=1}^{n}{(x_i - \overline{x})(y_i - \overline{y})}$ 将趋向于一个较大的正数。事实上，当较大（小）的 $x$ 与较大（小）的 $y$ 配对时，不但所有的 $(x_i - \overline{x})(y_i - \overline{y})$ 的符号都是正的，而且当 $(x_i - \overline{x})$ 的最大值与 $(y_i - \overline{y})$ 的最大值配对、其对应的次大值配对、依次类推对 $(x_i - \overline{x})$ 和 $(y_i - \overline{y})$ 配对时，$\sum_{i=1}^{n}{(x_i - \overline{x})(y_i - \overline{y})}$ 将获得最大值。同理，当 $x_i$ 的较大值倾向于和 $y_i$ 的较小值配对时，$x_i - \overline{x}$ 和 $y_i - \overline{y}$ 的符号相反，所以 $\sum_{i=1}^{n}{(x_i - \overline{x})(y_i - \overline{y})}$ 将是一个较大的负数。
+
+::: {#def-2_6_cc}
+对于成对数据集 $\{(x_i, y_i), i = 1,...,n\}$，$s_x$ 和 $s_y$ 分别表示 $x$ 和 $y$ 的样本标准差，则 $(x_i, y_i)$ 的样本相关系数（*sample correlation coefficient*）$r$ 的定义如下：
+
+$$
+\begin{align}
+r&=\frac{\sum_{i=1}^{n}{(x_i-\overline{x})(y_i-\overline{y})}}{(n-1)s_xs_y} \\
+&=\frac{\sum_{i=1}^{n}{(x_i-\overline{x})(y_i-\overline{y})}}{\sqrt{\sum_{i=1}^{n}{(x_i-\overline{x})^2} \cdot \sum_{i=1}^{n}{(y_i-\overline{y})^2}}}
+\end{align}
+$$ {#eq-2_6_001}
+:::
+
+当 $r \gt 0$ 时，成对数据集中的样本成正相关（*positively correlated*），当 $r \lt 0$ 时，样本成负相关（*negatively correlated*）。
+
+成对数据集的样本相关系数 $r$ 具备如下的特性：
+
+1. $-1 \le r \le 1$
+2. $\forall a>0$， 如果 $y_i = ax_i + b$，则 $r=1$
+3. $\forall a<0$， 如果 $y_i = ax_i + b$，则 $r=-1$
+4. $\forall a$ 和 $\forall c$，且 $a \cdot c \gt 0$，如果 $r$ 是 $\{(x_i, y_i)\}$ 的相关系数，则 $r$ 也是 $\{(ax_i + b, cy_i + d)\}$ 的相关系数
+
+* 特性 1 说明样本相关系数 $r$ 总是介于 -1 和 +1 之间。
+* 特性 2 说明当成对数据之间存在线性关系并且 $x$ 的较大（小）值趋向于和 $y$ 的较大（小）值相关联时，$r$ 等于 +1。
+* 特性 3 说明当成对数据之间存在线性关系并且 $x$ 的较大（小）值趋向于和 $y$ 的较小（大）值相关联时，$r$ 等于 -1。
+* 特性 4 指出，当给每个 $x$（或 $y$） 变量加上一个常数，或将每个 $x$（或 $y$） 变量都乘以一个正数时，$r$ 的值保持不变。特性 4 意味着 $r$ 不依赖于测量数据的单位。例如，无论身高数据的测量单位是英尺还是英寸，也无论体重数据的测量单位是磅还是千克，一个人的身高和体重之间的样本相关系数都是一致的。此外，如果成对数据中的一个值是温度，那么无论该值是华氏温度还是摄氏温度，样本相关系数都是相同的。
+
+样本相关系数 $r$ 的绝对值 $|r|$ 用于表示 $x$ 和 $y$ 之间线性关系的强度。$|r| = 1$ 意味着完美的线性关系，也就是说，可以用一条直线穿过 $\{(xi,yi), i = 1, ..., n\}$ 中的所有数据点 。$|r| \thickapprox 0.8$ 意味着相对较强的线性关系，此时虽然没有任何一条直线可以穿过所有的数据点，但存在一条直线 “接近” 穿过所有的数据点。$|r| \thickapprox 0.3$ 意味着成对数据之间的线性关系相对较弱。
+
+$r$ 的符号给定了相关性的方向。当较小的 $y$ 倾向于和较小的 $x$ 配对，而较大的 $y$ 倾向于和较大的 $x$ 配对时，对于这样的线性关系，$r \gt 0$。而当较小的 $y$ 倾向于和较大的 $x$ 配对，而较大的 $y$ 倾向于和较小的 $x$ 配对时，对于这样的线性关系，$r \lt 0$。@fig-2_6_cc 显示了具有不同 $r$ 值的数据集的散点图。
+
+```{r}
+#| label: fig-2_6_cc
+#| fig-cap: "不同样本相关系数的数据散点图"
+#| fig-subcap:
+#|   - "r = -0.5"
+#|   - "r = 0"
+#|   - "r = 0.9"
+#|   - "r = 1" 
+#| layout-ncol: 2
+#| warning: false
+
+library(MASS)  
+library(ggplot2)
+
+# 设置你想要的相关系数  
+rho <- -0.5  # 例如，我们想要的相关系数是0.5  
+
+# 创建一个协方差矩阵。假设两个变量的方差都是1（对于标准化数据）  
+# 协方差矩阵的对角线元素是方差，非对角线元素是协方差（与相关系数相关）  
+Sigma <- matrix(c(1, rho, rho, 1), nrow = 2)  
+data <- mvrnorm(n = 100, mu = c(0, 0), Sigma = Sigma)
+df1 <- as.data.frame(data)
+colnames(df1) <- c("X", "Y")
+
+rho <- 0   
+Sigma <- matrix(c(1, rho, rho, 1), nrow = 2)  
+data <- mvrnorm(n = 100, mu = c(0, 0), Sigma = Sigma)
+df2 <- as.data.frame(data)
+colnames(df2) <- c("X", "Y")
+
+rho <- 0.9   
+Sigma <- matrix(c(1, rho, rho, 1), nrow = 2)  
+data <- mvrnorm(n = 100, mu = c(0, 0), Sigma = Sigma)
+df3 <- as.data.frame(data)
+colnames(df3) <- c("X", "Y")
+
+rho <- 1
+Sigma <- matrix(c(1, rho, rho, 1), nrow = 2)  
+data <- mvrnorm(n = 100, mu = c(0, 0), Sigma = Sigma)
+df4 <- as.data.frame(data)
+colnames(df4) <- c("X", "Y")
+
+ggplot(df1, aes(x=X, y=Y)) +
+    geom_point()
+
+ggplot(df2, aes(x=X, y=Y)) +
+    geom_point()
+
+ggplot(df3, aes(x=X, y=Y)) +
+    geom_point()
+
+ggplot(df4, aes(x=X, y=Y)) +
+    geom_point()
+```
+
+::: {#exr-2_6_a}
+计算 @tbl-temp_defect 所示的样本相关系数。
+:::
+
+:::{#sol-2_6_a}
+```{r}
+df <- read.table("../misc/temp_defect.csv", header=TRUE, sep=",")
+r <- cor(df$Temperature, df$Number.of.Defects)
+print(r)
+```
+
+这意味着气温和当天的缺陷产品数量之间存在着弱正相关性。
+:::
+
+
+::: {#exm-2_6_b}
+以下数据表给出了 10 个学生的静息心率（每分钟心跳次数）和其对应的受教育年限。@fig-2_6_bpm 展现了这些数据的散点图。这些数据的样本相关系数 $r=−0.7638$。负相关系数表明，对于这个数据集来说，高静息心率与低受教育年限紧密相关，而低静息心率则与高受教育年限紧密相关。
+
+```{r}
+library(knitr)
+person <- seq(1:10)
+Years <- c(12, 16, 13, 18, 19, 12, 18, 19, 12, 14)
+BPM <- c(73, 67, 74, 63, 73, 84, 60, 62, 76, 71)
+df <- data.frame(Person=person, Years.of.School=Years, BPM=BPM)
+
+kable(df, align="l")
+```
+
+```{r}
+#| label: fig-2_6_bpm
+#| fig-cap: "不同数据集的直方图"
+#| warning: false
+
+library(ggplot2)
+person <- seq(1:10)
+Years <- c(12, 16, 13, 18, 19, 12, 18, 19, 12, 14)
+BPM <- c(73, 67, 74, 63, 73, 84, 60, 62, 76, 71)
+df <- data.frame(Person=person, Years.of.School=Years, BPM=BPM)
+
+ggplot(df, aes(x=Years.of.School, y=BPM)) +
+    geom_point()
+```
+:::
+
+::: {.callout-important title="相关性衡量的是变量之间的关联关系，而不是因果关系"}
+@exm-2_6_b 中的数据集仅考虑了 10 名学生，因此不足以让人对受教育年限和心率之间的关系得出任何确凿的结论。此外，即使有更大规模的数据集，并且受教育年限高低与其静息心率之间同样存在着较强的负相关性，我们也没有理由得出 **多接受几年教育会直接降低一个人的心率** 的结论。也就是说，尽管高受教育年限往往与较低的静息心率有关联，但这并不意味着多受几年教育是导致较低心率的直接原因。通常，对这种关联性的解释在于，存在一个与所考虑的这两个变量都有相关性的隐藏因素。
+
+在 @exm-2_6_b 中，可能是受教育年限高的人更了解健康领域的最新发现，因此可能更了解锻炼和良好营养的重要性。亦或者，可能不是知识在起作用，而是受过更多教育的人所从事的工作会让他们有更多时间进行锻炼，同时也可以获取更多薪水以补充良好的营养。受教育年限和静息心率之间的强烈负相关性可能是由受教育年限以及其他潜在因素的综合结果。
+:::
+
+接下来，我们将证明样本相关系数 $r$ 的第一个特性：$|r| \le 1$，当且仅当所有的数据点都在一条直线上时，$=$ 成立。
+
+$$
+\begin{align}
+\because &\sum{(\frac{x_i - \overline{x}}{s_x} - \frac{y_i - \overline{y}}{s_y})^2} \ge 0 \\
+\therefore & \sum{\frac{(x_i - \overline{x})^2}{s_x}} + \sum{\frac{(x_i - \overline{x})^2}{s_x}} - 2 \sum{\frac{(x_i - \overline{x})(y_i - \overline{y})}{s_xs_y}} \\
+\therefore & (n - 1) + (n - 1) -2(n - 1)r \ge 0 \\
+\therefore & 2(n - 1)(1 - r) \ge 0 \\
+\therefore & r \le 1 
+\end{align}
+$$ {#eq-2_6_002}
+
+假设所有的数据点 ${(x_i, y_i), i=1,...,n}$ 都位于直线 $y_i = ax_i + b;\ i=1,...n \ \& \ a>0$ 上，则：
+
+$$
+\begin{align}
+& s_y^2=a^2s_x^2 \\
+& \overline{y}=a\overline{x} + b \\
+\therefore & a = \frac{s_y}{s_x}, \ b = \overline{y} - \frac{s_y}{s_x}\overline{x}
+\end{align}
+$$ {#eq-2_6_004}
+
+根据 @eq-2_6_002， 当且仅当 $r = 1$ 时，$\sum{(\frac{x_i - \overline{x}}{s_x} - \frac{y_i - \overline{y}}{s_y})^2} = 0$。
+
+也即当且仅当 $r = 1$ 时，$\frac{y_i - \overline{y}}{s_y} = \frac{x_i - \overline{x}}{s_x}$。
+
+所以，当且仅当 $r = 1$ 时，$y_i = \overline{y} - \frac{s_y}{s_x}\overline{x} + \frac{s_y}{s_x}x_i$，把 @eq-2_6_004 代入得到 $y_i=ax_i + b$。
+
+因此，当且仅当 $r = 1$ 时，$(x_i, y_i)$ 的所有的点都位于直线 $y_i = ax_i + b, a>0$。
+
+同理，我们可以证明，当且仅当 $r = -1$ 时，$(x_i, y_i)$ 的所有的点都位于直线 $y_i = ax_i + b, a<0$。

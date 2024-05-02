@@ -1,1 +1,230 @@
-## The Lorenz curve and Gini index {#sec-2_7}
+## 洛伦兹曲线和基尼系数 {#sec-2_7}
+洛伦兹曲线（*Lorenz Curve*）$L(p), 0 \le p \le 1$，是与群体中成员的收入相关的图表。$L(p)$ 表示群体中，收入最低的 $100p\%$ 的人的总收入在群体总收入中的收入占比。例如，$L(0.3)$ 是收入最低的 30% 的人的总收入在群体中的收入占比。一般来说，假设群体中有 $n$ 个人，其个体收入按升序排列为 $x_1 \le x_2 \le x_3 ... \le x_n$。因为 $x_1 + ... + x_j$ 是收入最低的 $j$ 个人的总收入，而 $x_1 + ... + x_n$ 是该群体所有人的总收入。因此，收入最低的 $100\frac{j}{n}\%$ 的人的收入占比就是：
+
+$$
+L(\frac{j}{n}) = \frac{x_1 + ... + x_j}{x_1 + ... + x_n},\ j = 1, ..., n
+$$
+
+一般而言，令 $L(0) = 0$，并通过直线连接 $\frac{j}{n}$ 和 $\frac{j + 1}{n}$ 来绘制洛伦兹曲线。
+
+::: {#exm-2_7_a}
+假设我们想绘制 $n=5$ 的洛伦兹曲线，其中该群体的收入分别是：9，7，22，5，17。该群体的收入按照升序排序后是：5，7，9，17，22。因为群体的总收入是 60，因此：
+
+* L(0.2) = 5 / 60
+* L(0.4) = 12 / 60
+* L(0.6) = 21 / 60
+* L(0.8) = 38 / 60
+* L(1)   = 60 /60 
+
+将如上的点用直线连接起来就形成了洛伦兹曲线，如 @fig-2_7_lc。
+:::
+
+```{r}
+#| label: fig-2_7_lc
+#| fig-cap: "@exm-2_7_a 的洛伦兹曲线"
+#| warning: false
+
+library(ggplot2)
+x <- seq(0, 1, 0.2)
+y <- c(0, 5, 7, 9, 17, 22)
+y <- cumsum(y)
+df <- data.frame(x=x, y=y, yf=(y / 60))
+ggplot(df, aes(x=x, y=yf)) +
+  geom_line() + 
+  scale_x_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  scale_y_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  geom_point(color = "black", size = 1) + 
+  labs(x="people proportion", y="incomes proportion")
+```
+
+也可以用洛伦茨曲线来展现群体中的个体财富，其中 $L(p)$ 代表最贫穷的 $100p%$ 的人所拥有的全部财富的比例。例如，如果全部人口由 1000 人组成，那么 $L(0.22)$ 就是 220 个最贫穷的人所拥有的财富比例。
+
+现在，当向集合中添加一个大于之前所有值的新值时，集合的平均值总是会增加。因此，如果群体成员的收入递增排序后是 $x_1 \le x_2 \le x_3... \le x_n$，那么 $\forall j = 1,...,n$，有：
+
+$$
+\begin{align}
+& \frac{x_1 + ... + x_j}{j} \le \frac{x_1 + ... + x_{j+1}}{j + 1} \le \frac{x_1 + ... + x_n}{n} \\
+\therefore & \frac{x_1 + ... + x_j}{x_1 + ... + x_n} \le \frac{j}{n} \\
+\therefore & L{(\frac{j}{n}}) \le \frac{j}{n}
+\end{align}
+$$
+
+此外，可以验证，当且仅当所有人的收入都相等时，$L(\frac{j}{n}) = \frac{j}{n}, j=1,...,n$。因此，除非所有人的收入都相等，否则洛伦茨曲线总是位于 $(0,0)$ 和 $(1,1)$ 构成的直线之下。对于 @exm-2_7_a，@fig-2_7_lc_002 正说明了这一点。
+
+```{r}
+#| label: fig-2_7_lc_002
+#| fig-cap: "@exm-2_7_a 的包含直线的洛伦兹曲线"
+#| warning: false
+
+library(ggplot2)
+
+x <- seq(0, 1, 0.2)
+y <- c(0, 5, 7, 9, 17, 22)
+y <- cumsum(y)
+df <- data.frame(x=x, y=y, yf=(y / 60))
+ggplot(df, aes(x=x, y=yf)) +
+  geom_line() + 
+  scale_x_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  scale_y_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  geom_point(color = "black", size = 1) + 
+  geom_segment(x=df$x[1], y=df$yf[1], xend=df$x[length(df$x)], yend=df$yf[length(df$yf)], color="red") +
+  labs(x="people proportion", y="incomes proportion")
+```
+
+因此，当所有人的收入都相等时，洛伦茨曲线与从 $(0, 0)$ 到 $(1, 1)$ 的直线重合；而当群体中不同个体收入不相等时，洛伦茨曲线则位于该直线的下方。当群体成员的收入越不平等，$(0, 0)$ 到 $(1, 1)$ 的直线和洛伦茨曲线之间的区域则越大（如 @fig-2_7_lc_area 中的阴影区域所示）。
+
+```{r}
+#| label: fig-2_7_lc_area
+#| fig-cap: "直线[(0, 0), (1, 1)]和洛伦兹曲线之间的面积"
+#| warning: false
+
+library(ggplot2)
+x <- seq(0, 1, 0.2)
+y <- c(0, 5, 7, 9, 17, 22)
+y <- cumsum(y)
+df <- data.frame(x=x, y=y, yf=(y / 60))
+ggplot(df, aes(x=x, y=yf)) +
+  geom_line() + 
+  scale_x_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  scale_y_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  geom_point(color = "black", size = 1) + 
+  geom_polygon(aes(x=x, y=yf), fill="grey", alpha=0.7) +
+  geom_segment(x=df$x[1], y=df$yf[1], xend=df$x[length(df$x)], yend=df$yf[length(df$yf)], color="red") + 
+  annotate("text", x = 0.75, y = 0.25, label = "B", hjust = 1, vjust = 0, size = 6) +
+  labs(x="people proportion", y="incomes proportion")
+```
+
+可以用基尼系数（*Gini Index*）衡量 $(0, 0)$ 到 $(1, 1)$ 的直线和洛伦茨曲线之间的区域大小，进而衡量群体中成员的收入不平等性。基尼系数等于 @fig-2_7_lc_area 中阴影区域面积与直线下方区域的面积之比。由于三角形的面积是底乘以高的一半，所以从 $(0, 0)$ 到 $(1, 1)$ 的直线下方的面积等于 $\frac{1}{2}$。
+
+因此，基尼系数 $G$ 的定义如下：
+
+$$
+G = \frac{L(p) 曲线和直线围成的区域面积}{\frac{1}{2}}
+$$
+
+令洛伦兹曲线下方的区域为 $B$，则洛伦兹曲线和直线围成的面积就是直线下方的面积减去洛伦兹曲线下方的面积。因此，基尼系数 $G=\frac{\frac{1}{2} - B}{\frac{1}{2}} = 1 - 2B$。
+
+::: {#exr-2_7_b}
+计算 @exm-2_7_a 中的数据的基尼系数。
+:::
+
+```{r}
+#| label: fig-2_7_lc_area_seg
+#| fig-cap: "求解 B 的面积" 
+#| warning: false
+
+x <- seq(0, 1, 0.2)
+y <- c(0, 5, 7, 9, 17, 22)
+y <- cumsum(y)
+df <- data.frame(x=x, y=y, yf=(y / 60))
+ggplot(df, aes(x=x, y=yf)) +
+  geom_line() + 
+  scale_x_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  scale_y_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  geom_point(color = "black", size = 1) + 
+  geom_polygon(aes(x=x, y=yf), fill="grey", alpha=0.7) +
+  geom_segment(x=df$x[1], y=df$yf[1], xend=df$x[length(df$x)], yend=df$yf[length(df$yf)], color="red") + 
+  geom_segment(x=df$x[2], y=df$yf[2], xend=df$x[2], yend=0) +
+  geom_segment(x=df$x[3], y=df$yf[3], xend=df$x[3], yend=0) +
+  geom_segment(x=df$x[4], y=df$yf[4], xend=df$x[4], yend=0) +
+  geom_segment(x=df$x[5], y=df$yf[5], xend=df$x[5], yend=0) +
+  geom_segment(x=df$x[6], y=df$yf[6], xend=df$x[6], yend=0) +
+  annotate("text", x = 0.15, y = 0.02, label = "B1", hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 0.3, y = 0.1, label = "B2", hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 0.5, y = 0.2, label = "B3", hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 0.7, y = 0.4, label = "B4", hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 0.9, y = 0.6, label = "B5", hjust = 1, vjust = 0, size = 3) +
+  labs(x="people proportion", y="incomes proportion")
+```
+::: {#sol-2_7_b}
+为了计算 $B$ 的面积（即洛伦兹曲线下的面积），如 @fig-2_7_lc_area_seg 所示，我们令 $B = B1 + B2 + B3 + B4 + B5$，其中 $B1$ 是0~0.2 的洛伦兹曲线下的区域面积，$B2$ 是 0.2~0.4 之间的区域面积，$B3$ 是 0.4~0.6 之间的区域面积，$B4$ 是 0.6~0.8 之间的区域面积；$B5$ 是 0.8~1 之间的区域面积。现在，$B1$ 是一个三角形的面积，其底为 0.2，高为 5/60，因此：
+
+$$
+B1 = \frac{1}{2} \cdot 0.2 \cdot \frac{5}{60} = \frac{5}{600}
+$$
+
+对于 $B2, B3, B4, B5$ 而言，这些区域的面积由两部区域构成：顶部的三角形的面积和底部的矩形面积。如下图所示，以 $B2$ 为例，其面积由 $B2-1$ 和 $B2-2$ 两部分构成：
+
+```{r}
+x <- seq(0, 1, 0.2)
+y <- c(0, 5, 7, 9, 17, 22)
+y <- cumsum(y)
+df <- data.frame(x=x, y=y, yf=(y / 60))
+ggplot(df, aes(x=x, y=yf)) +
+  scale_x_continuous(limits=c(0, 0.6), breaks=seq(0, 0.6, 0.2)) +
+  scale_y_continuous(limits=c(0, 0.25), breaks=seq(0, 0.25, 0.05)) +
+  geom_segment(x=df$x[2], y=df$yf[2], xend=df$x[3], yend=df$yf[3]) + 
+  geom_segment(x=df$x[2], y=df$yf[2], xend=df$x[2], yend=0) +
+  geom_segment(x=df$x[3], y=df$yf[3], xend=df$x[3], yend=0) +
+  geom_segment(x=df$x[2], y=df$yf[2], xend=df$x[3], yend=df$yf[2], linetype="dashed") +
+  annotate("text", x = 0.3, y = 0.1, label = "B2-1", hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 0.3, y = 0.03, label = "B2-2", hjust = 1, vjust = 0, size = 3) +
+  labs(x="people proportion", y="incomes proportion")
+```
+
+因此，所有的三角形的底的长度都是 0.2，其对应的高分别为 $\frac{5}{60}, \frac{7}{60}, \frac{9}{60}, \frac{17}{60}, \frac{22}{60}$。因此，所有的三角形的面积为：
+
+$$
+S_\triangle = \frac{1}{2} \cdot 0.2 \cdot \frac{5+7+9+17+22}{60} = 0.1
+$$
+
+四个矩形的长均是 0.2，其对应的高分别是 $\frac{5}{60}, \frac{12}{60}, \frac{21}{60}, \frac{38}{60}$。因此，所有的矩形的面积为：
+
+$$
+S_\square = 0.2 \cdot \frac{5 + 12 + 21 + 38}{60} \thickapprox 0.25333
+$$
+
+所以 $B = S_\triangle + S_\square =$ $0.1 + 0.25333 = 0.35333$，故而 $G = 1 - 2B =$ $1 - 2 \cdot 0.35333 =$ $0.29334$。
+:::
+
+一般而言，收入数据以升序进行排列，$x_1 \le x_2 \le x_3 \le ... \le x_n$，令 $s_j = x_1 + ... + x_j, j=1,...,n$，则洛伦兹曲线下方的所有三角形的底均是 $\frac{1}{n}$，且其对应的高分别为 $\frac{x_1}{s_n}$，$\frac{x_2}{s_n}$，……，$\frac{x_n}{s_n}$。
+
+因此，所有三角形的面积为：
+
+$$
+S_\triangle=\frac{1}{2n}\frac{(x_1 + ... + x_n)}{s_n}=\frac{1}{2n}
+$$
+
+所有的矩形的长均为 $\frac{1}{n}$，且其对应的高分别为 $\frac{s_1}{s_n}$，$\frac{s_2}{s_n}$，……，$\frac{s_{n-1}}{s_n}$。
+
+因此，所有矩形的面积为：
+
+$$
+S_\square = \frac{s_1 + s_2 + ... + s_{n-1}}{ns_n}
+$$
+
+所以：$B = \frac{1}{2n} +  \frac{s_1 + s_2 + ... + s_{n-1}}{ns_n}$
+
+当所有人的收入都相等时，基尼系数为 0，因此直线与洛伦兹曲线之间的面积为 0。另一个极端的情况就是，当群体的 $n$ 个人中，只有一个人有收入，那么此时基尼系数达到最大值。对于第二种场景，洛伦兹曲线下的面积是一个三角形的面积，其底边长度为 $\frac{1}{n}$，高度为 1（如 @fig-2_7_gini_max）。此时 $B=\frac{1}{2n}$，因此 $G=1-\frac{1}{n}$。
+
+```{r}
+#| label: fig-2_7_gini_max
+#| fig-cap: "最大基尼系数"
+#| warning: false
+
+x <- seq(0, 1, 0.2)
+y <- c(0, 0, 0, 0, 0, 60)
+y <- cumsum(y)
+df <- data.frame(x=x, y=y, yf=(y / 60))
+ggplot(df, aes(x=x, y=yf)) +
+  geom_line() + 
+  scale_x_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  scale_y_continuous(limits=c(0, 1), breaks=seq(0, 1, 0.2)) +
+  geom_point(color = "black", size = 1) + 
+  geom_polygon(aes(x=x, y=yf), fill="grey", alpha=0.7) +
+  geom_segment(x=df$x[1], y=df$yf[1], xend=df$x[length(df$x)], yend=df$yf[length(df$yf)], color="red") + 
+  geom_segment(x=df$x[2], y=df$yf[2], xend=df$x[2], yend=0) +
+  geom_segment(x=df$x[3], y=df$yf[3], xend=df$x[3], yend=0) +
+  geom_segment(x=df$x[4], y=df$yf[4], xend=df$x[4], yend=0) +
+  geom_segment(x=df$x[5], y=df$yf[5], xend=df$x[5], yend=0) +
+  geom_segment(x=df$x[6], y=df$yf[6], xend=df$x[6], yend=0) +
+  labs(x="people proportion", y="incomes proportion") +
+  theme(  
+    axis.text.x = element_blank(),   
+    axis.text.y = element_blank(), 
+  ) + 
+  annotate("text", x = 0.9, y = 0.25, label = "B", hjust = 1, vjust = 0, size = 6) +
+  annotate("text", x = 0.8, y = 0, label = "1-(1/n)", hjust = 1, vjust = 0, size = 3) + 
+  annotate("text", x = 1, y = 0, label = "1", hjust = 1, vjust = 0, size = 3) + 
+  annotate("text", x = 0, y = 1, label = "1", hjust = 1, vjust = 0, size = 3)
+```

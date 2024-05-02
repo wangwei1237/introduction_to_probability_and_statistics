@@ -27,7 +27,7 @@ jobs:
             any::ggplot2
       #- name: Install R packages
       #  run: |
-      #    Rscript -e "install.packages(c('knitr', 'rmarkdown', 'ggplot2'))"
+      #    Rscript -e "install.packages(c('knitr', 'rmarkdown', 'ggplot2', 'MASS'))"
       - name: Checkout main source
         uses: actions/checkout@v4
       - name: Install Quarto Extensions

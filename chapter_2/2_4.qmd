@@ -1,1 +1,154 @@
-## Chebyshev’s inequality
+## 切比雪夫不等式 {#sec-2_4}
+设 $\overline {x}$ 和 $s$ 分别是数据集的样本均值和样本标准差。假设 $s > 0$，切比雪夫不等式表明，对于 $\forall k \ge 1$ ，至少有 $(100 \cdot (1−\frac {1}{k^2})) \%$ 的数据位于 $[ \overline {x} − ks, \overline {x} + ks]$ 的区间内。
+
+* 令 $k = \frac {3}{2}$，根据切比雪夫不等式，至少有 $55.56\%$ 的数据会位于 $\overline {x} \pm 1.5s$ 的范围内。
+* 令 $k=2$，则至少有 $75\%$ 的数据位于 $\overline {x} \pm 2s$ 的范围内。
+* 令 $k=3$，则至少有 $88.9\%$ 的数据位于 $\overline {x} \pm 3s$ 的范围内。
+
+### 切比雪夫不等式
+对于数据集 $\{x_1,...,x_n\}$ 而言，令 $\overline{x}$ 和 $s$ 分别是其样本均值和样本标准差，其中 $s \gt 0$。
+
+令 $S_k=\{|x_i - \overline{x}| \lt ks, i \in [1, n]\}$，即 $S_k$ 为距离 $\overline{x}$ $k$ 个标准差以内的数据构成的集合。
+
+令 $|S_k|$ 为集合 $S_k$ 中的元素个数。
+
+则有：
+
+$$
+\frac{|S_k|}{n} \ge {1 - \frac{n-1}{nk^2}} \gt {1 - \frac{1}{k^2}}, \ \ \forall k \ge 1
+$$ {#eq-2_4_001}
+
+@eq-2_4_001 就是切比雪夫不等式，其证明过程如下：
+
+$$
+\begin{align}
+(n-1)s^2 &= \sum_{i=1}^{n}{(x_i-\overline{x})^2} \\
+&= \sum_{i \in S_k}{{(x_i-\overline{x})^2}} + \sum_{i \notin S_k}{{(x_i-\overline{x})^2}} \\
+& \ge \sum_{i \notin S_k}{{(x_i-\overline{x})^2}}
+\end{align}
+$$
+
+$$
+\begin{align}
+&\because \forall i \in S_k, \ \ |x_i - \overline{x}| \lt ks, \\
+&\therefore \forall i \notin S_k, \ \ |x_i - \overline{x}| \ge ks, \\
+&\therefore \sum_{i \notin S_k}{{(x_i-\overline{x})^2}} \ge \sum_{i \notin S_k}{k^2s^2} \\
+&=k^2s^2(n-|S_k|)
+\end{align}
+$$
+
+$$
+\therefore (n-1)s^2 \ge k^2s^2(n-|S_k|)
+$$ {#eq-2_4_002}
+
+当 $s^2 \ne 0$ 时，对于 @eq-2_4_002 的等式两边都除以 $nk^2s^2$，得到：
+
+$$
+\begin{align}
+&\frac{n-1}{nk^2} \ge \frac{n-|S_k|}{n}, \\
+&\therefore \frac{n-1}{nk^2} \ge 1-\frac{|S_k|}{n} \\
+&\therefore \frac{|S_k|}{n} \ge 1-\frac{n}{nk^2}+\frac{1}{nk^2} \\
+&\therefore \frac{|S_k|}{n} \ge 1-\frac{1}{k^2}
+\end{align}
+$$
+
+由于切比雪夫不等式的通用性，对于给定的数据集，实际位于 $[\overline{x}-ks, \overline{x}+ks]$ 区间内的数据的百分比可能比切比雪夫不等式给出的下限要大一点。
+
+::: {#exm-2_4_a}
+@tbl-us_cars 给出了 2013 年 6 月美国最畅销的 10 款汽车。根据数据可知：$\overline{x}=35.33$，$s=11.86$，当 $k=\frac{3}{2}$ 时，至少有 55.55%（$100(1-\frac{1}{k^2})\%$）的数据位于 [17.54, 53.12]（$[\overline{x}-ks, \overline{x}+ks]$）区间内。而实际上，对于表中的数据而言，有 $90\%$ 的数据落在了这个区间。
+:::
+
+```{r}
+#| label: tbl-us_cars
+#| tbl-cap: "2013 年 6 月美国最畅销的 10 款汽车"
+#| warning: false
+#| 
+library(knitr)
+df <- read.table("../misc/US_cars.csv", header=TRUE, sep=",")
+kable(df, align="l")
+```
+
+对于数据集 $\{x_1,...,x_n\}$ 而言，令 $\overline{x}$ 和 $s$ 分别是其样本均值和样本标准差，其中 $s \gt 0$。那么，$\{x_i - \overline{x} \ge ks, i \in [1, n]\}$ 的数据占比是多少呢？
+
+假设令 $N_k=\{x_i - \overline{x} \ge ks, i \in [1, n]\}$，我们是否可以计算出 $\frac{|N_k|}{n}$？
+
+当然！！！
+
+根据 @eq-2_4_001，我们可以得到：
+
+$$
+\frac{|N_k|}{n} \le \frac{1}{k^2}
+$$ {#eq-2_4_003}
+
+不过，利用接下来要介绍的单边切比雪夫不等式，我们可以得到一个更为精准的数据。
+
+### 单边切比雪夫不等式
+对于数据集 $\{x_1,...,x_n\}$ 而言，令 $\overline{x}$ 和 $s$ 分别是其样本均值和样本标准差，其中 $s \gt 0$。
+
+令 $N_k=\{x_i - \overline{x} \ge ks, i \in [1, n]\}$， $|N_k|$ 为集合 $N_k$ 中的元素个数，则有：
+
+$$
+\frac{|N_k|}{n} \le \frac{1}{1+k^2}
+$$ {#eq-2_4_005}
+
+我们称 @eq-2_4_005 为单边切比雪夫不等式（*one-sided Chebyshev inequality*），其证明过程如下：
+
+令 $y_i=x_i-\overline{x}$，$i \in [1,n]$，对于 $\forall b \gt 0$，有：
+
+$$
+\begin{align}
+\sum_{i=1}^{n}{(y_i+b)^2} &\ge \sum_{i:y_i \ge ks}{(y_i+b)^2} \\
+& \ge \sum_{i:y_i \ge ks}{(ks+b)^2} \\
+& = |N_k| \cdot (ks+b)^2
+\end{align}
+$$ {#eq-2_4_006}
+
+因为 $|N_k|$ 为 $y_i \ge ks$ 的元素个数，$ks$ 和 $b$ 都是正数，因此有：
+$$
+\begin{align}
+\sum_{i=1}^{n}{(y_i+b)^2} &= \sum_{i=1}^{n}{(y_i^2 + 2by_i + b^2)} \\
+&= \sum_{i=1}^{n}{y_i^2} + 2b\sum_{i=1}^{n}{y_i} + nb^2
+\end{align}
+$$
+
+$$
+\begin{align}
+&\because y_i = x_i - \overline{x} \\
+&\therefore \sum_{i=1}^{n}{y_i} = \sum_{i=1}^{n}{(x_i - \overline{x})} = \sum_{i=1}^{n}{x_i} - n\overline{x} = 0
+\end{align}
+$$
+
+所以有：
+
+$$
+\begin{align}
+\sum_{i=1}^{n}{(y_i+b)^2} &= \sum_{i=1}^{n}{y_i^2} + nb^2 \\
+&=(n-1)s^2 + nb^2
+\end{align}
+$$ {#eq-2_4_007}
+
+根据 @eq-2_4_006 和 @eq-2_4_007，有：
+
+$$
+(n-1)s^2 + nb^2 \ge |N_k| \cdot (ks+b)^2
+$$
+
+进而得到：
+
+$$
+\frac{|N_k|}{n} \le \frac{s^2 + b^2}{(ks + b)^2}
+$$ {#eq-2_4_008}
+
+因为 $b$ 是任意大于 0 的数，因此我们可以令：
+
+$$
+b=\frac{s}{k}
+$$ {#eq-2_4_009}
+
+把 @eq-2_4_009 代入 @eq-2_4_008 得到 @eq-2_4_005：
+
+$$
+\frac{|N_k|}{n} \le \frac{1}{k^2 + 1}
+$$
+
+根据 @eq-2_4_003，我们可以发现，在一个数据集中，超过样本均值的 2 倍标准差的数据最多占比 25%。但是利用 @eq-2_4_005 所示的单边切比雪夫不等式，我们可以将这个比例精确到最多占比 20%。
