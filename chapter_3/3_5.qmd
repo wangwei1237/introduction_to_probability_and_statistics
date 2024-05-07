@@ -1,1 +1,1 @@
-## Sample spaces having equally likely outcomes
+## Sample spaces having equally likely outcomes {#sec-3_5}

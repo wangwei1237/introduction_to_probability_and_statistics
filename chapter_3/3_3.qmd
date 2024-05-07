@@ -1,1 +1,39 @@
-## Venn diagrams and the algebra of events
+## 事件的代数运算和韦恩图表示 {#sec-3_3}
+韦恩图（*Venn DIagram*）是一种用来描述事件之间逻辑关系的、非常有用的图形化表示。用一个矩形表示样本空间 $S$，而用矩形内的圆表示样本空间中的事件 $E$, $F$, $G$,... 对图中的特定区域进行着色以表示我们感兴趣的事件。例如，在 @fig-3_1 所示的三个韦恩图中，着色区域分别表示事件 $E \cup F$（$E$ 和 $F$ 的并集），$EF$（$E$ 和 $F$ 的交集），以及 $E^c$（$E$ 的补集）。@fig-3_2 所示的韦恩图表示 $E \subset F$（$E$ 是 $F$ 的子集）。
+
+::: {#fig-3_1 layout-ncol=3}
+
+![$E \cup F$](../images/chapter_3/f_3_1_a.png){#fig-3_1_a}
+
+![$EF$](../images/chapter_3/f_3_1_b.png){#fig-3_1_b}
+
+![$E^c$](../images/chapter_3/f_3_1_c.png){#fig-3_1_c}
+
+韦恩图
+:::
+
+![$E \subset F$ 的韦恩图](../images/chapter_3/f_3_2.png){#fig-3_2}
+
+事件的并集、交集和补集操作类似于代数中的规则，例如：
+
+* 交换律：$E \cup F = F \cup E$，$EF=FE$
+* 结合律：$(E \cup F) \cup G = E \cup (F \cup G)$，$(EF)G=E(FG)$
+* 分配率：$(E \cup F)G = EG \cup FG$，$E(F \cup G) = (E \cup G)(F \cup G)$
+
+可以通过证明等式左侧事件中的任何结果也包含在等式右侧的事件中来验证如上的事件操作规则。可以通过韦恩图来证明这如上的规则，例如，可以通过 @fig-3_3 中所示的一系列韦恩图来证明分配率。
+
+::: {#fig-3_3 layout-ncol=3}
+
+![$EG$](../images/chapter_3/f_3_3_a.png){#fig-3_3_a}
+
+![$FG$](../images/chapter_3/f_3_3_b.png){#fig-3_3_b}
+
+![$(E \cup F )G$](../images/chapter_3/f_3_3_c.png){#fig-3_3_c}
+
+利用韦恩图证明分配率： $(E \cup F )G = EG \cup FG$
+:::
+
+基于事件的并集、交集和补集形成的如下的关系称之为德摩根定律（*DeMorgan's laws*）。
+
+* $(E \cup F)^c = E^cF^c$
+* $(FE)^c = E^c \cup F^c$

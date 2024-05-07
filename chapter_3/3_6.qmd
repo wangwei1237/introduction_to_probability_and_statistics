@@ -1,1 +1,1 @@
-## Conditional probability
+## Conditional probability {#sec-3_6}

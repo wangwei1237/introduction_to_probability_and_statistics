@@ -1,1 +1,1 @@
-## Bayes’ formula
+## Bayes’ formula {#sec-3_7}
