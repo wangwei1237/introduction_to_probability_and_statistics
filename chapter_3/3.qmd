@@ -16,4 +16,4 @@
 
 {{< include 3_8.qmd >}}
 
-{{< include 3_9.qmd >}}  
+{{< include 3_9.qmd >}}
