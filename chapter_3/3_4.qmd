@@ -34,7 +34,7 @@ $P(E \cup F) = P(E) + P(F) - P(EF)$
 :::
 
 ::: {.callout-tip title="证明 @prp-3_4_2"}
-@fig-3_4 所示的韦恩图是证明 @pro-3_4_2 的最简单的方法。在 @fig-3_4 中，区域 I、II、III 是互斥的，因此：
+@fig-3_4 所示的韦恩图是证明 @prp-3_4_2 的最简单的方法。在 @fig-3_4 中，区域 I、II、III 是互斥的，因此：
 
 $$
 \begin{align}
