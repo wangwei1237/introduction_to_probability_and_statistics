@@ -1,4 +1,4 @@
-# Random variables and expectation {#sec-4}
+# 随机变量和期望 {#sec-4}
 
 {{< include 4_1.qmd >}}
 
