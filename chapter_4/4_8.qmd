@@ -1,1 +1,54 @@
-## Moment generating functions
+## 矩生成函数
+::: {.callout-note}
+矩生成函数（*Moment Generating Function*）是概率论中的一个重要概念，主要用于描述 **随机变量** 的概率分布。矩生成函数是 **随机变量** 的特征函数，我们可以利用矩生成函数得到 **随机变量** 的所有矩（平均值、方差、偏度等统计量）。
+:::
+
+**随机变量** $X$ 的矩生成函数 $\phi(t)$ 的定义如下：
+
+$$
+\phi(t) = E[e^{tX}] = \begin{cases}
+\sum_{x}{e^{tx}p(x)}, \quad & 如果 X 为离散随机变量 \\
+& \\
+& \\
+\int_{-\infty}^{\infty}{e^{tx}f(x) \mathrm{d} x}, \quad & 如果 X 为连续随机变量 \\
+\end{cases}
+$$ {#eq-4_8_001}
+
+因为 $X$ 的所有的矩都可以通过对 $\phi(t)$ 求 $k$ 阶导数来获得，因此我们称 $\phi(t)$ 为矩生成函数。例如 
+
+* $\phi'(0)=E[X]$：
+
+$$
+\begin{align}
+\phi'(t) &= \frac{\mathrm{d} {E[e^{tX}]}}{\mathrm{d} t} \\
+&= E\bigg[ \frac{\mathrm{d} {e^{tX}}}{\mathrm{d} t} \bigg] \\
+&= E[Xe^{tX}] \\
+\therefore \phi'(0) &= E[Xe^{0 \cdot X}] = E[X]
+\end{align}
+$$ {#eq-4_8_002}
+
+* $\phi''(0)=E[X^2]$
+
+$$
+\begin{align}
+\phi''(t) &= \frac{\mathrm{d} {\phi'(t)}}{\mathrm{d} t} \\
+&= \frac{\mathrm{d} {E[Xe^{tX}]}}{\mathrm{d} t} \\ 
+&= E\bigg[ \frac{\mathrm{d} {(Xe^{tX})}}{\mathrm{d} t} \bigg] \\
+&= E[X^2e^{tX}] \\
+\therefore \phi''(0) &= E[X^2]
+\end{align}
+$$ {#eq-4_8_003}
+
+* 更一般的，在 $t=0$ 处的 $\phi(t)$ 的 $n$ 阶导数等于 $E[X^n]$，即：
+
+$$
+\phi^{n}(0) = E[X^n], \quad n \ge 1
+$$ {#eq-4_8_004}
+
+矩生成函数的一个重要特性是：独立 **随机变量** 之和的矩生成函数是每个 **随机变量** 的矩生成函数的乘积。假设 $X$ 和 $Y$ 是独立 **随机变量**，其矩生成函数分别为 $\phi_X(t)$、$\phi_Y(t)$，则 $X+Y$ 的矩生成函数为：
+
+$\begin{align} \phi_{X+Y}(t) &= E[e^{t(X+Y)}] \\ &= E[e^{tX}e^{tY}] \\ &= E[e^{tX}]E[e^{tY}] \\ &= \phi_X(t)\phi_Y(t) \end{align}$
+
+如果 $X$ 和 $Y$ 是相互独立的，则 $e^{tX}$ 和 $e^{tY}$ 也是独立的，所以根据 @thm-4_7_4 有 $E[e^{tX}e^{tY}] = E[e^{tX}]E[e^{tY}]$，所以上式得证。
+
+矩生成函数的另一个重要的特性是：矩生成函数唯一地确定了 **随机变量** 的概率分布。也就是说，矩生成函数和 **随机变量** 的分布函数之间存在一一对应的关系。

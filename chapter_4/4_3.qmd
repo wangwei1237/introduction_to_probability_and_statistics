@@ -122,13 +122,13 @@ $$
 $X$ 和 $Y$ 是两个连续 **随机变量**，对于 $x \in (-\infty, \infty)$ 和 $y \in (-\infty, \infty)$，对于任何一个 $x$ 和 $y$ 构成的 *数据对* 集合 $C$（$C$ 是一个二维平面中的集合），如果存在函数 $f(x,y)$，使得：
 
 $$
-P\{(X,Y) \in C\} = \iint_{(x,y) \in C}{f(x,y)dxdy}
+P\{(X,Y) \in C\} = \iint_{(x,y) \in C}{f(x,y)\mathrm{d} x \mathrm{d} y}
 $$ {#eq-4_3_007_433}
 
 我们称 $X$ 和 $Y$ 是联合连续随机变量，称函数 $f(x,y)$ 为 $X$ 和 $Y$ 的 **联合概率密度函数**（*joint probability density function*）。如果令 $A$ 和 $B$ 为两个实数集，并令 $C = \{(x,y): x \in A, y \in B\}$，则 @eq-4_3_007_433 可以写作：
 
 $$
-P\{X \in A, Y \in B\} = \int_{B} \int_{A} {f(x,y)dxdy}
+P\{X \in A, Y \in B\} = \int_{B} \int_{A} {f(x,y)\mathrm{d} x \mathrm{d} y}
 $$ {#eq-4_3_008_434}
 
 因为：
@@ -136,7 +136,7 @@ $$ {#eq-4_3_008_434}
 $$
 \begin{align}
 F(a,b) &= P\{X \in (-\infty, a], Y \in (-\infty, b]\} \\
-&= \int_{-\infty}^{b} \int_{-\infty}^{a} {f(x,y)dxdy}
+&= \int_{-\infty}^{b} \int_{-\infty}^{a} {f(x,y)\mathrm{d} x \mathrm{d} y}
 \end{align}
 $$ {#eq-4_3_009}
 
@@ -150,7 +150,7 @@ $$ {#eq-4_3_010}
 
 $$
 \begin{align}
-P\{a \lt X \lt a + \Delta a, b \lt Y \lt b + \Delta b\} &= \int_{b}^{b + \Delta b} \int_{a}^{a + \Delta a} {f(x,y)dxdy} \\ 
+P\{a \lt X \lt a + \Delta a, b \lt Y \lt b + \Delta b\} &= \int_{b}^{b + \Delta b} \int_{a}^{a + \Delta a} {f(x,y)\mathrm{d} x \mathrm{d} y} \\ 
 &\approx f(a,b) \Delta a \Delta b
 \end{align}
 $$ {#eq-4_3_011}
@@ -162,9 +162,9 @@ $$ {#eq-4_3_011}
 $$
 \begin{align}
 P\{X \in A\} &= P\{X \in A, Y \in (-\infty, \infty)\} \\
-&= \int_{A} \int_{-\infty}^{\infty} {f(x,y)dydx} \\
-&= \int_{A}{f_X{(x)dx}} \\
-其中\ f_X{(x)} &= \int_{-\infty}^{\infty}{f(x,y)dy}
+&= \int_{A} \int_{-\infty}^{\infty} {f(x,y) \mathrm{d} y\mathrm{d} x} \\
+&= \int_{A}{f_X{(x)\mathrm{d} x}} \\
+其中\ f_X{(x)} &= \int_{-\infty}^{\infty}{f(x,y) \mathrm{d} y}
 \end{align}
 $$ {#eq-4_3_012_435}
 
@@ -173,9 +173,9 @@ $$ {#eq-4_3_012_435}
 $$
 \begin{align}
 P\{Y \in B\} &= P\{X \in (-\infty, \infty), Y \in B\} \\
-&= \int_{B} \int_{-\infty}^{\infty} {f(x,y)dxdy} \\
-&= \int_{B}{f_Y{(y)dy}} \\
-其中\ f_Y{(y)} &= \int_{-\infty}^{\infty}{f(x,y)dx}
+&= \int_{B} \int_{-\infty}^{\infty} {f(x,y)\mathrm{d} x \mathrm{d} y} \\
+&= \int_{B}{f_Y{(y) \mathrm{d} y}} \\
+其中\ f_Y{(y)} &= \int_{-\infty}^{\infty}{f(x,y)\mathrm{d} x}
 \end{align}
 $${#eq-4_3_013_436}
 
@@ -201,9 +201,9 @@ $$
 ::: {.callout-tip title="$P\\{X \gt 1, Y \lt 1\\}$"}
 $$
 \begin{align}
-P\{X \gt 1, Y \lt 1\} &= \int_{0}^{1} \int_{1}^{\infty} {2e^{-x}e^{-2y}dxdy} \\
-&= \int_{0}^{1}{2e^{-2y}(-e^{-x} \big |_{1}^{\infty})}dy \\
-&= e^{-1}\int_{0}^{1}2e^{-2y}dy \\
+P\{X \gt 1, Y \lt 1\} &= \int_{0}^{1} \int_{1}^{\infty} {2e^{-x}e^{-2y}\mathrm{d} x \mathrm{d} y} \\
+&= \int_{0}^{1}{2e^{-2y}(-e^{-x} \big |_{1}^{\infty})} \mathrm{d} y \\
+&= e^{-1}\int_{0}^{1}2e^{-2y} \mathrm{d} y \\
 &= e^{-1}(1-e^{-2})
 \end{align}
 $$
@@ -212,10 +212,10 @@ $$
 ::: {.callout-tip title="$P\\{X \lt Y\\}$"}
 $$
 \begin{align}
-P\{X \lt Y\} &= \iint_{(x,y):x \lt y}{2e^{-x}e^{-2y}dxdy} \\
-&= \int_{0}^{\infty} \int_{0}^{y} {2e^{-x}e^{-2y}dxdy} \\
-&= \int_{0}^{\infty}{2e^{-2y}(1-e^{-y})dy} \\
-&= \int_{0}^{\infty}{2e^{-2y}dy} - \int_{0}^{\infty}{2e^{-3y}dy} \\
+P\{X \lt Y\} &= \iint_{(x,y):x \lt y}{2e^{-x}e^{-2y}\mathrm{d} x \mathrm{d} y} \\
+&= \int_{0}^{\infty} \int_{0}^{y} {2e^{-x}e^{-2y}\mathrm{d} x \mathrm{d} y} \\
+&= \int_{0}^{\infty}{2e^{-2y}(1-e^{-y}) \mathrm{d} y} \\
+&= \int_{0}^{\infty}{2e^{-2y} \mathrm{d} y} - \int_{0}^{\infty}{2e^{-3y} \mathrm{d} y} \\
 &= 1-\frac{2}{3} \\
 &= \frac{1}{3}
 \end{align}
@@ -225,8 +225,8 @@ $$
 ::: {.callout-tip title="$P\\{X \lt a\\}$"}
 $$
 \begin{align}
-P\{X \lt a\} &= \int_{0}^{a} \int_{0}^{\infty}{2e^{-2y}e^{-x}dydx} \\
-&= \int_{0}^{a}{e^{-x}dx} \\
+P\{X \lt a\} &= \int_{0}^{a} \int_{0}^{\infty}{2e^{-2y}e^{-x} \mathrm{d} y\mathrm{d} x} \\
+&= \int_{0}^{a}{e^{-x}\mathrm{d} x} \\
 &= 1-e^{-a} 
 \end{align}
 $$
@@ -296,10 +296,10 @@ $$
 \begin{align}
 \forall a & \gt 0, \\ 
 F_{\frac{X}{Y}}{(a)} &= P\{\frac{X}{Y} \le a\} \\
-&= \iint_{\frac{x}{y} \le a}{f(x,y)dxdy} \\
-&= \iint_{\frac{x}{y} \le a}{e^{-x}e^{-y}dxdy} \\
-&= \int_{0}^{\infty} \int_{0}^{ay} {e^{-x}e^{-y}dxdy} \\
-&= \int_{0}^{\infty} {(1-e^{-ay})e^{-y}dy} \\
+&= \iint_{\frac{x}{y} \le a}{f(x,y)\mathrm{d} x \mathrm{d} y} \\
+&= \iint_{\frac{x}{y} \le a}{e^{-x}e^{-y}\mathrm{d} x \mathrm{d} y} \\
+&= \int_{0}^{\infty} \int_{0}^{ay} {e^{-x}e^{-y}\mathrm{d} x \mathrm{d} y} \\
+&= \int_{0}^{\infty} {(1-e^{-ay})e^{-y} \mathrm{d} y} \\
 &= \bigg(-e^{-y} + \frac{e^{-(a+1)y}}{a+1}\bigg) \bigg | _{0}^{\infty} \\
 &= 1 - \frac{1}{a+1}
 \end{align}
@@ -323,7 +323,7 @@ $$ {#eq-4_3_018}
 此外，对于 $n$ 维空间中的集合 $C$，如果存在一个函数 $f(\cdot)$ 使得：
 
 $$
-P\{(X_1,X_2,...,X_n) \in C\} = \idotsint_{(x_1,...,x_n) \in C}{f(x_1,...,x_n)dx_1 \cdots dx_n} 
+P\{(X_1,X_2,...,X_n) \in C\} = \idotsint_{(x_1,...,x_n) \in C}{f(x_1,...,x_n)\mathrm{d} x_1 \cdots \mathrm{d} x_n} 
 $$ {#eq-4_3_019}
 
 我们称 $f(x_1,...,x_n)$ 为这 $n$ 个联合连续随机变量的联合概率密度函数。
@@ -333,7 +333,7 @@ $$ {#eq-4_3_019}
 $$
 \begin{align}
 P\{X_1 \in A_1, X_2 \in A_2, ..., X_n \in A_n\} &= \\
-\int_{A_n} \int_{A_{n-1}} \cdots \int_{A_1}{f(x_1,...,x_n)dx_1dx_2 \cdots dx_n} &
+\int_{A_n} \int_{A_{n-1}} \cdots \int_{A_1}{f(x_1,...,x_n)\mathrm{d} x_1\mathrm{d} x_2 \cdots \mathrm{d} x_n} &
 \end{align}
 $$ {#eq-4_3_020}
 
@@ -452,7 +452,7 @@ $$ {#eq-4_3_024}
 我们可以使用条件概率密度函数来定义：在给定一个随机变量的值下，另一个随机变量的条件概率。也就是说，如果 $X$ 和 $Y$ 都是连续 **随机变量**，那么，对于任何集合 $A$，都有：
 
 $$
-P\{X \in A, Y=y\} = \int_{A}f_{X|Y}(x|y)dx
+P\{X \in A, Y=y\} = \int_{A}f_{X|Y}(x|y)\mathrm{d} x
 $$
 
 ::: {#exr-4_3_h}
@@ -474,8 +474,8 @@ $$
 $$
 \begin{align}
 f_{X|Y}(x|y) &= \frac{f(x,y)}{f_Y(y)} \\
-&= \frac{f(x,y)}{\int_{-\infty}^{\infty}{f(x,y)dx}} \\
-&= \frac{x(2-x-y)}{\int_0^1{x(2-x-y)dx}} \\
+&= \frac{f(x,y)}{\int_{-\infty}^{\infty}{f(x,y)\mathrm{d} x}} \\
+&= \frac{x(2-x-y)}{\int_0^1{x(2-x-y)\mathrm{d} x}} \\
 &= \frac{x(2-x-y)}{\frac{2}{3} - \frac{y}{2}} \\
 &= \frac{6x(2-x-y)}{4-3y} \quad \blacksquare
 \end{align}

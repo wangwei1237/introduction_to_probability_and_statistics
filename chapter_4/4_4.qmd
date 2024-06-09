@@ -107,7 +107,7 @@ $$
 如果 $x$ 的权重等于 $X$ 在 $x$ 附近的概率，则 $X$ 的所有可能值的加权平均数就是 $xf(x) \Delta x$ 在所有 $x$ 上的积分。通常，定义 $X$ 的期望为：
 
 $$
-E[X] = \int_{-\infty}^{\infty}{xf(x)dx}
+E[X] = \int_{-\infty}^{\infty}{xf(x) \mathrm{d} x}
 $$
 
 ::: {#exm-4_4_d}
@@ -120,7 +120,7 @@ f(x) = \begin{cases}
 \end{cases}
 $$
 
-则下午 5 点之后可以收到消息的期望时间为：$E[X] = \int_{0}^{1.5}{\frac{1}{1.5}dx} = 0.75$。因此，您等待消息的时间平均为 45 分钟。  $\blacksquare$
+则下午 5 点之后可以收到消息的期望时间为：$E[X] = \int_{0}^{1.5}{\frac{1}{1.5} \mathrm{d} x} = 0.75$。因此，您等待消息的时间平均为 45 分钟。  $\blacksquare$
 :::
 
 ::: {.callout-tip title="备注"}

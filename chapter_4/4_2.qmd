@@ -88,7 +88,7 @@ ggplot(df1, aes(x = value, y = cpf)) +
 **离散随机变量** 的可能取值是一个序列集合，但是我们通常必须考虑那些取值是一个区间的 **随机变量**。假设 $X$ 为一个取值是一个区间的 **随机变量**。如果存在一个定义域为所有实数 $x \in (−\infty, \infty)$ 的非负函数 $f(x)$，且对于任意实数集 $B$，$f(x)$ 都满足：
 
 $$
-P\{X \in B\} = \int_{B}{f(x)dx}
+P\{X \in B\} = \int_{B}{f(x)\mathrm{d} x}
 $$ {#eq-4_2_004}
 
 则我们称 $X$ 是一个 **连续随机变量**（*continous random variable*），而函数 $f(x)$ 为 **随机变量** $X$ 的 **概率密度函数**（*probability density function*）。
@@ -96,19 +96,19 @@ $$ {#eq-4_2_004}
 换句话说，@eq-4_2_004 指出，对集合 $B$ 上的概率密度函数进行积分运算可以得到 $X$ 在 $B$ 中的概率。由于 $X$ 必须为某个值，所以 $f(x)$ 必须满足：
 
 $$
-1 = P\{X \in (-\infty, \infty)\} = \int_{-\infty}^{\infty}{f(x)dx}
+1 = P\{X \in (-\infty, \infty)\} = \int_{-\infty}^{\infty}{f(x)\mathrm{d} x}
 $$ {#eq-4_2_005}
 
 概率密度函数 $f(x)$ 可以用于回答所有关于 **随机变量** $X$ 的概率问题，例如，令 $B=[a,b]$，根据 @eq-4_2_004，我们有：
 
 $$
-P\{a \le X \le b\}=\int_{a}^{b}{f(x)dx}
+P\{a \le X \le b\}=\int_{a}^{b}{f(x)\mathrm{d} x}
 $$ {#eq-4_2_006}
 
 在 @eq-4_2_006 中，如果令 $a=b$，则：
 
 $$
-P\{X=a\}=\int_{a}^{a}{f(x)dx} = 0
+P\{X=a\}=\int_{a}^{a}{f(x)\mathrm{d} x} = 0
 $$ {#eq-4_2_007}
 
 换句话说，对于 **连续随机变量** 而言，其取值为某个特殊值的概率为 0，如 @fig-4_3 所示。
@@ -143,7 +143,7 @@ ggplot(df, aes(x=x, y=y)) +
 
 $$
 \begin{align}
-F(a)&=P\{X \in (-\infty,a]\} = \int_{-\infty}^{a}{f(x)dx} \\
+F(a)&=P\{X \in (-\infty,a]\} = \int_{-\infty}^{a}{f(x)\mathrm{d} x} \\
 两边&求微分得：\\
 \frac{dF(a)}{da}&=f(a)
 \end{align}
@@ -152,7 +152,7 @@ $$ {#eq-4_2_008}
 也就是说，概率密度函数是累积分布函数的导数。根据 @eq-4_2_006，概率密度函数的更直观的解释如下：
 
 $$
-P\{a - \frac{\varepsilon}{2} \le X \le a + \frac{\varepsilon}{2}\} = \int_{a-\frac{\varepsilon}{2}}^{a+\frac{\varepsilon}{2}}{f(x)dx} \approx \varepsilon f(a)
+P\{a - \frac{\varepsilon}{2} \le X \le a + \frac{\varepsilon}{2}\} = \int_{a-\frac{\varepsilon}{2}}^{a+\frac{\varepsilon}{2}}{f(x)\mathrm{d} x} \approx \varepsilon f(a)
 $$ {#eq-4_2_009}
 
 其中，$\varepsilon$ 是一个非常小的数。也就是说，$X$ 的取值位于区间 $[a - \frac{\varepsilon}{2},a + \frac{\varepsilon}{2}]$ 内时的概率大约为 $\varepsilon f(a)$。由此，我们可以看出，$f(a)$ 是对随机变量 $X$ 的取值接近 $a$ 的可能性大小的一种度量。
@@ -174,14 +174,14 @@ $$
 :::
 
 ::: {#sol-4_2_b}
-因为 $f(x)$ 是一个概率密度函数，因此必有：$\int_{-\infty}^{\infty}{f(x)dx}=1$。因此，有：
+因为 $f(x)$ 是一个概率密度函数，因此必有：$\int_{-\infty}^{\infty}{f(x)\mathrm{d} x}=1$。因此，有：
 
 $$
 \begin{align}
-C\int_0^2{(4x-2x^2)dx} &=1 \\
+C\int_0^2{(4x-2x^2)\mathrm{d} x} &=1 \\
 C\bigg(2x^2-\frac{2}{3}x^3\bigg)\Bigg|_{x=0}^{x=2} &= 1
 \end{align}
 $$
 
-所以，$C = \frac{3}{8}$。所以，$P\{X \gt 1\}=\int_{1}^{\infty}{f(x)dx}=\frac{3}{8}\int_1^2{(4x-2x^2)dx}=\frac{1}{2}$。 $\blacksquare$
+所以，$C = \frac{3}{8}$。所以，$P\{X \gt 1\}=\int_{1}^{\infty}{f(x)\mathrm{d} x}=\frac{3}{8}\int_1^2{(4x-2x^2)\mathrm{d} x}=\frac{1}{2}$。 $\blacksquare$
 :::
