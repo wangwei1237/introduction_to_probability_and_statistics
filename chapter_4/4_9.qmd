@@ -1,1 +1,106 @@
-## Chebyshev’s inequality and the weak law of large numbers 
+## 切比雪夫不等式和弱大数定律
+我们从证明马尔可夫不等式（*Markov's inequality*）开始本节的内容。
+
+::: {#prp-4_9_1}
+**马尔可夫不等式**：如果 $X$ 是一个取值为非负数的 **随机变量**，则对于任意的 $a \gt 0$ 有：
+
+$P\{X \ge a\} \le \frac{E[X]}{a}$
+
+:::{.proof}
+我们给出了概率密度函数为 $f$ 的连续 **随机变量** $X$ 的证明。
+
+$$
+\begin{align}
+E[X] &= \int_{0}^{\infty}{xf(x) \mathrm{d} x} \\
+&= \int_{0}^{a}{xf(x) \mathrm{d} x} + \int_{a}^{\infty}{xf(x) \mathrm{d} x} \\
+& \ge \int_{a}^{\infty}{xf(x) \mathrm{d} x} \\
+& \ge \int_{a}^{\infty}{af(x) \mathrm{d} x} \\
+&= a\int_{a}^{\infty}{f(x) \mathrm{d} x} \\
+&= aP\{X \ge a\} \quad \blacksquare
+\end{align}
+$$
+:::
+:::
+
+作为推论，我们得到 @prp-4_9_2。
+
+::: {#prp-4_9_2}
+**契比雪夫不等式**：如果$X$ 是一个均值为 $\mu$ 方差为 $\sigma^2$ 的随机变量，则对于任意的 $k \gt 0$ 有：
+
+$P\{|X - \mu| \ge k\} \le \frac{\sigma^2}{k^2}$
+
+::: {.proof}
+因为 $(X-\mu)^2$ 是一个非负的随机变量，因此，令 $a=k^2$，然后根据 @prp-4_9_1 所示的马尔科夫不等式有：
+
+$$
+P\{(X-\mu)^2 \ge k^2\} \le \frac{E[(X-\mu)^2]}{k^2}
+$$ {#eq-4_9_001_491}
+
+$(X-\mu)^2 \ge k^2$ 当且仅当 $|X-\mu| \ge k$，所以 @eq-4_9_001_491 等价于：
+
+$$
+P\{|X-\mu| \ge k\} \le \frac{E[(X-\mu)^2]}{k^2} = \frac{\sigma^2}{k^2}
+$$ {#eq-4_9_002}
+
+证毕。$\blacksquare$
+:::
+:::
+
+马尔可夫不等式和切比雪夫不等式的重要性在于：在只知道概率分布的均值或均值和方差的情况下，我们可以利用马尔可夫不等式和切比雪夫不等式推导出概率的界限。当然，如果实际的概率分布是已知的，那么就可以精确的计算出待计算的概率，我们也就不需要计算概率的界限。
+
+::: {#exr-4_9_a}
+已知工厂一周的产量是一个 **随机变量**，其平均值为 50。
+
+1. 本周的产量超过 75 的概率可以说是多少？
+2. 如果已知一周的产量的方差等于 25，那么本周产量在 40 和 60 之间的概率是多少？
+:::
+
+::: {#sol-4_9_a}
+令 $X$ 为工厂一周的产量。
+
+1. 利用马尔科夫不等式可知：
+  
+    $P\{X \gt 75\} \le \frac{E[X]}{75} = \frac{50}{75} = \frac{2}{3}$
+
+2. 利用切比雪夫不等式可知：
+
+    $P\{|X-50| \ge 10\} \le \frac{\sigma^2}{10^2} = \frac{1}{4}$，所以：
+
+    $$P\{|X-50| \lt 10\} \ge 1 - \frac{1}{4} = \frac{3}{4}$。
+
+    因此，本周产量在 40 和 60 之间的概率最小是 0.75。$\blacksquare$
+:::
+
+在 @eq-4_9_002 中，令 $k = k\sigma$，我们可以将切比雪夫不等式改写为：
+
+$$
+P\{|X - \mu| \ge k\sigma\} \le \frac{1}{k^2} 
+$$ {#eq-4_9_003}
+
+因此，**随机变量** 与其 **均值** 相差超过 $k$ 个 **标准差** 的概率最大为 $\frac{1}{k^2}$。
+
+在本节的最后，我们将用切比雪夫不等式来证明弱大数定律（*weak law of large numbers*）。弱大数定律指出：在一个独立同分布的 **随机变量** 序列中，当 $n$ 趋向于无穷大时，前 $n$ 个 **随机变量** 的平均数（*average*）和该随机变量的均值（*mean*）的差值超过 $\varepsilon$ 的概率为 0。
+
+::: {#thm-4_9_3}
+**弱大数定律**：令 $X_1, X_2,...$ 是一个独立同分布的 **随机变量** 序列，每个 **随机变量** 的均值都为 $\mu$（$E[X_i] = \mu$）。则，对于任意的 $\varepsilon \gt 0$，有：
+
+$P\bigg\{ \big| \frac{X_1 + X_2 + ... + X_n}{n} - \mu \big| \gt \varepsilon \bigg\} \rightarrow 0, \quad n \rightarrow \infty$
+
+::: {.proof}
+我们只能在 **随机变量** 的方差 $\sigma^2$ 为有限数的附加假设下证明 @thm-4_9_3。因为：
+
+$E\bigg[\frac{X_1 + X_2 + ... + X_n}{n}\bigg] = \mu$，$\textup{Var}\bigg(\frac{X_1 + X_2 + ... + X_n}{n}\bigg) = \frac{\sigma^2}{n}$
+
+所以，根据 @prp-4_9_2 的切比雪夫不等式有：
+
+$P\bigg\{ \big| \frac{X_1 + X_2 + ... + X_n}{n} - \mu \big| \gt \varepsilon \bigg\} \le \frac{\sigma^2}{n \varepsilon^2}$
+
+证毕。$\blacksquare$
+:::
+:::
+
+假设我们独立执行某个试验多次，令 $E$ 为某个固定 **事件**，用 $P(E)$ 表示 $E$ 在给定试验中发生的概率。令 
+
+$X_i = \begin{cases} 1, \quad & 第 i 次试验中 E 发生\\ 0, \quad & 第 i 次试验中 E 不发生 \end{cases}$
+
+则 $X_1+X_2+...+X_n$ 表示在 $n$ 次试验中，$E$ 发生的次数。因为 $E[X_i]=P(E)$，所以根据弱大数定律，对于任意的 $\varepsilon \gt 0$，无论 $\varepsilon$ 有多小，随着 $n$ 的增加，前 $n$ 次试验中 $E$ 发生的比例与 $P(E)$ 的差值超过 $\varepsilon$ 的概率会变为 0。 
