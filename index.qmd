@@ -6,7 +6,7 @@ Introduction to Probability and Statistics for Engineers and Scientists (*Sixth 
 
 本书是为工程学、计算机科学、数学、统计学和自然科学专业的学生编写的统计学和概率统计入门课程。当然，科学家、工程师和其他专业人员也可以从本书中找到灵感。
 
-关于书中的各章的 **问题** 部分，可以参见：[www.chegg.com/homework-help](https://www.chegg.com/homework-help/introduction-to-probability-and-statistics-for-engineers-and-scientists-6th-edition-solutions-9780128243466)。
+关于书中的各章最后的 **习题** 部分，可以参见：[www.chegg.com/homework-help](https://www.chegg.com/homework-help/introduction-to-probability-and-statistics-for-engineers-and-scientists-6th-edition-solutions-9780128243466)。
 
 ## 翻译进度
 ```{.bash}
