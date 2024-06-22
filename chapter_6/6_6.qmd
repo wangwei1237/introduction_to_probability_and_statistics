@@ -1,1 +1,1 @@
-## Sampling from a finite population
+## Sampling from a finite population {#sec-6_6}

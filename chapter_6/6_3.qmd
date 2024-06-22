@@ -1,1 +1,1 @@
-## The central limit theorem
+## The central limit theorem {#sec-6_3}

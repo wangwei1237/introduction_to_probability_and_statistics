@@ -1,1 +1,1 @@
-## The sample mean
+## The sample mean {#sec-6_2}

@@ -1,1 +1,1 @@
-## Sampling distributions from a normal population
+## Sampling distributions from a normal population {#sec-6_5}

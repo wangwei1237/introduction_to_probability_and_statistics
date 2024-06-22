@@ -1,4 +1,7 @@
-# Distributions of sampling statistics {#sec-6}
+# 抽样分布 {#sec-6}
+::: {.callout-note}
+样本统计量的分布（*Distributions of Sampling Statistics*）也称为抽样分布，是指样本的统计指标的分布。例如，样本平均数是总体平均数的一个估计量，如果按照相同的样本容量，相同的抽样方式，反复地抽取样本，每次抽样可以得到一个平均数，所有可能样本的平均数所形成的分布，就是样本平均数的抽样分布。
+:::
 
 {{< include 6_1.qmd >}}
 
@@ -13,3 +16,4 @@
 {{< include 6_6.qmd >}} 
 
 {{< include 6_7.qmd >}}
+       
