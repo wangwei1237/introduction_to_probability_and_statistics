@@ -1,1 +1,45 @@
-## The sample mean {#sec-6_2}
+## 样本均值 {#sec-6_2}
+考虑一个总体，总体中的每个元素都有一个数字类型的值（*value*）。例如，总体可能由特定社区的成年人构成，总体中和每个成年人相关的数字类型的值可能是其年收入、身高或年龄等。我们经常假设，与总体中的任何成员相关的值都可以看作期望为 $\mu$、方差为 $\sigma^2$ 的随机变量的取值。我们称 $\mu$ 为总体均值，称 $\sigma^2$ 为总体方差。令 $X_1, X_2, ..., X_n$ 是从该总体中抽取的样本的值，则样本均值的定义为：
+
+$$
+\overline{X} = \frac{X_1 + ... + X_n}{n}
+$$
+
+因为样本均值 $\overline{X}$ 的值取决于样本中的各随机变量的值，因此 $\overline{X}$ 也是一个随机变量。$\overline{X}$ 的期望和方差分别为：
+
+$$
+\begin{align}
+E[\overline{X}] &= E\bigg[\frac{X_1 + ... + X_n}{n}\bigg] \\
+&= \frac{1}{n}(E[X_1] + ... + E[X_n]) \\
+&= \mu \\
+\textup{Var}(\overline{X}) &= \textup{Var}\bigg(\frac{X_1 + ... + X_n}{n}\bigg) \\
+&= \frac{1}{n^2}\bigg(\textup{Var}(X_1) + ... + \textup{Var}(X_n) \bigg) \\
+&= \frac{n\sigma^2}{n^2} \\
+&= \frac{\sigma^2}{n}
+\end{align}
+$$
+
+其中，$\mu$ 和 $\sigma^2$ 分别为总体的均值和方差。因此，样本均值的期望就是总体均值 $\mi$，而样本均值的方差就是总体方差的 $\frac{1}{n}$ 倍。因此，我们可以得出结论：$\overline{X}$ 也是以总体均值 $\mu$ 为中心，但是其波动会随着样本量的增加而变得越来越小。@fig_6_1 绘制了来自标准正态分布总体的、不同样本量的样本均值的概率密度函数。
+
+```{r}
+#| label: fig-6_1
+#| fig-cap: "来自标准正态分布的不同样本量的样本均值的概率密度"
+#| warning: false
+#| 
+library(ggplot2)
+distributions <- data.frame(
+  x = rep(seq(-4, 4, length = 1000), 4),
+  mean = rep(c(0, 0, 0, 0), each = 1000),
+  sd = rep(c(1, 0.5, 0.25, 0.1), each = 1000),
+  n  = rep(c(1, 2, 4, 10), each = 1000)
+)
+
+# 计算每个分布的概率密度
+distributions$y <- with(distributions, dnorm(x, mean=mean, sd=sd))
+
+# 绘制多个正态分布的曲线
+ggplot(distributions, aes(x=x, y=y, color=factor(n))) +
+  geom_line() +
+  labs(color="n") +
+  theme_minimal()
+```
