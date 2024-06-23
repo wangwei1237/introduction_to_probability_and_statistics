@@ -16,4 +16,3 @@
 {{< include 6_6.qmd >}} 
 
 {{< include 6_7.qmd >}}
-       
