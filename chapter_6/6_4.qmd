@@ -1,1 +1,37 @@
-## The sample variance {#sec-6_4}
+## 样本方差 {#sec-6_4}
+令 $X_1, ..., X_n$ 是从均值为 $\mu$、方差为 $\sigma^2$ 的总体中抽取的随机样本。令 $\overline{X}$ 为样本均值，然后回顾一下 @sec-2_3_2 节中的 @def-variance。
+
+::: {#def-sample_variance}
+令 $S^2$ 为样本方差，则样本方差的定义如下：
+
+$$
+S^2 = \frac{\sum_{i=1}^{n}{(X_i - \overline{X})^2}}{n-1}
+$$
+:::
+
+$S = \sqrt{S^2}$ 为样本标准差。
+
+为了计算 $E[S^2]$，我们需要用到在 @sec-2_3_2 中已经证明过的 @eq-2_3_2_002，即：对于任意的 $x_1, ..., x_n$，
+
+$\sum_{i=1}^{n}{(x_i - \overline{x})^2} = \sum_{i=1}^{n}{x_i^2} - n\overline{x}^2$，其中 $\overline{x} = \frac{\sum_{i=1}^{n}{x_i}}{n}$。
+
+根据 @def-sample_variance 和 @eq-2_3_2_002 有：
+
+$$
+(n-1)S^2 = \sum_{i=1}^{n}{X_i^2} - n\overline{X}^2
+$$ {#eq-6_4_001}
+
+根据 @eq-4_6_001_461，对于任意的随机变量 $X$，$E[X^2] = \textup{Var}(X) + (E[X])^2$。对 @eq-6_4_001 两边求期望得到：
+
+$$
+\begin{align}
+(n-1)E[S^2] &= E\bigg[\sum_{i=1}^{n}{X_i^2}\bigg] - nE[\overline{X}^2] \\
+&= nE[X_1^2] - nE[\overline{X}^2] \\
+&= n \textup{Var}(X_1) + n(E[X_1])^2 - n \textup{Var}(\overline{X}) - n (E[\overline{X}])^2 \\
+&= n \sigma^2 + n \mu^2 - n \frac{\sigma^2}{n} - n \mu^2 \\
+&= (n-1)\sigma^2 \\
+\therefore E[S^2] &= \sigma^2
+\end{align}
+$$
+
+也就是说，样本方差 $S^2$ 的期望等于总体的方差 $\sigma^2$。

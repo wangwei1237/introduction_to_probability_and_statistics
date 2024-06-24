@@ -1,1 +1,96 @@
-## Sampling distributions from a normal population {#sec-6_5}
+## 正态分布总体的抽样分布 {#sec-6_5}
+令 $X_1, X_2, ..., X_n$ 是从均值为 $\mu$、方差为 $\sigma^2$ 的正态分布总体中抽取的样本。也就是说，$X_i$ 之间是独立且同分布的，并且 $X_i \thicksim \mathcal{N}(\mu, \sigma^2)$。
+
+同时，令 $\overline{X} = \frac{\sum_{i=1}^{n}{X_i}}{n}$ 表示样本均值，令 $S^2 = \frac{\sum_{i=1}^{n}{(X_i - \overline{X})^2}}{n-1}$ 表示样本方差。接下来，我们就将计算 $\overline{X}$ 和 $S^2$ 的分布。
+
+### 样本均值的分布 {#sec-6_5_1}
+因为独立的、正态分布的随机变量的和也是正态分布，因此，$\overline{X}$ 也是正态分布，其均值和方差分别为：
+
+$E[\overline{X}] = \sum_{i=1}^{n}{\frac{E[X_i]}{n}} = \mu$
+
+$\textup{Var}(\overline{X}) = \frac{1}{n^2}\sum_{i=1}^{n}{\textup{Var}(X_i)} = \frac{\sigma^2}{n}$
+
+也就是说，随机样本的平均值 $\overline{X}$ 是一个均值为总体均值、但是方差为总体方差 $\frac{1}{n}$ 倍的正态分布。因此，
+
+$\frac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}}$ 是一个标准正态分布。
+
+### $\overline{X}$ 和 $S^2$ 的联合分布
+在本节中，我们不仅会计算样本方差 $S^2$ 的分布，还发现了关于正态分布随机样本的一个基本事实：即 $\overline{X}$ 和 $S^2$ 是相互独立的随机变量，并且 $\frac{(n-1)S^2}{\sigma^2}$ 服从自由度为 $n−1$ 的卡方（*chi-square*）分布。
+
+对于 $x_1, ..., x_n$，令 $y_i = x_i - \mu$，则 $\overline{y} = \overline{x} - \mu$，根据：
+
+$$
+\sum_{i=1}^{n}{(y_i - \overline{y})^2} = \sum_{i=1}^{n}{y_i^2} - n\overline{y}^2
+$$
+
+有：
+
+$$
+\sum_{i=1}^{n}{(x_i - \overline{x})^2} = \sum_{i=1}^{n}{(x_i - \mu)^2} - n(\overline{x} - \mu)^2
+$$ {#eq-6_5_001}
+
+如果 $X_1, ..., X_n$ 是从均值为 $\mu$、方差为 $\sigma^2$ 的正态分布总体中抽取的样本，根据 @eq-6_5_001 有：
+
+$$
+\frac{\sum_{i=1}^{n}{(X_i - \mu)^2}}{\sigma^2} = \frac{\sum_{i=1}^{n}{(X_i - \overline{X})^2}}{\sigma^2} + \frac{n(\overline{X} - \mu)^2}{\sigma^2}
+$$
+
+即，
+
+$$
+\sum_{i=1}^{n}{\bigg(\frac{X_i - \mu}{\sigma}\bigg)^2} = \frac{\sum_{i=1}^{n}{(X_i - \overline{X})^2}}{\sigma^2} + \bigg(\frac{\sqrt{n}(\overline{X} - \mu)}{\sigma}\bigg)^2
+$$ {#eq-6_5_1}
+
+因为 $\frac{X_i - \mu}{\sigma}$ 是相互独立的标准正态分布，所以 @eq-6_5_1 中的等式左边是一个自由度为 $n$ 的卡方随机变量。又根据 @sec-6_5_1 可知，$\frac{\sqrt{n}(\overline{X} - \mu)}{\sigma}$ 也是一个标准正态分布，因此，$\bigg(\frac{\sqrt{n}(\overline{X} - \mu)}{\sigma}\bigg)^2$ 是一个自由度为 1 的卡方随机变量。因此 @eq-6_5_1 等价于一个自由度为 $n$ 的卡方随机变量
+是两个随机变量的和，其中一个随机变量是自由度为 1 的卡方随机变量。同时已知两个独立卡方随机变量之和也是卡方随机变量，并且其自由度为这两个独立的卡方随机变量的自由度之和。因此，看起来，@eq-6_5_1 右边的两部分是相互独立的、并且 $\frac{\sum_{i=1}^{n}{(X_i - \overline{X})^2}}{\sigma^2}$ 服从自由度为 $n-1$ 的卡方分布。结果确实如此，因此我们有以下基本结论。
+
+::: {#thm-6_5_1}
+如果 $X_1, ..., X_n$ 是从均值为 $\mu$、方差为 $\sigma^2$ 的正态分布总体中抽取的样本，则
+
+1. $\overline{X}$ 和 $S^2$ 是相互独立的随机变量
+2. $\overline{X}$ 是均值为 $\mu$、方差为 $\frac{\sigma^2}{n}$ 的正态分布随机变量
+3. $\frac{(n-1)S^2}{\sigma^2}$ 是一个自由度为 $n-1$ 的卡方分布随机变量
+::: 
+
+对于一个正态分布的总体而言，@thm-6_5_1 不但给出了 样本均值 $\overline{X}$ 和样本方差 $S^2$ 的分布，而且还给出了 $\overline{X}$ 和 $S^2$ 之间是相互独立的这一重要事实。事实上，$\overline{X}$ 和 $S^2$ 的这种独立性是正态分布的一个特性。@thm-6_5_1 的重要性将在后续的章节中得以明显的体现。
+
+::: {#exr-6_5_a}
+CPU 处理某类作业（*job*）所需的时间服从均值为 20 秒、标准差为 3 秒的正态分布。如果观察到 15 个这样的作业，则样本方差超过 12 的概率是多少？
+:::
+
+::: {#sol-6_5_a}
+因为样本的大小 $n = 15$，样本方差 $\sigma^2 = 9$，因此：
+
+$P\{S^2 > 12\} = P\bigg\{\frac{14}{9} S^2 \gt \frac{14}{9} \cdot 12\bigg\}$
+:::
+
+在 R 中利用 `1 - pchisq(56/3, 14)` 进行计算得到：
+
+```{r}
+1 - pchisq(56/3, 14)
+```
+$\blacksquare$
+
+在后续章节中，@thm-6_5_1 的如下推论将非常有用。
+
+::: {#cor-6_5_2}
+如果 $X_1, ..., X_n$ 是从均值为 $\mu$ 的正态分布总体中抽取的样本。如果 $\overline{X}$ 为样本均值，$S$ 为样本标准差，则：
+
+$$
+\sqrt{n} \frac{\overline{X} - \mu}{S} \thicksim t_{n-1}
+$$
+:::
+
+也就是说，$\sqrt{n} \frac{\overline{X} - \mu}{S}$ 服从自由度为 $n-1$ 的 $t$ 分布。
+
+::: {.proof}
+回想一下，自由度为 $n$ 的 $t$ 分布随机变量的定义为：
+
+$\frac{Z}{\sqrt{\frac{\chi_n^2}{n}}}$
+
+其中，$Z$ 为标准正态分布随机变量，并且与自由度为 $n$ 的卡方随机变量 $\chi_n^2$。根据 @thm-6_5_1，$\frac{\sqrt{n}(\overline{X} - \mu)}{\sigma}$ 是一个标准正态分布并且与自由度为 $n-1$ 的卡方分布随机变量 $\frac{(n-1)S^2}{\sigma^2}$ 相互独立。因此，我们有：
+
+$\frac{\sqrt{n}(\overline{X} - \mu) / \sigma}{\sqrt{S^2 / \sigma^2}} = \sqrt{n} \frac{(\overline{X} - \mu)}{S}$ 
+
+是一个自由度为 $n-1$ 的 $t$ 分布随机变量。$\blacksquare$
+:::

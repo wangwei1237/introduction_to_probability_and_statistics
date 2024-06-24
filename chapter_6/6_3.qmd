@@ -176,7 +176,7 @@ $$
 ::: {#sol-6_3_d}
 令 $Z \thicksim \mathcal{N}(0,1)$。
 
-1. 根据中心极限定理，$\overline{X}$ 近似符合均值为 167、标准差为 $\frac{27}{\sqrt{36}} = 4.5$ 的正态分布。因此：
+1. 根据中心极限定理，$\overline{X}$ 近似服从均值为 167、标准差为 $\frac{27}{\sqrt{36}} = 4.5$ 的正态分布。因此：
 
     $\begin{align} P\{163 \lt \overline{X} \lt 170\} &= P\bigg\{\frac{163 - 167}{4.5} \lt \frac{\overline{X} - 167}{4.5} \lt \frac{170 - 167}{4.5} \bigg\} \\ & \approx P\{-0.8889 \lt Z \lt 0.8889\} \\ &= P\{Z \lt 0.8889\} - P\{Z \lt -0.8889\} \\ &= 1 - 2 \cdot P\{Z \ge 0.8889\} \\ &= 0.6259432 \end{align}$
 
@@ -186,7 +186,7 @@ $$
 1 - 2 * pnorm(0.8889, lower.tail = FALSE)
 ```
 
-2. 当样本量为 144 时，近似符合均值为 167、标准差为 $\frac{27}{\sqrt{144}} = 2.25$ 的正态分布。因此：
+2. 当样本量为 144 时，近似服从均值为 167、标准差为 $\frac{27}{\sqrt{144}} = 2.25$ 的正态分布。因此：
 
     $\begin{align} P\{163 \lt \overline{X} \lt 170\} &= P\bigg\{\frac{163 - 167}{2.25} \lt \frac{\overline{X} - 167}{2.25} \lt \frac{170 - 167}{2.25} \bigg\} \\ & \approx P\{-1.7778 \lt Z \lt 1.7778\} \\ &= P\{Z \lt 1.7778\} - P\{Z \lt -1.7778\} \\ &= 1 - 2 \cdot P\{Z \ge 1.7778\} \\ &= 0.9245633 \end{align}$
 
@@ -198,7 +198,7 @@ $$
 :::
 
 ::: {#sol-6_3_e}
-如果天文学家测量了 $n$ 次，则测量数据的样本均值 $\overline{X}$ 将近似符合均值为 $d$、标准差为 $\frac{2}{\sqrt{n}}$ 的正态分布。因此，测量值位于 $d \pm 0.5$ 之间的概率为：
+如果天文学家测量了 $n$ 次，则测量数据的样本均值 $\overline{X}$ 将近似服从均值为 $d$、标准差为 $\frac{2}{\sqrt{n}}$ 的正态分布。因此，测量值位于 $d \pm 0.5$ 之间的概率为：
 
 $\begin{align} P\{-0.5 \lt \overline{X} - d \lt 0.5\} &= P\bigg\{\frac{-0.5}{\frac{2}{\sqrt{n}}} \lt \frac{\overline{X} - d}{\frac{2}{\sqrt{n}}} \lt \frac{0.5}{\frac{2}{\sqrt{n}}} \bigg\} \\ & \approx P\{-\frac{\sqrt{n}}{4} \lt Z \lt \frac{\sqrt{n}}{4}\} \\ &= 1 - 2 \cdot P\{Z \ge \frac{\sqrt{n}}{4}\} \end{align}$
 
