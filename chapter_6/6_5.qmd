@@ -88,7 +88,7 @@ $$
 
 $\frac{Z}{\sqrt{\frac{\chi_n^2}{n}}}$
 
-其中，$Z$ 为标准正态分布随机变量，并且与自由度为 $n$ 的卡方随机变量 $\chi_n^2$。根据 @thm-6_5_1，$\frac{\sqrt{n}(\overline{X} - \mu)}{\sigma}$ 是一个标准正态分布并且与自由度为 $n-1$ 的卡方分布随机变量 $\frac{(n-1)S^2}{\sigma^2}$ 相互独立。因此，我们有：
+其中，$Z$ 为标准正态分布随机变量，并且与自由度为 $n$ 的卡方随机变量 $\chi_n^2$ 相互独立。根据 @thm-6_5_1，$\frac{\sqrt{n}(\overline{X} - \mu)}{\sigma}$ 是一个标准正态分布并且与自由度为 $n-1$ 的卡方分布随机变量 $\frac{(n-1)S^2}{\sigma^2}$ 相互独立。因此，我们有：
 
 $\frac{\sqrt{n}(\overline{X} - \mu) / \sigma}{\sqrt{S^2 / \sigma^2}} = \sqrt{n} \frac{(\overline{X} - \mu)}{S}$ 
 
