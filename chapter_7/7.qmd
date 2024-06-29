@@ -1,4 +1,4 @@
-# Parameter estimation {#sec-7}
+# 参数估计 {#sec-7}
 
 {{< include 7_1.qmd >}}
 
