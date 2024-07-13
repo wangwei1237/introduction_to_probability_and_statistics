@@ -1,1 +1,1 @@
-## Estimating the difference in means of two normal populations
+## Estimating the difference in means of two normal populations {#sec-7_4}

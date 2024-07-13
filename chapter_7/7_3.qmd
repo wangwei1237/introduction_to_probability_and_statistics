@@ -1,1 +1,86 @@
-## Interval estimates
+## 区间估计 {#sec-7_3}
+假设 $X_1, \ldots, X_n$ 是来自均值 $\mu$ 未知但是方差 $\sigma^2$ 已知的正态分布总体的样本。根据 @sec-7_2，我们知道 $\overline{X} = \frac{1}{n} \sum_{i=1}^{n} X_i$ 是 $\mu$ 的最大似然估计。然而，我们不能指望样本均值 $\overline{X}$ 会正好等于 $\mu$，我们反而更希望 $\overline{X}$ 会“接近” $\mu$。因此，有时指定一个 $\mu$ 可能会落入的、我们有一定信心水平的区间，比一个点估计更有价值。为了得到这样的区间估计量，我们需要利用点估计量的概率分布。
+
+如 @sec-6_2 所述，点估计量 $\overline{X}$ 服从均值为 $\mu$ 、方差为 $\frac{\sigma^2}{n}$ 的正态分布，因此：
+
+$\frac{\overline{X} - \mu}{\frac{\sigma}{\sqrt{n}}} = \sqrt{n} \frac{(\overline{X} - \mu)}{\sigma}$
+
+服从标准正态分布。因此，
+
+$P\bigg\{ -1.96 < \sqrt{n} \frac{(\overline{X} - \mu)}{\sigma} < 1.96 \bigg\} = 0.95$
+
+上式等价于：
+
+$P\bigg\{ -1.96 \frac{\sigma}{\sqrt{n}} < \overline{X} - \mu < 1.96 \frac{\sigma}{\sqrt{n}} \bigg\} = 0.95$
+
+通过乘以 -1 得到等价的表述：
+
+$P\bigg\{ -1.96 \frac{\sigma}{\sqrt{n}} < \mu - \overline{X} < 1.96 \frac{\sigma}{\sqrt{n}} \bigg\} = 0.95$
+
+即，
+
+$P\bigg\{ \overline{X} - 1.96 \frac{\sigma}{\sqrt{n}} < \mu < \overline{X} + 1.96 \frac{\sigma}{\sqrt{n}} \bigg\} = 0.95$
+
+也就是说，样本均值 $\overline{X}$ 有 95% 的概率落在与总体均值 $\mu$ 之间的距离小于 $1.96 \frac{\sigma}{\sqrt{n}}$ 的区间。如果我们现在观察样本，并且发现 $\overline{X} = \overline{x}$，那么我们可以说，有 95% 的置信度使得
+
+$$
+\overline{x} - 1.96 \frac{\sigma}{\sqrt{n}} < \mu < \overline{x} + 1.96 \frac{\sigma}{\sqrt{n}}
+$$ {#eq-7_3_1}
+
+也就是说，我们“有95%的信心”断言总体的均值位于观测到的样本均值的 $\pm 1.96$ 个标准差的区间内。（需要注意到，$\overline{X}$ 的标准差为 $\frac{\sigma}{\sqrt{n}}$）。
+
+我们称 
+
+$\left( \overline{x} - 1.96\frac{\sigma}{\sqrt{n}},\ \overline{x} + 1.96\frac{\sigma}{\sqrt{n}}\right)$
+
+为 $\mu$ 的 95% 置信区间估计（*95 percent confidence interval estimate of $\mu$ *）。
+
+::: {#exr-7_3_a}
+假设从 A 地发射一个信号到 B 地，该信号的值服从均值为 $\mu$、方差为 4 的正态分布。也就是说，如果发送的信号值为 $\mu$，那么接收到的信号值是 $\mu + N$，其中 $N$ 代表噪声是服从均值为 0、方差为 4 的正态分布。为了减少误差，相同的值会被发送 9 次。如果接收到的值分别是：
+
+5、8.5、12、15、7、9、7.5、6.5、10.5
+
+为 $\mu$ 构造一个 95% 置信区间。
+:::
+
+::: {#sol-7_3_a}
+因为 $\overline{x} = \frac{81}{9} = 9$，因此，假设 B 地接收到的信号值之间是独立的，则 $\mu$ 的 95% 可信区间是：
+
+$\left(9 - 1.96\frac{\sigma}{3},\ 9 + 1.96\frac{\sigma}{3}\right) = (7.69, 10.31)$
+
+因此，我们有 95% 的置信度确认真实的信号值将位于 7.69~10.31 的范围内。
+:::
+
+@eq-7_3_1 中的区间称为双边置信区间（*two-sided confidence interval*）。然而，有时我们感兴趣的是确定一个值，使得我们能以 95% 的置信度断言 $\mu$ 至少与该值一样大。
+
+如果 $Z$ 是一个标准正态分布随机变量，则
+
+$P\{Z \lt 1.645\} = 0.95$
+
+:::{.callout-note}
+在 R 中，可以使用 `qnorm()` 来得到该值：
+
+```{r}
+qnorm(0.95)
+```
+:::
+
+因此有：$P\bigg\{\sqrt{n}\frac{(\overline{X} - \mu)}{\sigma} \lt 1.645\bigg\} = 0.95$，即
+
+$P\bigg\{\overline{X} - 1.645\frac{\sigma}{\sqrt{n}} \lt \mu \bigg\} = 0.95$
+
+因此，$\mu$ 的 95% 单边上置信区间为：
+
+$\left(\overline{x} - 1.645\frac{\sigma}{\sqrt{n}},\ \infty\right)$，其中 $\overline{x}$ 为观察到的数据的样本均值。
+
+::: {.callout-note}
+或者说，我们有 95% 的信心认为 $\mu$ 的值不可能低于 $\overline{x} - 1.645\frac{\sigma}{\sqrt{n}}$。
+:::
+
+类似的，我们可以得到单边下置信区间（*one-sided lower confidence interval*）。当我们观察到的数据的样本均值为 $\overline{x}$ 时，则 $\mu$ 的 95% 单边下置信区间为：
+
+$\left(-\infty,\ \overline{x} + 1.645\frac{\sigma}{\sqrt{n}}\right)$
+
+::: {.callout-note}
+或者说，我们有 95% 的信心认为 $\mu$ 的值不可能大于 $\overline{x} + 1.645\frac{\sigma}{\sqrt{n}}$。
+:::

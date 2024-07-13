@@ -1,1 +1,1 @@
-## Approximate confidence interval for the mean of a Bernoulli random variable
+## Approximate confidence interval for the mean of a Bernoulli random variable {#sec-7_5}

@@ -1,1 +1,1 @@
-## The Bayes estimator
+## The Bayes estimator {#sec-7_8}

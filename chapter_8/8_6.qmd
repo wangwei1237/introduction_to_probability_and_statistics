@@ -1,1 +1,31 @@
-## Hypothesis tests in Bernoulli populations
+## 二项分布的假设检验
+二项分布在工程问题中经常遇到。例如，考虑一种产品生产线，该生产线制造的产品可以分为两类——可接受的或有缺陷的。通常会假设生产的每个产品的缺陷概率为 $p$，因此一个具有 $n$ 个产品的样本中的缺陷产品数量将是参数为 $(n, p)$ 的二项分布。现在考虑以下的假设检验：
+
+$H_0 : p \le p_0 \quad versus \quad H_1 : p > p_0$
+
+其中 $p_0$ 是某个指定的值。
+
+如果令 $X$ 表示样本大小为 $n$ 的样本中的缺陷数，那么显然当 $X$ 较大时我们希望拒绝 $H_0$。为了计算在显著性水平 $\alpha$ 下需要多大的 $X$ 才能证明拒绝是合理的，我们关注到：
+
+$P\{X \ge k\} = \sum_{i=k}^{n} P\{X = i\} = \sum_{i=k}^{n} \binom{n}{i} p^i (1 - p)^{n-i}$
+
+现在，很直观（并且可以证明），$P\{X \ge k\}$ 是 $p$ 的递增函数——即，样本中包含至少 $k$ 个缺陷产品的概率随着缺陷概率 $p$ 的增加而增加。使用这一点，我们看到当 $H_0$ 为真时（即 $p \le p_0$），
+
+$P\{X \ge k\} \le \sum_{i=k}^{n} \binom{n}{i} p_0^i (1 - p_0)^{n-i}$
+
+因此，显著性水平 $\alpha$ 下的假设检验
+
+$H_0 : p \le p_0$ $versus$ $H_1 : p > p_0$ 
+
+是当 $X \ge k^*$ 时拒绝 $H_0$，其中 $k^*$ 是使 $\sum_{i=k}^{n} \binom{n}{i} p_0^i (1 - p_0)^{n-i} \le \alpha$ 成立的最小的 $k$ 值。也就是说，
+
+$k^* = \min \left\{ k : \sum_{i=k}^{n} \binom{n}{i} p_0^i (1 - p_0)^{n-i} \le \alpha \right\}$
+
+可以通过首先确定检验统计量的值——例如 $X = x$，然后再计算给定的 $p$-值 来执行假设检验。
+
+$$
+\begin{align}
+p\text{-value} &= P\{B(n, p_0) \ge x\} \\
+&= \sum_{i=x}^{n}{\left(\begin{array}{cc}  n \\ i  \end{array}\right)p_0^i(1-p_0)^{n-i}}
+\end{align}
+$$

@@ -1,4 +1,4 @@
-# Hypothesis testing {#sec-8}
+# 假设检验 {#sec-8}
 
 {{< include 8_1.qmd >}}
 
