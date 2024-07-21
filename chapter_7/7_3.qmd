@@ -84,3 +84,111 @@ $\left(-\infty,\ \overline{x} + 1.645\frac{\sigma}{\sqrt{n}}\right)$
 ::: {.callout-note}
 或者说，我们有 95% 的信心认为 $\mu$ 的值不可能大于 $\overline{x} + 1.645\frac{\sigma}{\sqrt{n}}$。
 :::
+
+::: {#exr-7_3_b}
+确定 @exr-7_3_a 中 $\mu$ 的 95% 置信区间估计的上下限。
+:::
+
+::: {#sol-7_3_b}
+因为：
+
+$1.645 \frac{\sigma}{\sqrt{n}} = \frac{3.29}{3} = 1.097$，
+
+所以，95% 上置信区间为：$(9 - 1.097, \infty) = (7.903, \infty)$。
+95% 下置信区间为：$(-\infty, 9 + 1.097) = (-\infty, 10.097)$。$\blacksquare$
+:::
+
+我们也可以获得任何指定置信水平的置信区间。为此，回忆一下 $z_{\alpha}$ 的定义。$z_{\alpha}$ 是使得
+
+$$
+P\{Z > z_{\alpha}\} = \alpha
+$$
+
+成立的值，其中 $Z$ 是标准正态随机变量。这意味着（见 @fig-7_1），对于任意 $\alpha$，
+
+$$
+P\{-z_{\alpha/2} < Z < z_{\alpha/2}\} = 1 - \alpha
+$$
+
+![$P\{-z_{\alpha/2} < Z < z_{\alpha/2}\} = 1 - \alpha$](../images/chapter_7/f_7_1.png){#fig-7_1}
+
+因此，我们有：
+
+$$
+P\left\{ -z_{\alpha/2} < \sqrt{n}\left(\frac{\overline{X} - \mu}{\sigma}\right) < z_{\alpha/2} \right\} = 1 - \alpha
+$$
+
+或
+
+$$
+P\left\{ -z_{\alpha/2} \frac{\sigma}{\sqrt{n}} < \overline{X} - \mu < z_{\alpha/2} \frac{\sigma}{\sqrt{n}} \right\} = 1 - \alpha
+$$
+
+或
+
+$$
+P \left\{-z_{\alpha/2} \frac{\sigma}{\sqrt{n}} < \mu - \overline{X} < z_{\alpha/2} \frac{\sigma}{\sqrt{n}}\right\} = 1 - \alpha
+$$
+
+也就是说，
+
+$$
+P \left\{\overline{X} - z_{\alpha/2} \frac{\sigma}{\sqrt{n}} < \mu < \overline{X} + z_{\alpha/2} \frac{\sigma}{\sqrt{n}}\right\} = 1 - \alpha
+$$
+
+因此，$\mu$ 的 $100(1−\alpha)％$ 的双边置信区间是：
+
+$$
+\left(\overline{X} - z_{\alpha/2} \frac{\sigma}{\sqrt{n}}, \overline{X} + z_{\alpha/2} \frac{\sigma}{\sqrt{n}}\right)
+$$
+
+其中 $\overline{X}$ 是观测样本均值。
+
+同样地，对于一个标准正态随机变量 $Z = \sqrt{n} \frac{(\overline{X} - \mu)}{\sigma}$，有 $P\{Z > z_{\alpha}\} = \alpha$ 和 $P\{Z < -z_{\alpha}\} = \alpha$。
+
+因此，我们可以得到任意置信水平的单边置信区间。具体来说，$\mu$ 的 $100(1−\alpha)％$ 单边上置信区间和 $100(1−\alpha)％$ 单边下置信区间分别为：
+
+* $\left(\overline{X} - z_{\alpha} \frac{\sigma}{\sqrt{n}}, \infty\right)$
+* $\left(-\infty, \overline{X} + z_{\alpha} \frac{\sigma}{\sqrt{n}}\right)$
+
+::: {#exr-7_3_c}
+使用 @exr-7_3_a 中的数据来计算 $\mu$ 的 99% 置信区间估计，以及其 99% 单边上、下置信区间。
+:::
+
+::: {#sol-7_3_c}
+由于 $z_{0.005} = 2.58$，且 $2.58 \frac{\sigma}{\sqrt{n}} = \frac{5.16}{3} = 1.72$，
+
+因此，$\mu$ 的 99% 置信区间为 $9 \pm 1.72$，也就是说，99% 置信区间估计为 $(7.28, 10.72)$。
+
+此外，由于 $z_{0.01} = 2.33$，因此，99% 上置信区间为 $(9 - 2.33(\frac{2}{3}), \infty) = (7.447, \infty)$。
+
+同样地，99% 下置信区间为 $(-\infty, 9 + 2.33(\frac{2}{3})) = (-\infty, 10.553)$。$\blacksquare$
+:::
+
+有时候，我们对某一置信水平（比如 $1−\alpha$）的双边置信区间感兴趣，但问题是如何选择样本量 $n$ 才能使得置信区间为某个指定的大小。例如，假设我们要计算一个长度为 0.1 的区间，并且能断言该区间以 99% 的置信度包含 $\mu$，此时我们需要多大的样本量 $n$？
+
+由于 $z_{0.005} = 2.58$，从样本量为 $n$ 的样本中得到的 $\mu$ 的 99% 置信区间是：
+
+$\left( \overline{X} - 2.58 \frac{\sigma}{\sqrt{n}}, \overline{X} + 2.58 \frac{\sigma}{\sqrt{n}} \right)$
+
+因此，置信区间的长度为：$5.16 \frac{\sigma}{\sqrt{n}}$。因此，要使置信区间的长度等于 0.1，我们必须让 $5.16 \frac{\sigma}{\sqrt{n}} = 0.1$，即：$n = (51.6 \sigma)^2$。
+
+::: {.callout-tip title="注意"}
+对“$100(1−\alpha)％$ 置信区间”的解释可能会令人困惑。需要注意的是，我们并不是在断言 $\mu \in \left( \overline{X} - 1.96 \frac{\sigma}{\sqrt{n}}, \overline{X} + 1.96 \frac{\sigma}{\sqrt{n}} \right)$ 的概率为 0.95，这主要是因为在如上的断言中并没有涉及到任何 **随机变量**。我们所断言的是，使用这种方法得到的区间会有 95% 的概率包含 $\mu$。换句话说，观测到数据之前，我们可以断言该区间有 0.95 的概率将包含 $\mu$；而在观测到数据之后，我们只能断言结果区间确实以 0.95 的置信度包含 $\mu$。
+:::
+
+::: {#exr-7_3_d}
+根据以往的经验，在商业孵化场中养殖的三文鱼的重量符合正态分布，其均值会随季节的不同而不同，但其标准差固定为 0.3 磅。如果我们想在 95% 的置信度下，估计当前季节三文鱼的平均重量，并且估计的误差在 $\pm 0.1$ 磅以内，需要多大的样本量？
+:::
+
+::: {#sol-7_3_d}
+基于样本量 $n$ 的未知均值 $\mu$ 的 95% 置信区间估计为：
+
+$\mu \in \left( \overline{X} - 1.96 \frac{\sigma}{\sqrt{n}}, \overline{X} + 1.96 \frac{\sigma}{\sqrt{n}} \right)$
+
+因为估计值 $\overline{X}$ 在区间内的任何一点都在 $1.96(\sigma / \sqrt{n}) = \frac{0.588}{\sqrt{n}}$ 以内，因此我们可以 95% 地确信 $\overline{X}$ 在 $\mu$ 的 0.1 以内，前提是：
+
+$\frac{0.588}{\sqrt{n}} \leq 0.1$
+
+也就是说 $\sqrt{n} \geq 5.88$，即 $n \geq 34.57$。也就是说，样本量为 35 或更大就足够了。 $\blacksquare$
+:::
