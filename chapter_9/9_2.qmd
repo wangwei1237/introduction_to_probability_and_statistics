@@ -1,1 +1,126 @@
-## Least squares estimators of the regression parameters
+## 回归参数的最小二乘估计 {#sec-9_2}
+假设对于输入值 $x_i$（$i = 1, \ldots, n$）的输出为 $Y_i$，我们将这些数据作为观察值并用于估计简单线性回归模型（@eq-9_1_002）中的 $\alpha$ 和 $\beta$。
+
+为了确定 $\alpha$ 和 $\beta$ 的估计，我们作如下推理：如果 $A$ 是 $\alpha$ 的估计，$B$ 是 $\beta$ 的估计，那么输入变量 $x_i$ 的输出估计将是 $A + Bx_i$。由于实际输出是 $Y_i$ ，因此实际输出和输出估计之间的平方差为 $(Y_i - A - Bx_i)^2$，因此如果 $A$ 和 $B$ 是 $\alpha$ 和 $\beta$ 的估计，那么输出估计值和实际输出值之间的平方差的和（*SS: the sum of the squared*）为：
+
+$$
+SS = \sum_{i=1}^n (Y_i - A - Bx_i)^2
+$$ {#eq-9_2_001}
+
+最小二乘法（*the least squares*）选择让 *SS* 达到最小值的 $A$ 和 $B$ 以作为 $\alpha$ 和 $\beta$ 的估计。为了确定 $A$ 和 $B$，我们首先对 *SS* 进行微分运算：
+
+$\frac{\partial SS}{\partial A} = -2 \sum_{i=1}^n (Y_i - A - Bx_i)$
+
+$\frac{\partial SS}{\partial B} = -2 \sum_{i=1}^n x_i (Y_i - A - Bx_i)$
+
+令偏导数为零，得到令 $A$ 和 $B$ 最小化的方程：
+
+$$
+\begin{align}
+\sum_{i=1}^n Y_i &= nA + B \sum_{i=1}^n x_i \\
+\sum_{i=1}^n x_i Y_i &= A \sum_{i=1}^n x_i + B \sum_{i=1}^n x_i^2
+\end{align}
+$$ {#eq-9_2_1}
+
+我们称 @eq-9_2_1 为 **正规方程**（*the normal equations*）。如果令：
+
+$\overline{Y} = \sum_i Y_i / n, \quad \overline{x} = \sum_i x_i / n$
+
+那么我们可以将第一个 **正规方程** 写为：
+
+$$
+A = \overline{Y} - B \overline{x}
+$$ {#eq-9_2_2}
+
+把 $A$ 的代入到第二个 **正规方程** 得到：
+
+$\sum_{i}{x_iY_i} = (\overline{Y}-B\overline{x})n\overline{x} + B \sum_{i}{x_i^2}$
+
+即，$B\bigg(\sum_i{x_i^2} - n \overline{x}^2\bigg)=\sum_i{x_iY_i} - n\overline{x}\overline{Y}$
+
+即，$B = \frac{\sum_i{x_iY_i} - n\overline{x}\overline{Y}}{\sum_i{x_i^2} - n \overline{x}^2}$
+
+因此，根据 @eq-9_2_2 和 $n\overline{Y}=\sum_{i=1}^{n}{Y_i}$，我们可以证明 @prp-9_2_1。
+
+::: {#prp-9_2_1}
+在数据集 $(x_i, y_i), i = 1, \ldots, n$ 上的 $\beta$ 和 $\alpha$ 的最小二乘法估计量分别为：
+
+$B = \frac{\sum_{i=1}^n x_i Y_i - \overline{x} \sum_{i=1}^n Y_i}{\sum_{i=1}^n x_i^2 - n\overline{x}^2}$
+
+$A = \overline{Y} - B\overline{x}$
+:::
+
+我们称直线 $A + Bx$ 为估计线性方程（*the estimated regression line*）。
+
+我们可以使用 R 来获得数据对 $(x_1, y_1), ..., (x_n, y_n)$ 的估计线性方程。
+
+```{.r}
+x <- c(x_1, ..., x_n)
+y <- c(y_1, ..., y_n)
+df <- data.frame(x = x, y = y)
+fit <- lm(y ~ x, df) #<1>
+fit #<2>
+```
+
+1. 定义模型为 `lm(y~x)`，该模型为线性模型并且假定 $y$ 是 $x$ 的线性函数加上一个随机误差，并且我们将该模型命名为 `fit`。
+2. 输出模型 `fit` 的估计线性方程。
+
+例如：
+
+```{r}
+#| code-fold: false
+
+x <- c(1, 2, 3, 4, 5, 6, 7)
+y <- c(3, 2, 5, 6, 4, 8, 9)
+df <- data.frame(x = x, y = y)
+fit <- lm(y ~ x, df)
+fit
+```
+
+所以，根据如上的结果，估计线性方程为：$y = 1.143 + 1.036x$。
+
+要获得估计线性方程图，首先输入 `plot(x, y)`，这将生成散点图。然后输入 `abline(fit)`，这将在散点图上添加估计线性方程的直线。
+
+```{r}
+#| code-fold: false
+
+x <- c(1, 2, 3, 4, 5, 6, 7)
+y <- c(3, 2, 5, 6, 4, 8, 9)
+df <- data.frame(x = x, y = y)
+fit <- lm(y ~ x, df)
+plot(x, y)
+abline(fit)
+```
+
+::: {#exm-9_2_a}
+生产某种合成纤维所用的原材料储存在一个没有湿度控制的地方。该储存地点 15 天内的相对湿度和原材料样品的水分含量数据如下所示：
+
+| 相对湿度（%） | 46 | 53 | 29 | 61 | 36 | 39 | 47 | 49 | 52 | 38 | 55 | 32 | 57 | 54 | 44 |
+|-------------------|----|----|----|----|----|----|----|----|----|----|----|----|----|----|----|
+| 原材料含水量（%）  | 12 | 15 |  7 | 17 | 10 | 11 | 11 | 12 | 14 |  9 | 16 |  8 | 18 | 14 | 12 |
+
+将该线性回归模型命名为 `moisture`，并且利用 R 得到：
+
+```{r}
+#| code-fold: false
+
+x <- c(46, 53, 29, 61, 36, 39, 47, 49, 52, 38, 55, 32, 57, 54, 44)
+y <- c(12, 15,  7, 17, 10, 11, 11, 12, 14,  9, 16,  8, 18, 14, 12)
+df <- data.frame(x = x, y = y)
+moisture <- lm(y ~ x, df)
+moisture
+```
+
+数据的散点图和估计线性方程图为：
+
+```{r}
+#| code-fold: false
+x <- c(46, 53, 29, 61, 36, 39, 47, 49, 52, 38, 55, 32, 57, 54, 44)
+y <- c(12, 15,  7, 17, 10, 11, 11, 12, 14,  9, 16,  8, 18, 14, 12)
+df <- data.frame(x = x, y = y)
+moisture <- lm(y ~ x, df)
+
+plot(x, y)
+abline(moisture)
+```
+:::

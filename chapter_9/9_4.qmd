@@ -1,1 +1,1 @@
-## Statistical inferences about the regression parameters
+## 关于回归参数的统计推断 {#sec-9_4}

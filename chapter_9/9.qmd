@@ -1,4 +1,4 @@
-# Regression {#sec-9}
+# 回归 {#sec-9}
 
 {{< include 9_1.qmd >}}
 

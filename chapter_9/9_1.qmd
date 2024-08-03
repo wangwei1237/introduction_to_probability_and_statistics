@@ -1,1 +1,68 @@
-## Introduction
+## 引言 {#sec-9_1}
+工程和科学中的许多问题都涉及到：确定一组变量之间的关系。例如，在化学反应中，我们可能对化学反应的产物、反应时的温度以及所用催化剂的用量之间的关系感兴趣。了解这种不同变量之间的关系可以使我们预测不同温度和催化剂用量下的反应产物。
+
+在许多情况下，存在一个单一的 **响应变量**（*response variable*）——也称之为 **因变量**（*dependent variable*）—— $Y$。**因变量** $Y$ 依赖于一组 **输入变量**（*input variables*）——也称之为 **自变量**（*independent variables*）——$x_1, \ldots, x_r$ 的值。最简单的 **因变量** $Y$ 和 **自变量** $x_1, \ldots, x_r$ 之间的关系类型是线性关系。即，对于一组常数 $\beta_0, \beta_1, \ldots, \beta_r$，先行关系的等式为：
+
+$$
+Y = \beta_0 + \beta_1 x_1 + \cdots + \beta_r x_r
+$$ {#eq-9_1_1}
+
+如果 $Y$ 和 $x_i$ 之间的关系如 @eq-9_1_1 所示，那么一旦学习到 $\beta_i$，我们就可以准确预测任意一组输入值的 $Y$。然而，实际上，几乎无法实现 100% 的精确预测，我们最多可以期望 @eq-9_1_1 在随机误差下（*subject to random error*）是有效的。此时，@eq-9_1_1 将表示为：
+
+$$
+Y = \beta_0 + \beta_1 x_1 + \cdots + \beta_r x_r + e
+$$ {#eq-9_1_2}
+
+其中 $e$ 表示随机误差，并假设随机误差是均值为 0 的随机变量。实际上，@eq-9_1_2 的另一种表达为：
+
+$$
+E[Y|\mathbf{x}] = \beta_0 + \beta_1 x_1 + \cdots + \beta_r x_r
+$$ {#eq-9_1_001}
+
+其中 $\mathbf{x} = (x_1, \ldots, x_r)$ 是 **自变量**，$E[Y|\mathbf{x}]$ 是在给定输入 $\mathbf{x}$ 下的结果的期望。
+
+我们称 @eq-9_1_2 为 **线性回归方程**（*linear regression equation*）。@eq-9_1_2 描述了 **因变量** $Y$ 对一组 **自变量** $x_1, \ldots, x_r$ 的回归。我们称 $\beta_0, \beta_1, \ldots, \beta_r$ 为 **回归系数**（*regression coefficients*），并且通常需要通过估计得到 **回归系数**。如果回归方程中只包含一个 **自变量**——即 $r=1$，我们称之为 **简单回归方程**（*simple regression equation*）；相比之下，如果回归方程包含多个 **自变量**，我们称之为 **多元回归方程**（*multiple regression equation*）。
+
+因此，简单线性回归模型假设 $Y$ 的均值与单个 **自变量** 的值之间存在线性关系，即：
+
+$$
+Y = \alpha + \beta x + e
+$$ {#eq-9_1_002}
+
+其中，$x$ 是自变量的值，也称为 **输入水平**（*input level*），$Y$ 是对应的输出，$e$ 代表均值为 0 的随机误差。
+
+::: {#exm-9_1_a}
+考虑以下 10 对数据 $(x_i, y_i), i = 1, \ldots, 10$，其中 $y$ 是实验的百分比产量，$x$ 是实验温度。
+
+$$
+\begin{array}{ccc|ccc}
+i & x_i & y_i & i & x_i & y_i \\
+1 & 100 & 45 & 6 & 150 & 68 \\
+2 & 110 & 52 & 7 & 160 & 75 \\
+3 & 120 & 54 & 8 & 170 & 76 \\
+4 & 130 & 63 & 9 & 180 & 92 \\
+5 & 140 & 62 & 10 & 190 & 88 \\
+\end{array}
+$$
+
+如上数据的散点图（*scatter diagram*）如 @fig-9_1 所示。
+
+```{r}
+#| label: fig-9_1
+#| fig-cap: "散点图"
+#| warning: false
+#| 
+
+library(ggplot2)
+x <- seq(100, 190, 10)
+y <- c(45, 52, 54, 63, 62, 68, 75, 76, 92, 88)
+df <- data.frame(x = x, y = y)
+
+ggplot(df, aes(x = x, y = y)) + 
+  geom_point() + 
+  scale_x_continuous(breaks = seq(100, 200, 20), limits = c(100, 200)) +
+  scale_y_continuous(breaks = seq(40, 100, 10), limits = c(40, 100))
+```
+
+正如 @fig-9_1 的散点图所显示的那样，受随机误差的影响，$y$ 和 $x$ 之间似乎存在线性关系。因此，看起来，对于本例的数据而言，简单线性回归模型似乎是合适的。$\blacksquare$
+:::
