@@ -1,1 +1,159 @@
-## Polynomial regression
+## 多项式回归 {#sec-9_9}
+当无法通过线性关系充分拟合响应变量 $Y$ 和自变量 $x$ 之间的函数关系的情况下，有时可以通过考虑多项式关系来获得合理的拟合。也就是说，可以尝试将数据集拟合到以下形式的函数关系：
+
+$Y = \beta_0 + \beta_1 x + \beta_2 x^2 + \cdots + \beta_r x^r + e$
+
+其中 $\beta_0, \beta_1, \ldots, \beta_r$ 是需要估计的回归系数。如果数据集由 $n$ 对 $(x_i, Y_i)$ 组成，其中 $i = 1, \ldots, n$，那么 $\beta_0, \ldots, \beta_r$ 的最小二乘估计量——我们称之为 $B_0, \ldots, B_r$——就是使下式最小化的值：
+
+$\sum_{i=1}^{n} \left( Y_i - B_0 - B_1 x_i - B_2 x_i^2 - \cdots - B_r x_i^r \right)^2$
+
+为了确定这些估计量，我们分别求解 $B_0 \ldots B_r$ 的偏导数，并令这些偏导数等于 0。在执行这些操作，并重新排列所得的方程之后，我们得到的最小二乘估计 $B_0, B_1, \ldots, B_r$ 满足以下由 $r + 1$ 个线性方程组（称为 **正规方程**（*normal equations*））成的方程组：
+
+$$
+\begin{align}
+\sum_{i=1}^{n} Y_i &= B_0 n + B_1 \sum_{i=1}^{n} x_i + B_2 \sum_{i=1}^{n} x_i^2 + \cdots + B_r \sum_{i=1}^{n} x_i^r \\
+\sum_{i=1}^{n} x_i Y_i &= B_0 \sum_{i=1}^{n} x_i + B_1 \sum_{i=1}^{n} x_i^2 + B_2 \sum_{i=1}^{n} x_i^3 + \cdots + B_r \sum_{i=1}^{n} x_i^{r+1} \\
+\sum_{i=1}^{n} x_i^2 Y_i &= B_0 \sum_{i=1}^{n} x_i^2 + B_1 \sum_{i=1}^{n} x_i^3 + B_2 \sum_{i=1}^{n} x_i^4 + \cdots + B_r \sum_{i=1}^{n} x_i^{r+2} \\
+& \vdots \qquad \vdots \qquad \qquad \qquad \qquad \qquad \qquad \qquad \vdots \\
+\sum_{i=1}^{n} x_i^r Y_i &= B_0 \sum_{i=1}^{n} x_i^r + B_1 \sum_{i=1}^{n} x_i^{r+1} + \cdots + B_r \sum_{i=1}^{n} x_i^{2r}
+\end{align}
+$$
+
+在对一组数据进行多项式拟合时，通常可以通过研究散点图来确定多项式的必要阶数。我们强调，应始终使用最小可能阶数来充分描述数据的关系。例如，尽管通常可以找到一个阶数为 $n$ 的多项式以通过所有 $n$ 对 $(x_i, Y_i)$，但我们很难对这种拟合寄予太大的信心。
+
+与线性回归相比，使用多项式拟合来预测那些远离拟合数据（$i = 1, \ldots, n$）的 $x_0$ 的响应值是一件更为危险的事情。多项式拟合可能只在 $x_i$（$i = 1, \ldots, n$）周围的某一区域有效，并且这个区域并不包括 $x_0$。
+
+::: {#exr-9_9_a}
+为如下的数据进行多项式拟合。
+
+| x  | Y    |
+|----|------|
+| 1  | 20.6 |
+| 2  | 30.8 |
+| 3  | 55.0 |
+| 4  | 71.4 |
+| 5  | 97.3 |
+| 6  | 131.8|
+| 7  | 156.3|
+| 8  | 197.3|
+| 9  | 238.7|
+| 10 | 291.7|
+:::
+
+::: {#sol-9_9_a}
+```{r}
+#| label: fig-9_10
+#| fig-cap: ""
+#| warning: false
+#| 
+
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+y <- c(20.6, 30.8, 55.0, 71.4, 97.3, 131.8, 156.3, 197.3, 238.7, 291.7)
+plot(x, y)
+```
+
+数据的散点图（@fig-9_10）暗示着 $Y$ 与 $x$ 之间存在二次关系：
+
+$Y = \beta_0 +\beta_1 x + \beta_2 x ^2 + e$
+
+$\begin{align} \sum_{i} x_i &= 55, \quad \sum_{i} x_i^2 = 385, \quad \sum_{i} x_i^3 = 3025, \quad \sum_{i} x_i^4 = 25,333 \\ \sum_{i} Y_i &= 1291.1, \quad \sum_{i} x_i Y_i = 9549.3, \quad \sum_{i} x_i^2 Y_i = 77,758.9 \end{align}$
+
+所以，最小二乘估计就是如下的方程组的解：
+
+$$
+\begin{align}
+1291.1 &= 10B_0 + 55B_1 + 385B_2 \\
+9549.3 &= 55B_0 + 385B_1 + 3025B_2 \\
+77758.9 &= 385B_0 + 3025B_1 + 25333B_2
+\end{align}
+$$ {#eq-9_9_1}
+
+解如上的方程组可以得到最小二乘估计为：
+
+$B_0 = 12.59326, \quad B_1 = 6.326172, \quad B_2 = 2.122818$
+
+因此，估计的二次回归方程为：
+
+$Y = 12.59 + 6.33x + 2.12x^2$
+
+数据的散点图和拟合的二次回归方程图如 @fig-9_11 所示。
+
+```{r}
+#| label: fig-9_11
+#| fig-cap: ""
+#| warning: false
+#| 
+
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+y <- c(20.6, 30.8, 55.0, 71.4, 97.3, 131.8, 156.3, 197.3, 238.7, 291.7)
+plot(x, y)
+
+beta0 <- 12.59
+beta1 <- 6.33
+beta2 <- 2.12
+curve(beta0 + beta1 * x + beta2 * x^2, from=0, to=10, col="red", lwd=2, add=TRUE)
+```
+
+$\blacksquare$
+:::
+
+::: {.callout-note} 
+可以使用 R 的 `lm()` 实现 @exr-9_9_a 的多项式拟合。
+
+```{r}
+#| code-fold: false
+
+x <- c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+y <- c(20.6, 30.8, 55.0, 71.4, 97.3, 131.8, 156.3, 197.3, 238.7, 291.7)
+model <- lm(y ~ x + I(x^2))
+
+summary(model)
+
+plot(x, y)
+curve(12.6433 + 6.2971 * x + 2.1250 * x^2, from=0, to=10, col="blue", lwd=2, add=TRUE)
+```
+:::
+
+::: {.callout-tip title="备注"}
+在矩阵表示法中，@eq-9_9_1 可以表示为：
+
+$$
+\begin{bmatrix}
+1291.1 \\
+9549.3 \\
+77758.9
+\end{bmatrix}
+=
+\begin{bmatrix}
+10 & 55 & 385 \\
+55 & 385 & 3025 \\
+385 & 3025 & 25,333
+\end{bmatrix}
+\begin{bmatrix}
+B_0 \\
+B_1 \\
+B_2
+\end{bmatrix}
+$$
+
+其解为：
+
+$$
+\begin{bmatrix}
+B_0 \\
+B_1 \\
+B_2
+\end{bmatrix}
+=
+\begin{bmatrix}
+10 & 55 & 385 \\
+55 & 385 & 3025 \\
+385 & 3025 & 25,333
+\end{bmatrix}^{-1}
+\begin{bmatrix}
+1291.1 \\
+9549.3 \\
+77,758.9
+\end{bmatrix}
+$$
+::: 

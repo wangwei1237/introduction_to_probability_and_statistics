@@ -1,1 +1,205 @@
-## Weighted least squares
+## 加权最小二乘法 {#sec-9_8}
+在回归模型
+
+$Y = \alpha + \beta x + e$
+
+中，我们经常发现 **响应变量** 的方差不是常数，而是依赖于其 **输入水平**（*input level*）。如果已经知道这些方差——至少应该知道这些方差的系数——那么可以通过最小化加权平方和来估计回归参数 $\alpha$ 和 $\beta$。具体来说，如果
+
+$\text{Var}(Y_i) = \frac{\sigma^2}{w_i}$
+
+那么估计量 $A$ 和 $B$ 应该为下式的最小化：
+
+$\sum_i \frac{[Y_i - (A + Bx_i)]^2}{\text{Var}(Y_i)} = \frac{1}{\sigma^2} \sum_i w_i (Y_i - A - Bx_i)^2$
+
+分别对 $A$ 和 $B$ 进行偏微分计算，然后令偏微分为 0，得到令 $A$ 和 $B$ 最小化的方程：
+
+$$
+\begin{align}
+\sum_i w_i Y_i &= A \sum_i w_i + B \sum_i w_i x_i \\
+\sum_i w_i x_i Y_i &= A \sum_i w_i x_i + B \sum_i w_i x_i^2
+\end{align}
+$$ {#eq-9_8_1}
+
+很容易就可以求解这些方程以得到最小二乘估计量。
+
+::: {#exm-9_8_a}
+为了理解为什么应该通过最小化加权平方和而不是普通平方和来获得估计量，需要考虑以下情况。假设 $X_1, \ldots, X_n$ 是具有均值 $\mu$ 和方差 $\sigma^2$ 的独立正态分布随机变量。假设 $X_i$ 不可直接观测，而只能观测到
+
+$Y_1 = X_1 + \dots + X_k, \quad Y_2 = X_{k+1} + \dots + X_n, \quad k < n$
+
+我们如何基于 $Y_1$ 和 $Y_2$ 估计 $\mu$？
+
+虽然 $\mu$ 的最佳估计量显然是 $\overline{X} = \sum_{i=1}^{n} X_i / n = (Y_1 + Y_2)/n$，但让我们看看普通最小二乘估计量会是什么。因为
+
+$E[Y_1] = k\mu, \quad E[Y_2] = (n - k)\mu$
+
+$\mu$ 的最小二乘估计量是使得以下表达式最小化的 $\mu$ 的值：
+
+$(Y_1 - k\mu)^2 + (Y_2 - [n - k]\mu)^2$
+
+对其求导并令其等于零，我们得到最小二乘估计量 $\mu$（记作 $\hat{\mu}$）应满足：
+
+$-2k(Y_1 - k\hat{\mu}) - 2(n - k)[Y_2 - (n - k)\hat{\mu}] = 0$
+
+即：
+
+$[k^2 + (n - k)^2]\hat{\mu} = kY_1 + (n - k)Y_2$
+
+所以：
+
+$\hat{\mu} = \frac{kY_1 + (n - k)Y_2}{k^2 + (n - k)^2}$
+
+因为
+
+$E[\hat{\mu}] = \frac{kE[Y_1] + (n - k)E[Y_2]}{k^2 + (n - k)^2} = \frac{k^2\mu + (n - k)^2\mu}{k^2 + (n - k)^2} = \mu$
+
+因此，我们看到虽然普通最小二乘估计量是 $\mu$ 的无偏估计量，但它却不是 $\overline{X}$ 的最佳估计量。
+
+现在，我们通过最小化加权平方和来确定 $\mu$ 的估计量。也就是说，让我们确定 $\mu$ 的值（记作 $\mu_w$）以使得以下表达式最小化：
+
+$\frac{(Y_1 - k\mu)^2}{\text{Var}(Y_1)} + \frac{[Y_2 - (n - k)\mu]^2}{\text{Var}(Y_2)}$
+
+因为
+
+$\text{Var}(Y_1) = k\sigma^2, \quad \text{Var}(Y_2) = (n - k)\sigma^2$
+
+这相当于需要选择令下式最小化的 $\mu$：
+
+$\frac{(Y_1 - k\mu)^2}{k} + \frac{[Y_2 - (n - k)\mu]^2}{n - k}$
+
+对其求导并令其等于零，我们得到 $\mu_w$ 应满足：
+
+$\frac{-2k(Y_1 - k\mu_w)}{k} - \frac{2(n - k)[Y_2 - (n - k)\mu_w]}{n - k} = 0$
+
+即：
+
+$Y_1 + Y_2 = n\mu_w$
+
+所以：
+
+$\mu_w = \frac{Y_1 + Y_2}{n}$
+
+即加权最小二乘估计量实际上就是首选的估计量 $(Y_1 + Y_2) / n = \overline{X}$。$\blacksquare$
+::: 
+
+::: {.callout-tip title="备注"}
+1. 假设数据是正态分布的，加权最小二乘估计量就是最大似然估计量。这是因为数据 $Y_1, \ldots, Y_n$ 的联合概率密度为：
+
+    $\begin{align} f_{Y_1, \ldots, Y_n}(y_1, \ldots, y_n) &= \prod_{i=1}^{n} \frac{1}{\sqrt{2\pi (\sigma/\sqrt{w_i})}} e^{-(y_i - \alpha - \beta x_i)^2 / (2\sigma^2 / w_i)} \\ &= \frac{\sqrt{w_1 \dots w_n}}{(2\pi)^{n/2} \sigma^n} e^{-\sum_{i=1}^{n} w_i (y_i - \alpha - \beta x_i)^2 / 2\sigma^2} \end{align}$
+
+    因此，$\alpha$ 和 $\beta$ 的最大似然估计量正是使的加权平方和 $\sum_{i=1}^{n} w_i (y_i - \alpha - \beta x_i)^2$ 最小的 $\alpha$ 和 $\beta$ 的值。
+
+2. 加权平方和也可以看作是回归方程 $Y = \alpha + \beta x + e$ 乘以 $\sqrt{w}$，即：
+
+    $Y\sqrt{w} = \alpha \sqrt{w} + \beta x \sqrt{w} + e\sqrt{w}$
+
+    在这个方程中，误差项 $e\sqrt{w}$ 的均值为 0，且方差是常数。因此，$\alpha$ 和 $\beta$ 的最小二乘估计量应是使以下表达式最小的 $A$ 和 $B$ 的值：
+
+    $\sum_{i} (Y_i \sqrt{w_i} - A \sqrt{w_i} - B x_i \sqrt{w_i})^2 = \sum_{i} w_i (Y_i - A - B x_i)^2$
+
+3. 加权最小二乘法主要关注那些具有最大权重的数据对（会让权重最大的数据项的误差的方差最小）。
+:::
+
+因为加权最小二乘法需要知道在任意输入水平处的响应变量的方差（至少需要知道其系数），因此加权最小二乘法可能看起来不太有用。但是，通常可以通过分析模型生成的数据来确定这些值。以下两个例子将对此进行说明。
+
+::: {#exr-9_8_b}
+下表表示某城市市区内的通勤时间。自变量或输入变量是通勤的距离。
+
+| 通勤距离（英里）  | 0.5 | 1   | 1.5 | 2   | 3   | 4   | 5   | 6   | 8   | 10  |
+|-------------|-----|-----|-----|-----|-----|-----|-----|-----|-----|-----|
+| 通勤时间（分钟） | 15.0 | 15.1 | 16.5 | 19.9 | 27.7 | 29.7 | 26.7 | 35.9 | 42  | 49.4 |
+
+假设通勤时间 $Y$ 和通勤距离 $x$ 之间的关系为线性关系：
+
+$Y = \alpha + \beta x + e$
+
+我们应如何估计 $\alpha$ 和 $\beta$？
+
+为了使用加权最小二乘法，我们需要知道 $Y$ 的方差。现在，我们提出一个论点，即 $\text{Var}(Y)$ 应与 $x$ 成正比。
+:::
+
+::: {#sol-9_8_b}
+设 $d$ 表示一个街区的长度，于是一个通勤距离为 $x$ 的行程将由 $x/d$ 个街区组成。如果我们让 $Y_i$ 表示第 $i$ 个街区所需的时间，那么总通勤时间可以表示为：
+
+$Y = Y_1 + Y_2 + \dots + Y_{x/d}$
+
+在许多应用中，合理的假设是 $Y_i$ 是具有相同方差的独立随机变量，因此
+
+$\begin{align} \text{Var}(Y) &= \text{Var}(Y_1) + \dots + \text{Var}(Y_{x/d}) \\ &= (x/d)\text{Var}(Y_1) \\ &= x\sigma^2 \end{align}$
+
+其中 $\sigma^2 = \text{Var}(Y_1)/d$。
+
+因此，估计量 $A$ 和 $B$ 应该令以下表达式最小化：
+
+$\sum_{i} \frac{(Y_i - A - B x_i)^2}{x_i}$
+
+使用上面的数据，且权重为 $w_i = 1/x_i$，@eq-9_8_1 的最小二乘方程为：
+
+$\begin{align} 104.22 &= 5.34A + 10B \\ 277.9 &= 10A + 41B \end{align}$
+
+求解得：
+
+$A = 12.561, \quad B = 3.714$
+
+@fig-9_9 展示了数据点和其估计回归线 $12.561 + 3.714x$ 的图形。对我们的解的定性分析可以知：在输入水平较小时，回归的效果最好，这主要是因为权重与输入水平成反比。
+
+```{r}
+#| label: fig-9_9
+#| fig-cap: ""
+#| warning: false
+#| 
+
+miles <- c(0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10)
+time <- c(15.0, 15.1, 16.5, 19.9, 27.7, 29.7, 26.7, 35.9, 42, 49.4)
+plot(miles, time)
+abline(a = 12.561, b = 3.714)
+```
+
+$\blacksquare$
+:::
+
+::: {#exm-9_8_c}
+考虑在交通繁忙的高速公路上发生的事故数量 $Y$ 与在高速公路上行驶的车辆数量 $x$ 之间的关系。稍微思考后，大多数人可能会认为其比较合适的关系应该为线性模型：
+
+$Y = \alpha + \beta x + e$
+
+然而，由于没有任何先验（*priori*）理由认为 $\text{Var}(Y)$ 和输入水平 $x$ 之间无关，因此我们不清楚是否可以使用普通最小二乘法来估计 $\alpha$ 和 $\beta$。实际上，我们将论证：应该采用加权最小二乘法且权重为 $1/x$，即我们应该选择 $A$ 和 $B$ 以最小化
+
+$\sum_{i} \frac{(Y_i - A - Bx_i)^2}{x_i}$
+
+背后的理由是，假设 $Y$ 近似服从泊松分布是合理的。因为我们可以想象每辆车 $x$ 都存在一个小概率会导致事故，因此对于较大的 $x$，事故的数量应该近似为泊松随机变量。由于泊松随机变量的方差等于其均值，我们可以看到：
+
+$\begin{align} \text{Var}(Y) & \simeq E[Y] \\ &= \alpha + \beta x \\ & \simeq \beta x \end{align}$
+:::
+
+::: {.callout-tip title="备注"}
+1. 在响应变量的方差依赖于输入水平时，另一种常用的技术是通过适当的变换来稳定方差。例如，如果 $Y$ 是一个均值为 $\lambda$ 的泊松随机变量，那么可以证明（参见第 2 点），无论 $\lambda$ 的值是多少 $\sqrt{Y}$ 的近似方差都是 $0.25$。基于这一事实，可以尝试将 $E[\sqrt{Y}]$ 建模为输入水平的线性函数，即：
+
+    $\sqrt{Y} = \alpha + \beta x + e$
+
+2. 当 $Y$ 是具有均值 $\lambda$ 的泊松分布时，证明 $\text{Var}(\sqrt{Y}) \approx 0.25$。考虑 $g(y) = \sqrt{y}$ 在 $\lambda$ 处的泰勒级数（*Taylor series*）展开。忽略二阶导数项以后的所有项，我们得到：
+
+    $$
+    g(y) \approx g(\lambda) + g'(\lambda)(y - \lambda) + \frac{g''(\lambda)(y - \lambda)^2}{2} 
+    $$ {#eq-9_8_2}
+
+    由于
+
+    $g'(\lambda) = \frac{1}{2} \lambda^{-1/2}, \quad g''(\lambda) = -\frac{1}{4} \lambda^{-3/2}$
+
+    于是，在 $y = Y$ 处，我们得到
+
+    $\sqrt{Y} \approx \sqrt{\lambda} + \frac{1}{2} \lambda^{-1/2}(Y - \lambda) - \frac{1}{8} \lambda^{-3/2}(Y - \lambda)^2$
+
+    因为 $E[Y - \lambda] = 0$ 和 $E[(Y - \lambda)^2] = \text{Var}(Y) = \lambda$，所以：
+
+    $E[\sqrt{Y}] \approx \sqrt{\lambda} - \frac{1}{8\sqrt{\lambda}}$
+
+    因此：
+
+    $(E[\sqrt{Y}])^2 \approx \lambda + \frac{1}{64\lambda} - \frac{1}{4} \approx \lambda - \frac{1}{4}$
+
+    因此：
+
+    $\begin{align} \text{Var}(\sqrt{Y}) &= E[Y] - (E[\sqrt{Y}])^2 \\ & \approx \lambda - \left(\lambda - \frac{1}{4}\right) \\ &= \frac{1}{4} \end{align}$
+:::
