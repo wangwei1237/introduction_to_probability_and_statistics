@@ -83,7 +83,7 @@ $X_i = \begin{cases} 1, \quad & 第 i 次试验成功\\ 0, \quad & 其它 \end{c
 
 $X = X_1 + \cdots + X_n$
 
-因为 $E[X_i] = p$，$\textup{Var}(X_i) = p(1-p)$，所以根据中心极限定理，当 $n$ 比较大时：
+因为 $E[X_i] = p$，$\textup{Var}(X_i) = np(1-p)$，所以根据中心极限定理，当 $n$ 比较大时：
 
 $\frac{X - np}{\sqrt{np(1-p)}}$ 近似于标准正态分布。
 

@@ -1,1 +1,9 @@
-## Distributions arising from the normal
+## 由正态分布衍生的分布 {#sec-5_8}
+
+### 卡方分布 {#sec-5_8_1}
+
+#### 卡方分布和伽马分布之间的关系 {#sec-5_8_1_1}
+
+### $t-\text{分布}$ {#sec-5_8_2}
+
+### $F-\text{分布}$ {#sec-5_8_3}

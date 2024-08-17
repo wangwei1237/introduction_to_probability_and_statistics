@@ -1,1 +1,207 @@
-## Estimating the difference in means of two normal populations {#sec-7_4}
+## 估计两个正态分布总体的均值差异 {#sec-7_4}
+令 $X_1, X_2, \dots, X_n$ 是来自均值为 $\mu_1$、方差为 $\sigma_1^2$ 的正态分布的总体的一个样本，样本大小为 $n$；$Y_1, \dots, Y_m$ 是来自均值为 $\mu_2$、方差为 $\sigma_2^2$ 的另一个正态分布总体的一个样本，样本大小为 $m$。假设这两个样本之间彼此相互独立。此时，我们感兴趣的是：如何估计 $\mu_1 - \mu_2$？
+
+因为 $\mu_1$ 和 $\mu_2$ 的最大似然估计分别是：$\overline{X} = \sum_{i=1}^n X_i / n$、$\overline{Y} = \sum_{i=1}^m Y_i / m$，所以直觉而言（并且可以证明）$\mu_1 - \mu_2$ 的最大似然估计是 $\overline{X} - \overline{Y}$。
+
+为了得到置信区间估计，我们需要计算 $\overline{X} - \overline{Y}$ 的分布。由于
+
+$\begin{align} \overline{X} &\sim \mathcal{N}\left(\mu_1, \frac{\sigma_1^2}{n}\right) \\ \overline{Y} & \sim \mathcal{N}\left(\mu_2, \frac{\sigma_2^2}{m}\right) \end{align}$
+
+根据独立正态分布随机变量的和也是正态分布的性质，有：
+
+$\overline{X} - \overline{Y} \sim \mathcal{N}\left(\mu_1 - \mu_2, \frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}\right)$
+
+因此，假设 $\sigma_1^2$ 和 $\sigma_2^2$ 是已知的，我们有：
+
+$$
+\frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{\frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}}} \sim \mathcal{N}(0, 1)
+$$ {#eq-7_4_1}
+
+因此，
+
+$P\left\{-z_{\alpha/2} < \frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{\frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}}} < z_{\alpha/2}\right\} = 1 - \alpha$
+
+即：
+
+$P\left\{\overline{X} - \overline{Y} - z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}} < \mu_1 - \mu_2 < \overline{X} - \overline{Y} + z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}}\right\} = 1 - \alpha$
+
+因此，如果获得了样本的观察数据，则 $\overline{X}$ 和 $\overline{Y}$ 分别等于 $\overline{x}$ 和 $\overline{y}$，那么 $\mu_1 - \mu_2$ 的 $100(1-\alpha)\%$ 双边置信区间估计为：
+
+$$
+\mu_1 - \mu_2 \in \left(\overline{x} - \overline{y} - z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}}, \, \overline{x} - \overline{y} + z_{\alpha/2}\sqrt{\frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}}\right)
+$$ {#eq-7_4_001}
+
+类似的，可以得到 $\mu_1 - \mu_2$ 的 $100(1-\alpha)\%$ 的单边置信区间：
+
+$$
+\mu_1 - \mu_2 \in \left(-\infty, \, \overline{x} - \overline{y} + z_{\alpha}\sqrt{\frac{\sigma_1^2}{n} + \frac{\sigma_2^2}{m}}\right)
+$$ {#eq-7_4_002}
+
+@eq-7_4_002 的证明我们留给读者来进行验证。
+
+::: {#exr-7_4_a}
+我们对两种不同类型的电缆绝缘材料进行了测试，以确定故障发生时的电压水平。在实验室的实验中，在电压不断增加的情况下，两种类型的电缆绝缘材料在如下的电压下发生了故障：
+
+| Type A | Type B |
+|--------|--------|
+| 36     | 52     |
+| 44     | 64     |
+| 41     | 38     |
+| 53     | 68     |
+| 38     | 66     |
+| 36     | 52     |
+| 34     | 60     |
+| 54     | 44     |
+| 52     | 48     |
+| 37     | 46     |
+| 51     | 70     |
+| 44     | 62     |
+| 35     |        |
+| 44     |        |
+
+假设已知绝缘材料 A 所能承受的电压服从均值为 $\mu_A$（未知）、方差为 $\sigma_A^2 = 40$ 的正态分布；而绝缘材料 B 服从均值为 $\mu_B$（未知）、方差为 $\sigma_B^2 = 100$ 的正态分布。
+
+1. 确定 $\mu_B - \mu_A$ 的 95% 置信区间。
+2. 确定我们可以以 95% 的置信度断言比 $\mu_B - \mu_A$ 小的最大值。
+:::
+
+::: {#sol-7_4_a}
+```{r}
+#| code-fold: false
+
+x <- c(52, 64, 38, 68, 66, 52, 60, 44, 48, 46, 70, 62)
+y <- c(36, 44, 41, 53, 38, 36, 34, 54, 52, 37, 51, 44, 35, 44)
+l <- mean(x) - mean(y) - qnorm(.975) * sqrt(40 / 14 + 100 / 12) 
+u <- mean(x) - mean(y) + qnorm(.975) * sqrt(40 / 14 + 100 / 12) 
+c(l,u)
+```
+
+因此，我们有 95% 的信心可以断言 $\mu_B - \mu_A \in (6.491114, 19.604124)$。为了获得单边上置信区间，我们可以采用如下的 R 代码：
+
+```{r}
+#| code-fold: false
+
+x <- c(52, 64, 38, 68, 66, 52, 60, 44, 48, 46, 70, 62)
+y <- c(36, 44, 41, 53, 38, 36, 34, 54, 52, 37, 51, 44, 35, 44)
+u <- mean(x) - mean(y) - qnorm(.95) * sqrt(40 / 14 + 100 / 12) 
+u
+```
+
+因此，我们有 95% 的信心认为 $\mu_B - \mu_A \ge 7.545227$。$\blacksquare$
+:::
+
+### 总体方差未知时 $\mu_1 - \mu_2$ 的区间估计 {#sec-7_4_1}
+现在，我们希望再次对 $\mu_1 - \mu_2$ 进行区间估计，但这次估计时的总体方差 $\sigma_1^2$ 和 $\sigma_2^2$ 均是未知的。在这种情况下，最直接的做法就是用 **样本方差** 来替换公式 @eq-7_4_1 中的总体方差 $\sigma_1^2$ 和 $\sigma_2^2$：
+
+$\begin{align} S_1^2 &= \frac{\sum_{i=1}^n (X_i - \overline{X})^2}{n - 1} \\ S_2^2 &= \frac{\sum_{i=1}^m (Y_i - \overline{Y})^2}{m - 1} \end{align}$
+
+也就是说，此时的区间估计很自然地变为如下的形式：
+
+$$
+\frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{S_1^2/n + S_2^2/m}}
+$$ {#eq-7_4_003}
+
+然而，为了利用 @eq-7_4_003 计算置信区间，我们需要知道 @eq-7_4_003 的分布，并且该分布不能依赖于任何未知参数 $\sigma_1^2$ 和 $\sigma_2^2$。不幸的是，这个分布既复杂又确实依赖于未知参数 $\sigma_1^2$ 和 $\sigma_2^2$。事实上，只有在特殊情况下，即 $\sigma_1^2 = \sigma_2^2$ 时，我们才能获得 $\mu_1 - \mu_2$ 的区间估计。因此，虽然总体方差未知，但我们可以假设总体方差是一致的，并令 $\sigma^2$ 表示 $\sigma_1^2$ 和 $\sigma_2^2$ 的值。由 @thm-6_5_1 得到：
+
+$\begin{align} (n - 1)\frac{S_1^2}{\sigma^2} & \sim \chi^2_{n-1} \\ (m - 1)\frac{S_2^2}{\sigma^2} & \sim \chi^2_{m-1} \end{align}$
+
+此外，由于样本是独立的，因此这两个卡方随机变量也是独立的。由卡方随机变量的可加性，独立卡方随机变量之和也是卡方分布，其自由度等于各卡方随机变量的自由度之和，因此有：
+
+$$
+(n - 1)\frac{S_1^2}{\sigma^2} + (m - 1)\frac{S_2^2}{\sigma^2} \sim \chi^2_{n+m-2}
+$$ {#eq-7_4_2}
+
+同时，由于
+
+$\overline{X} - \overline{Y} \sim \mathcal{N}\left(\mu_1 - \mu_2, \frac{\sigma^2}{n} + \frac{\sigma^2}{m}\right)$
+
+我们可以得到：
+
+$$
+\frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{\sigma^2/n + \sigma^2/m}} \sim \mathcal{N}(0, 1)
+$$ {#eq-7_4_3}
+
+现在，根据 @thm-6_5_1 中的基本结果，在正态分布抽样中，$\overline{X}$ 和 $S^2$ 是独立的，所以 $X_1, S_1^2, X_2, S_2^2$ 是独立的随机变量。因此，如果令：
+
+$S_p^2 = \frac{(n-1)S_1^2 + (m-1)S_2^2}{n+m-2}$
+
+使用 $t$ 随机变量的定义（@sec-5_8_2，$t$ 随机变量为两个独立随机变量的比值，其中分子为标准正态分布，分母为一个卡方随机变量除以其自由度的平方根），根据 @eq-7_4_2 和 @eq-7_4_3 可以得到：
+
+$\frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{\sigma^2 (1/n + 1/m)}} \div \sqrt{\frac{S_p^2}{\sigma^2}} = \frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{S_p^2 (1/n + 1/m)}}$
+
+是自由度为 $n + m - 2$ 的 $t-\text{分布}$ 随机变量。因此：
+
+$P\left\{ -t_{\alpha/2, n+m-2} \leq \frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{S_p \sqrt{1/n + 1/m}} \leq t_{\alpha/2, n+m-2} \right\} = 1 - \alpha$
+
+因此，当观察到样本数据后，令 $\overline{X} = \overline{x}$、$\overline{Y} = \overline{y}$、$S_p = s_p$，我们得到 $\mu_1 - \mu_2$ 的 $100(1-\alpha)\%$ 的置信区间：
+
+$$
+\left(\overline{x} - \overline{y} - t_{\alpha/2, n+m-2} s_p \sqrt{1/n + 1/m}, \quad \overline{x} - \overline{y} + t_{\alpha/2, n+m-2} s_p \sqrt{1/n + 1/m}\right)
+$$ {#eq-7_4_4}
+
+类似地，我们可以得到方差未知时 $\mu_1 - \mu_2$ 的单边置信区间。
+
+::: {#exr-7_4_b}
+对于 @exr-7_4_a 中的数据，如果两个样本的总体方差均未知、但是方差是相等的，计算 $\mu_B - \mu_A$ 的 95% 的双边置信区间？
+:::
+
+::: {#sol-7_4_b}
+```{r}
+#| code-fold: false
+
+x <- c(52, 64, 38, 68, 66, 52, 60, 44, 48, 46, 70, 62)
+y <- c(36, 44, 41, 53, 38, 36, 34, 54, 52, 37, 51, 44, 35, 44)
+sp <- sqrt((11 * var(x) + 13 * var(y)) / 24)
+l <- mean(x) - mean(y) - qt(0.975, 24) * sp * sqrt(1 / 12 + 1 / 14) 
+u <- mean(x) - mean(y) + qt(0.975, 24) * sp * sqrt(1 / 12 + 1 / 14) 
+c(l,u)
+```
+
+$\blacksquare$
+:::
+
+::: {.callout-tip title="备注"}
+由 @eq-7_4_4 给出的置信区间是在假设总体方差相等的条件下的结果；假设抽样的总体的方差都是 $\sigma^2$，则
+
+$\frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{\sigma^2/n + \sigma^2/m}} = \frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sigma\sqrt{1/n + 1/m}}$ 
+
+服从标准正态分布。
+
+然而，由于 $\sigma^2$ 是未知的，因此不能直接使用上式来计算置信区间。为了计算置信区间，必须首先估计 $\sigma^2$。同时，请注意，两个样本方差都是 $\sigma^2$ 的估计量。此外，由于 $S_1^2$ 的自由度为 $n - 1$，$S_2^2$ 的自由度为 $m - 1$，所以取这两个样本方差的估计量的加权平均值（权重与自由度成正比）作为 $\sigma^2$ 的估计量是合理的。也就是说，$\sigma^2$ 的估计量是 **池化估计量**（*the pooled estimator*）：
+
+$S_p^2 = \frac{(n - 1)S_1^2 + (m - 1)S_2^2}{n + m - 2}$
+
+于是基于以下统计量计算置信区间：
+
+$\frac{\overline{X} - \overline{Y} - (\mu_1 - \mu_2)}{\sqrt{S_p^2\left(1/n + 1/m\right)}}$
+
+根据之前的分析，如上的统计量服从自由度为 $n + m - 2$ 的 $t- \text{分布}$。
+:::
+
+@tbl-7_2 对本节的相关结论进行了总结。
+
+::: {#tbl-7_2 layout-ncol=1}
+|     |
+| --- |
+| $\begin{align} & X_1, ..., X_n \sim \mathcal{N}(\mu_1, \sigma_1^2) \\ & Y_1, ..., Y_n \sim \mathcal{N}(\mu_2, \sigma_2^2) \\ & \overline{X} = \sum_{i=1}^{n}{X_i} / n, \quad S_1^2 = \sum_{i=1}^{n}{(X_i - \overline{X})^2} / (n-1) \\ & \overline{Y} = \sum_{i=1}^{m}{Y_i} / n, \quad S_2^2 = \sum_{i=1}^{m}{(Y_i - \overline{Y})^2} / (m-1)\end{align}$  |
+
+: $X_i$，$Y_i$ 的分布 {#tbl-7_2_1}
+
+| Assumption                     | Confidence Interval |
+|--------------------------------|---------------------|
+| $\sigma_1, \sigma_2$ 已知 | $\overline{X} - \overline{Y} \pm z_{\alpha/2} \sqrt{\sigma_1^2/n + \sigma_2^2/m}$ |
+| $\sigma_1, \sigma_2$ 未知但相等| $\overline{X} - \overline{Y} \pm t_{\alpha/2, n+m-2} \sqrt{\left(\frac{1}{n} + \frac{1}{m}\right) \frac{(n-1)S_1^2 + (m-1)S_2^2}{n+m-2}}$ |
+
+: 双边置信区间 {#tbl-7_2_2}
+
+| Assumption | Lower Confidence Interval |
+|----------------------|---------------------|
+| $\sigma_1, \sigma_2$ 已知| $(-\infty, \overline{X} - \overline{Y} + z_{\alpha} \sqrt{\sigma_1^2/n + \sigma_2^2/m})$ |
+| $\sigma_1, \sigma_2$ 未知但相等 | $\left(-\infty, \overline{X} - \overline{Y} + t_{\alpha, n+m-2} \sqrt{\left(\frac{1}{n} + \frac{1}{m}\right) \frac{(n-1)S_1^2 + (m-1)S_2^2}{n+m-2}}\right)$ |
+
+:  单边下置信区间 {#tbl-7_2_3}
+
+$\mu_1 - \mu_2$ 的 $100(1 - \alpha) \%$ 置信区间
+:::
+
+> 注意：$\mu_1 - \mu_2$ 的单边上置信区间可以通过 $\mu_2 - \mu_1$ 的单边下执行区间得到 

@@ -26,6 +26,7 @@ jobs:
             any::rmarkdown
             any::ggplot2
             any::igraph
+            any::latex2exp
       #- name: Install R packages
       #  run: |
       #    Rscript -e "install.packages(c('knitr', 'rmarkdown', 'ggplot2', 'MASS'))"

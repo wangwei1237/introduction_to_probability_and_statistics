@@ -1,1 +1,419 @@
-## Tests concerning the mean of a normal population {#sec-8_3}
+## 正态分布的均值检验 {#sec-8_3}
+### 方差 $\sigma^2$ 已知的场景 {#sec-8_3_1}
+$X_1, \dots, X_n$ 是从未知均值 $\mu$ 且方差为 $\sigma^2$ 的正态分布总体中抽取的大小为 $n$ 的样本，假设我们要对以下的原假设进行检验：
+
+$\begin{align} H_0: \mu = \mu_0 \quad vs \quad H_1: \mu \neq \mu_0 \end{align}$
+
+其中 $\mu_0$ 是某个特定的常数。
+
+由于 $\overline{X} = \frac{1}{n} \sum_{i=1}^n X_i$ 是 $\mu$ 的点估计量，因此如果 $\overline{X}$ 与 $\mu_0$ 相差不大，则接受 $H_0$ 是合理的。也就是说，检验的 **临界区** 为：
+
+$$
+C = \{ X_1, \dots, X_n : |\overline{X} - \mu_0| > c \}
+$$ {#eq-8_3_1}
+
+其中 $c$ 为某个合适的值。
+
+如果我们要求检验的显著性水平为 $\alpha$，我们必须确定 @eq-8_3_1 中的临界值 $c$，以使得 I 类错误等于 $\alpha$。即，$c$ 必须满足：
+
+$$
+P_{\mu_0}\{ |\overline{X} - \mu_0| > c \} = \alpha
+$$ {#eq-8_3_2}
+
+$P_{\mu_0}$ 表示我们在 $\mu = \mu_0$ 的假设下计算 @eq-8_3_2 的概率。然而，当 $\mu = \mu_0$ 时，$\overline{X}$ 将服从均值为 $\mu_0$ 且方差为 $\sigma^2/n$ 的正态分布，因此 @eq-8_3_001 定义的 $Z$ 将服从标准正态分布。
+
+$$
+Z \equiv \frac{\overline{X} - \mu_0}{\sigma/\sqrt{n}} = \sqrt{n} \frac{(\overline{X} - \mu_0)}{\sigma}
+$$ {#eq-8_3_001}
+
+于是，@eq-8_3_2 等价于：
+
+$P\left\{ |Z| > \frac{c \sqrt{n}}{\sigma} \right\} = \alpha$
+
+即：
+
+$2P\left\{ Z > \frac{c \sqrt{n}}{\sigma} \right\} = \alpha$
+
+其中 $Z$ 是标准正态分布随机变量。然而，我们知道
+
+$P\{ Z > z_{\alpha/2} \} = \alpha/2$
+
+因此：
+
+$\frac{c \sqrt{n}}{\sigma} = z_{\alpha/2}$
+
+即：
+
+$c = \frac{z_{\alpha/2} \sigma}{\sqrt{n}}$
+
+因此，显著性水平为 $\alpha$ 的检验为：
+
+* 如果 $\frac{\sqrt{n}}{\sigma} |\overline{X} - \mu_0| > z_{\alpha/2}$，则拒绝 $H_0$；
+* 否则，接受 $H_0$。
+
+$$
+\begin{align}
+\text{拒绝} H_0 &: \quad \frac{\sqrt{n}}{\sigma} |\overline{X} - \mu_0| > z_{\alpha/2} \\
+\text{接受} H_0 &: \quad \frac{\sqrt{n}}{\sigma} |\overline{X} - \mu_0| \le z_{\alpha/2}
+\end{align}
+$$ {#eq-8_3_3}
+
+可以通过图 @fig-8_1 来直观地表示 @eq-8_3_3，在 @fig-8_1 中，我们叠加了标准正态分布的概率密度函数（即当 $H_0$ 成立时，统计量 $\sqrt{n}(\overline{X} - \mu_0)/\sigma$ 的概率密度）。
+
+```{r}
+#| label: fig-8_1
+#| fig-cap: ""
+#| warning: false
+#| 
+library(latex2exp)
+library(ggplot2)
+
+x <- seq(-3, 3, 0.01) 
+y <- dnorm(x)
+df <- data.frame(x=x, y=y)
+
+ggplot(df, aes(x=x, y=y)) + 
+  geom_line() + 
+  geom_segment(x=-1.96, y=dnorm(-1.96) * 1.5, xend=-1.96, yend=0) +
+  geom_segment(x=1.96, y=dnorm(1.96) * 1.5, xend=1.96, yend=0) + 
+  geom_segment(x=-1.96, y=dnorm(-1.96) * 1.3, xend=1.96, yend=dnorm(1.96) * 1.3, 
+               arrow = arrow(ends = "both", type = "closed", length = unit(0.1, "inches"))) + 
+  annotate("text", x = -1.86, y = -0.01, label = TeX("$-z_{\\alpha/2}$"), hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 2.06, y = -0.01, label = TeX("$z_{\\alpha/2}$"), hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 0.15, y = dnorm(-1.96) * 1.4, label = "Accept", hjust = 1, vjust = 0, size = 3) +
+  theme_minimal() + 
+  theme(axis.text = element_blank(),axis.title = element_blank())
+```
+
+::: {#exr-8_3_a}
+与 @exr-7_3_a 类似，假设从 A 地发射一个信号 $\mu$ 到 B 地，在 B 接收到的信号的值服从均值为 $\mu$、方差为 4 的正态分布。也就是说，B 地接收到的信号会加入随机噪声、并且该随机噪声是服从 $\mathcal{N}(0, 4)$ 的随机变量。现在，B 地的人怀疑今天 A 地发送的信号值为 $\mu = 8$。假设 A 地独立发送了 5 次该信号，且在 B 地接收到的信号的平均值为 $\overline{X} = 9.5$。请对 **今天 A 地发送的信号值为 $\mu = 8$ ** 这一假设进行检验。
+:::
+
+::: {#exr-8_3_a}
+假设我们在 5% 的显著性水平下进行检验。首先，计算检验统计量：
+
+$\frac{\sqrt{n}}{\sigma} |\overline{X} - \mu_0| = \frac{\sqrt{5}}{2} (1.5) = 1.68$
+
+由于 1.68 小于 $z_{0.025} = 1.96$，因此应该接受该假设。换句话说，因为当 A 地发射的信号真的为 8 时，那么会有 5% 的可能性发生像我们观察到的样本平均值偏离 8 的这种情况，但是这个比例并没有达到足以令我们拒绝原假设，所以观察到的数据与原假设并不矛盾。但是，如果我们选择了更不严格的显著性水平——比如 $\alpha = 0.1$，此时，因为 1.68 大于 $z_{0.05} = 1.645$，那么我们将拒绝原假设。因此，如果我们选择了 10% 的概率会错误的拒绝原假设的情况下（*第 I 类错误*），那么我们将拒绝原假设。
+
+选择合适的显著性水平（$\alpha$）并不是一个一成不变的标准，而是需要根据具体情况进行调整。例如，如果错误的拒绝实际为真的原假设 $H_0$ 会导致巨大损失，那么我们可能会选择非常保守的显著性水平，此时可以选择 0.05 或 0.01 的显著性水平。此外，如果我们一开始就非常相信 $H_0$ 是正确的，那么我们就需要设置一个非常严格的标准并要求有强有力的数据证据才能认为 $H_0$ 是错误的。也就是说，在这种情况下，我们通常需要设置一个非常低的显著性水平（例如 0.01 或者更低）。$\blacksquare$
+:::
+
+@eq-8_3_3 给出的 **检验** 的描述如下：对于检验统计量 $\sqrt{n}|\overline{X} - \mu_0|/\sigma$ 的任何观测值——我们称其为 $v$——当 $H_0$ 成立时，如果检验统计量大于或等于 $v$ 的概率小于或等于显著性水平 $\alpha$，则 **检验** 说明需要拒绝原假设 $H_0$。
+
+由此，我们可以通过以下步骤来确定是否接受原假设 $H_0$：
+
+* 首先，计算检验统计量的值 $v$；
+* 其次，计算标准正态分布（取绝对值）的概率，即标准正态分布中大于 $v$ 的概率，我们称这一概率为检验的 $p-\text{value}$。$p-\text{value}$ 给出了临界显著性水平的意义，即如果 $p-\text{value}$ 大于显著性水平 $\alpha$，则接受 $H_0$；如果 $p-\text{value}$ 小于或等于显著性水平 $\alpha$，则拒绝 $H_0$。
+
+在实际操作中，显著性水平往往不是预先设定的，而是会首先通过观察数据来确定 $p-\text{value}$。
+
+* 有时，$p-\text{value}$ 会明显大于我们愿意使用的任何显著性水平，因此我们可以非常轻松的就接受原假设 $H_0$。
+* 而有时，$p-\text{value}$ 值又非常小（甚至小于任何我们会使用到的显著性水平），因此显然我们应该拒绝该假设。
+
+::: {#exm-8_3_b}
+在 @exr-8_3_a 中，假设接收到的 5 个值的平均值为 $\overline{X} = 8.5$。在这种情况下，
+
+$\frac{\sqrt{n}}{\sigma} |\overline{X} - \mu_0| = \frac{\sqrt{5}}{4} = 0.559$
+
+因为
+
+$P\{|Z| > 0.559\} = 2P\{Z > 0.559\}= 2 \times 0.288 = 0.576$
+
+所以 $p-\text{value}$ 为 0.576，因此信号值为 8 的原假设在任何显著性水平 $\alpha < 0.576$ 下都将被接受。显然，我们绝不会使用一个高达 0.576 的显著性水平来检验原假设，因此我们将接受 $H_0$。
+
+另一方面，如果数据的平均值为 11.5，则检验均值为 8 的 $p-\text{value}$ 值将为
+
+$P\{|Z| > 1.75\sqrt{5}\} = P\{|Z| > 3.913\} \approx 0.00005$
+
+对于如此小的$p-\text{value}$，我们将拒绝信号值为 8 的原假设。$\blacksquare$
+:::
+
+到现在为止，我们还没有讨论过 **第 II 类错误** 的概率——也就是在真实均值 $\mu$ 不等于 $\mu_0$ 时错误的接受原假设的概率。**第 II 类错误** 的概率取决于 $\mu$ 的值，因此我们定义 $\beta(\mu)$ 如下：
+
+$\begin{align}\beta(\mu) &= P_\mu\{\text{接受 } H_0\} \\ &=P_{\mu}\left\{\left|\frac{\overline{X}-\mu_0}{\sigma/\sqrt{n}}\right| \le z_{\alpha/2}\right\} \\ &=P_{\mu}\left\{-z_{\alpha/2} \le \frac{\overline{X}-\mu_0}{\sigma/\sqrt{n}}\le z_{\alpha/2}\right\} \end{align}$
+
+我们称函数 $\beta(\mu)$ 为 **Operating Characteristic**（*OC*）Curve，$\beta(\mu)$ 表示当真实均值为 $\mu$ 时接受原假设 $H_0$ 的概率。
+
+为了计算这个概率，我们使用 $\overline{X}$ 服从均值为 $\mu$、方差为 $\sigma^2/n$ 的正态分布的事实，因此
+
+$Z \equiv \frac{\overline{X} - \mu}{\sigma/\sqrt{n}} \sim \mathcal{N}(0, 1)$
+
+因此，
+
+$$
+\begin{align}
+\beta(\mu) &= P_\mu\left\{-z_{\alpha/2} \leq \frac{\overline{X} - \mu_0}{\sigma/\sqrt{n}} \leq z_{\alpha/2}\right\} \\
+&= P_\mu\left\{-z_{\alpha/2} \leq \frac{\overline{X} - \mu + \mu - \mu_0}{\sigma/\sqrt{n}} \leq z_{\alpha/2}\right\} \\
+&= P_\mu\left\{-z_{\alpha/2} - \frac{\mu}{\sigma / \sqrt{n}} \leq \frac{\overline{X} - \mu - \mu_0}{\sigma/\sqrt{n}} \leq z_{\alpha/2} -  \frac{\mu}{\sigma / \sqrt{n}} \right\} \\
+&= P_\mu\left\{ -z_{\alpha/2} - \frac{\mu}{\sigma / \sqrt{n}} \leq Z - \frac{\mu_0}{\sigma/\sqrt{n}} \leq z_{\alpha/2} -  \frac{\mu}{\sigma / \sqrt{n}} \right\} \\
+&= P\left\{\frac{\mu_0 - \mu}{\sigma / \sqrt{n}} - z_{\alpha/2} \le Z \le \frac{\mu_0 - \mu}{\sigma / \sqrt{n}} + z_{\alpha/2}\right\} \\
+&= \Phi\left(\frac{\mu_0 - \mu}{\sigma/\sqrt{n}} + z_{\alpha/2}\right) - \Phi\left(\frac{\mu_0 - \mu}{\sigma/\sqrt{n}} - z_{\alpha/2}\right)
+\end{align}
+$$ {#eq-8_3_4}
+
+其中 $\Phi$ 是标准正态分布函数。
+
+对于固定的显著性水平 $\alpha$，由 @eq-8_3_4 给出的 OC 曲线是关于 $\mu_0$ 对称的，并且实际上仅通过 $\sqrt{n}|\mu - \mu_0|/\sigma$ 而依赖于 $\mu$。当 $\alpha = 0.05$ 时，这条曲线的横坐标由 $\mu$ 改为 $d = \sqrt{n}|\mu - \mu_0|/\sigma$，并且曲线如 @fig-8_2 所示。
+
+```{r}
+#| label: fig-8_2
+#| fig-cap: "显著性水平位 0.05 时双边正态分布检验的 OC 曲线图"
+#| warning: false
+
+library(ggplot2)
+
+# β(μ) 的计算函数
+calculate_beta <- function(mu, mu0, sigma, n, alpha) {
+  z_alpha = qnorm(1 - alpha / 2)
+  d = sqrt(n) * (mu0 - mu) / sigma
+  beta = pnorm(d + z_alpha) - pnorm(d - z_alpha)
+  return(beta)
+}
+
+# 参数设置
+mu0 <- 0        # 原假设的均值
+sigma <- 3      # 标准差
+n <- 10         # 样本大小
+alpha <- 0.05   # 显著性水平
+
+# 生成一系列 μ 的值
+mu_values <- seq(-5, 5, by = 0.1)
+
+# 计算每个 μ 对应的 β(μ)
+beta_values <- sapply(mu_values, calculate_beta, mu0 = mu0, sigma = sigma, n = n, alpha = alpha)
+d <- sqrt(n) / sigma * abs(mu0 - mu_values)
+
+# 创建数据框用于绘图
+df <- data.frame(mu = mu_values, d = d, beta = beta_values)
+
+# 绘制 OC 曲线
+ggplot(df, aes(x = d, y = beta)) +
+  geom_line() +
+  scale_x_continuous(limits = c(0, 5)) + 
+  scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
+  theme_minimal()
+```
+
+::: {#exm-8_3_c}
+对于 @exr-8_3_a 中的问题，当实际发送的值为 10 时，计算接受原假设 $\mu = 8$ 的概率？
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+# β(μ) 的计算函数
+calculate_beta <- function(mu, mu0, sigma, n, alpha) {
+  z_alpha = qnorm(1 - alpha / 2)
+  d = sqrt(n) * (mu0 - mu) / sigma
+  beta = pnorm(d + z_alpha) - pnorm(d - z_alpha)
+  return(beta)
+}
+
+p <- calculate_beta(10, 8, 2, 5, 0.05)
+p
+```
+
+$\blacksquare$
+:::
+
+::: {.callout-tip title="备注"}
+我们称 $1 - \beta(\mu)$ 为 **检验功效函数**（*power-function of the test*）。因此，对于给定的 $\mu$ 值，**检验功效** 等于当 $\mu$ 为真实值时拒绝原假设的概率。
+:::
+
+在确定所需的随机样本大小以满足我们对 *第 II 类错误* 的某些特定要求的场景下，**Operating Characteristic** 函数非常有用。例如，假设我们希望确定所需的样本大小 $n$，以确保当真实均值实际上为 $\mu_1$ 时，接受原假设 $H_0: \mu = \mu_0$ 的概率大约为 $\beta$。也就是说，我们希望找到 $n$ 使得：
+
+$\beta(\mu_1) \approx \beta$
+
+但是，根据 @eq-8_3_4，我们可以推导出，如上的式子等价于
+
+$$
+\Phi \left(\frac{\sqrt{n}(\mu_0 - \mu_1)}{\sigma} + z_{\alpha/2}\right) - \Phi \left(\frac{\sqrt{n}(\mu_0 - \mu_1)}{\sigma} - z_{\alpha/2}\right) \approx \beta \quad
+$$ {#eq-8_3_5}
+
+尽管无法直接对 @eq-8_3_5 进行求解并得到 $n$，但可以使用标准正态分布表来求解得到 $n$。此外，还可以通过 @eq-8_3_5 推导出 $n$ 的近似值 @eq-8_3_7。
+
+首先，假设 $\mu_1 > \mu_0$，于是这意味着：
+
+
+$\frac{\sqrt{n}(\mu_0 - \mu_1)}{\sigma} - z_{\alpha/2} \leq -z_{\alpha/2}$
+
+由于 $\Phi$ 是一个递增函数，因此：
+
+$\Phi \left(\frac{\sqrt{n}(\mu_0 - \mu_1)}{\sigma} - z_{\alpha/2}\right) \leq \Phi(-z_{\alpha/2}) = P\{Z \leq -z_{\alpha/2}\} = P\{Z \geq z_{\alpha/2}\} = \alpha/2$
+
+因此，我们可以取
+
+$\Phi \left(\frac{\sqrt{n}(\mu_0 - \mu_1)}{\sigma} - z_{\alpha/2}\right) \approx 0$
+
+根据 @eq-8_3_5 可以得到：
+
+$$
+\beta \approx \Phi \left(\frac{\sqrt{n}(\mu_0 - \mu_1)}{\sigma} + z_{\alpha/2}\right)
+$$ {#eq-8_3_6}
+
+或者，由于
+
+$\beta = P\{Z > z_{\beta}\} = P\{Z < -z_{\beta}\} = \Phi(-z_{\beta})$
+
+根据 @eq-8_3_6 得到：
+
+$-z_{\beta} \approx \frac{\sqrt{n}(\mu_0 - \mu_1)}{\sigma} + z_{\alpha/2}$
+
+即：
+
+$$
+n \approx \frac{(z_{\alpha/2} + z_{\beta})^2 \sigma^2}{(\mu_1 - \mu_0)^2}
+$$ {#eq-8_3_7}
+
+事实上，当 $\mu_1 < \mu_0$ 时，我们会得到近似相同的结果（留作习题），因此，在任何情况下 @eq-8_3_7 都是如下场景的一个合理的近似值：
+
+* 估计所需的样本大小，以确保当真实均值为 $\mu = \mu_1$ 时，**第 II 类错误** 的概率大约等于 $\beta$。
+
+::: {#exr-8_3_d}
+对于 @exr-8_3_a 的问题，在 0.05 的显著性水平下，当 $\mu$ 实际为 9.2 时，需要发送多少次信号才能使得原假设 $H_0: \mu = 8$ 至少有 75% 的概率被拒绝？
+:::
+
+::: {#sol-8_3_d}
+由于 $z_{.025} = 1.96$，$z_{0.25} = .67$，根据 @eq-8_3_7 有：
+
+$n \approx \frac{(1.96 + 0.67)^2}{(1.2)^2} 4 \approx 19.21$
+
+因此需要一个大小为 20 的样本。
+
+根据方程 @eq-8_3_4，当 $n = 20$ 时，
+
+$\begin{align} \beta(9.2) &= \Phi \left(-\frac{1.2\sqrt{20}}{2} + 1.96\right) - \Phi \left(-\frac{1.2\sqrt{20}}{2} - 1.96\right) \\ & \approx \Phi(-0.723) - \Phi(-4.643) \\ & \approx 1 - \Phi(0.723) \\ & \approx 0.235 \end{align}$
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+# β(μ) 的计算函数
+calculate_beta <- function(mu, mu0, sigma, n, alpha) {
+  z_alpha = qnorm(1 - alpha / 2)
+  d = sqrt(n) * (mu0 - mu) / sigma
+  beta = pnorm(d + z_alpha) - pnorm(d - z_alpha)
+  return(beta)
+}
+
+p <- calculate_beta(9.2, 8, 2, 20, 0.05)
+p
+```
+
+因此，如果发送消息 20 次，那么当真实均值为 9.2 时，有 76.5% 的概率会拒绝原假设 $\mu = 8$。$\blacksquare$
+:::
+
+#### 单边检验 {#sec-8_3_1_1}
+在检验原假设 $\mu = \mu_0$ 时，我们选择了一种检验以使得在 $\overline{X}$ 远离 $\mu_0$ 时拒绝原假设。也就是说，和 $\mu_0$ 相比，$\overline{X}$（$\mu$ 的估计量）的一个非常小的值或非常大的值似乎使得 $\mu$ 不可能等于 $\mu_0$。然而，当 $\mu$ 等于 $\mu_0$ 的唯一 **备择假设** 是 $\mu > \mu_0$ 时会发生什么呢？也就是说，当 **备择假设** 为 $H_1: \mu > \mu_0$ 时会发生什么？显然，此时，在 $\overline{X}$ 很小（与 $\mu$ 相比）时，$H_0$ 为真比 $H_1$ 为真更有可能发生。因此，此时，我们不希望拒绝 $H_0$。
+
+因此，对于 @eq-8_3_8 的检验
+
+$$
+H_0: \mu = \mu_0 \quad vs. \quad H_1: \mu > \mu_0
+$$ {#eq-8_3_8}
+
+当 $\mu_0$ 的点估计 $\overline{X}$ 远大于 $\mu_0$ 时，我们应该拒绝 $H_0$。这意味着，**临界区** 应如下所示：
+
+$C = \{(X_1, \dots, X_n) : \overline{X} - \mu_0 > c\}$
+
+由于当 $H_0$ 为真时，拒绝原假设的概率应该等于 $\alpha$，因此 $c$ 需要满足：
+
+$$
+P_{\mu_0}\{\overline{X} - \mu_0 > c\} = \alpha
+$$ {#eq-8_3_9}
+
+当 $H_0$ 为真时，$Z$ 服从标准正态分布：
+
+$Z = \frac{\overline{X} - \mu_0}{\sigma/\sqrt{n}} = \sqrt{n}\frac{(\overline{X} - \mu_0)}{\sigma}$
+
+所以，@eq-8_3_9 等价于：
+
+$P\left\{Z > \frac{c\sqrt{n}}{\sigma}\right\} = \alpha$
+
+由于
+
+$P\{Z > z_{\alpha}\} = \alpha$
+
+所以有：
+
+$$
+c = \frac{z_{\alpha}\sigma}{\sqrt{n}}
+$$ {#eq-8_3_1_1_001}
+
+因此，假设 @eq-8_3_8 的检验是当 $\overline{X} - \mu_0 > z_{\alpha} \sigma / \sqrt{n}$ 时拒绝 $H_0$，否则接受 $H_0$。即：
+
+$$
+\begin{align}
+&\text{接受} \ H_0 \quad \text{如果} \frac{\sqrt{n}}{\sigma} (\overline{X} - \mu_0) \leq z_{\alpha} \\
+&\text{拒绝} \ H_0 \quad \text{如果} \frac{\sqrt{n}}{\sigma} (\overline{X} - \mu_0) \gt z_{\alpha} \\
+\end{align}
+$$ {#eq-8_3_10}
+
+因为仅在 $\overline{X}$ 较大时才会拒绝原假设，所以 @eq-8_3_10 称之为 **单边临界区域**（*one-sided critical region*）。相应地，与 **备择假设** 为 $H_1: \mu \neq \mu_0$ 的双边检验问题相比，@eq-8_3_1_1_002 所示的假设检验问题也称之为 **单边检验问题**。
+
+$$
+\begin{align}
+H_0: &\mu = \mu_0 \\
+H_1: & \mu > \mu_0
+\end{align}
+$$ {#eq-8_3_1_1_002}
+
+为了计算 **单边检验** 中的 $p-\text{value}$，我们
+
+* 首先使用观测数据确定统计量 $\frac{\sqrt{n}(\overline{X} - \mu_0)}{\sigma}$ 的值。
+* 然后，$p-\text{value}$ 等于标准正态分布中大于等于该值的概率。
+
+::: {#exr-8_3_e}
+假设在 @exr-8_3_a 中，我们预先知道信号值至少是 8，那么在这种情况下可以得出什么结论？
+:::
+
+::: {#sol-8_3_e}
+为了判断观察到的数据是否与均值为 8 的假设一致，我们做如下的检验：
+
+$\begin{align}H_0: &\mu = 8 \\ H_1: &\mu > 8 \end{align}$
+
+单边检验统计量的值为：
+
+$\sqrt{n} \frac{(\overline{X} - \mu_0)}{\sigma} = \sqrt{5} \frac{(9.5 - 8)}{2} = 1.68$
+
+并且 $p-\text{value}$ 为标准正态分布超过 1.68 的概率，即
+
+$p-\text{value} = 1 - \Phi(1.68) = 0.0465$
+
+该检验将在所有大于或等于 0.0465 的显著性水平下拒绝原假设。例如，如果显著性水平 $\alpha = 0.05$，那么我们将拒绝原假设。 $\blacksquare$
+:::
+
+@eq-8_3_10 所示的单边检验的 **Operating Characteristic** 函数 $\beta(\mu) = P_{\mu}\{\text{接受} H_0\}$ 为：
+
+$\begin{align} \beta(\mu) &= P_{\mu}\left\{ \overline{X} \leq \mu_0 + z_{\alpha}\frac{\sigma}{\sqrt{n}} \right\} \\ &= P\left\{ \frac{\sqrt{n}(\overline{X} - \mu_0)}{\sigma} \leq \frac{\sqrt{n}(\mu_0 - \mu)}{\sigma} + z_{\alpha} \right\} \\ &= P\left\{ Z \leq \frac{\sqrt{n}(\mu_0 - \mu)}{\sigma} + z_{\alpha} \right\}, \quad Z \sim N(0, 1) \end{align}$
+
+即：
+
+$\beta(\mu) = \Phi \left( \frac{\sqrt{n}(\mu_0 - \mu)}{\sigma} + z_{\alpha} \right)$
+
+由于 $\Phi$ 是概率分布函数，因此 $\Phi$ 随着自变量的增加而递增，所以从直觉而言：$\beta(\mu)$ 随 $\mu$ 的增加而减少是合理的。显然，当真实均值 $\mu$ 越大时，$\mu \leq \mu_0$ 的可能性就越小。此外，由于 $\Phi(z_{\alpha}) = 1 - \alpha$，因此
+
+$\beta(\mu_0) = 1 - \alpha$
+
+最初用于检验 $H_0: \mu = \mu_0 \ vs. \ H_1: \mu > \mu_0$ 的 @eq-8_3_10 也可以用于：在显著性水平 $\alpha$ 下，如下假设的单边检验：
+
+$$
+H_0: \mu \leq \mu_0 \quad vs. \quad H_1: \mu > \mu_0
+$$ {#eq-8_3_1_1_003}
+
+为了验证它仍然是在显著性水平为 $\alpha$ 下的检验，我们需要证明：当 $H_0$ 为真时，拒绝原假设的概率不超过 $\alpha$。也就是说，我们必须验证：
+
+$1 - \beta(\mu) \leq \alpha , \quad \quad \forall \mu \leq \mu_0$
+
+或者
+
+$\beta(\mu) \geq 1 - \alpha , \quad \quad \forall \mu \leq \mu_0$
+
+之前已经证明，对于由方程 @eq-8_3_10 给出的检验，$\beta(\mu)$ 随 $\mu$ 的增加而减少，且 $\beta(\mu_0) = 1 - \alpha$。于是：
+
+$\beta(\mu) \geq \beta(\mu_0) = 1 - \alpha , \quad \quad \forall \mu \leq \mu_0$
+
+这表明由 @eq-8_3_10 给出的检验在显著性水平 $\alpha$ 下，对 $H_0: \mu \leq \mu_0 \quad vs. \quad H_1: \mu > \mu_0$ 仍然是一个 显著性水平为 $\alpha$ 的检验。
+
+### 方差未知的场景：$t-\text{检验}$
