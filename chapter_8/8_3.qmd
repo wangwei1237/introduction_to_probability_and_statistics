@@ -416,4 +416,77 @@ $\beta(\mu) \geq \beta(\mu_0) = 1 - \alpha , \quad \quad \forall \mu \leq \mu_0$
 
 这表明由 @eq-8_3_10 给出的检验在显著性水平 $\alpha$ 下，对 $H_0: \mu \leq \mu_0 \quad vs. \quad H_1: \mu > \mu_0$ 仍然是一个 显著性水平为 $\alpha$ 的检验。
 
+::: {.callout-tip title="备注"}
+我们还可以在在显著性水平 $\alpha$ 下对如下的假设
+
+$H_0: \mu = \mu_0 \quad (\text{或} \quad \mu \geq \mu_0) \quad vs \quad H_1: \mu < \mu_0$
+
+做出如下的单边检验：
+
+$\begin{align} \text{接受 } H_0, & \quad \text{如果} \quad \frac{\sqrt{n}}{\sigma}(\overline{X} - \mu_0) \geq -z_{\alpha} \\ \text{拒绝 } H_0, & \quad \text{其他} \end{align}$
+
+可以通过首先计算检验统计量 $\frac{\sqrt{n}(\overline{X} - \mu_0)}{\sigma}$ 来进行该检验。$p-\text{value}$ 等于标准正态分布小于 $\frac{\sqrt{n}(\overline{X} - \mu_0)}{\sigma}$ 的概率，当 $p-\text{value}$ 小于任何的显著性水平时，我们将拒绝原假设。
+:::
+
+::: {#exr-8_3_f}
+目前，市场上的所有香烟的平均尼古丁含量至少为 1.6 毫克/支。一家生产香烟的公司声称，他们发现了一种新的烟草叶处理方法，这种方法会使香烟的平均尼古丁含量低于 1.6 毫克/支。为了测试这家公司的这一说法，我们分析了该公司的 20 支香烟的样本。已知一支香烟的尼古丁含量的标准差为 0.8 毫克，如果 20 支香烟的平均尼古丁含量为 1.54/支，那么在显著性水平为 5% 的情况下，可以得出什么结论？
+
+**注意**：如上问题中有一个问题，即我们如何事先知道标准差为 0.8。一个可能性是，香烟尼古丁含量的变化源自每支香烟中的烟草量的变化，而不是使用的处理方法。因此，可以从以往的经验中得知香烟中尼古丁含量的标准差。
+:::
+
+::: {#sol-8_3_f}
+我们必须首先确定适当的原假设。如前所述，我们的检验方法在对原假设和备择假设的处理上是不对称的，因为我们只考虑那些在原假设为真时拒绝原假设的概率永远不会超过显著性水平 $\alpha$ 的检验。因此，拒绝原假设是对数据与此假设不一致的强烈陈述，而当接受原假设时，并不能做出类似的陈述。因此，我们希望仅在有充分证据支持生产商的说法时才能接受生产商的说法，因此我们应将生产商的说法作为备择假设。也就是说，我们应该检验：
+
+$H_0: \mu \geq 1.6 \quad vs \quad H_1: \mu < 1.6$
+
+此时，检验统计量的值为
+
+$\frac{\sqrt{n}(\overline{X} - \mu_0)}{\sigma} = \frac{\sqrt{20}(1.54 - 1.6)}{0.8} = -0.336$
+
+因此，$p$ 值为
+
+$\text{p-value} = P\{Z < -0.336\} = 0.368$
+
+由于 $\text{p-value}$ 大于 0.05，因此在显著性水平为 5% 的情况下，样本数据不足以拒绝平均尼古丁含量超过 1.6 毫克的假设。换句话说，尽管样本数据支持了香烟生产商的说法，但尚不足以证明应该接受生产商的说法。
+$\blacksquare$
+:::
+
+::: {.callout-tip title="备注"}
+* **置信区间估计** 与 **假设检验** 之间有直接的类比关系。例如，对于均值为 $\mu$、方差为 $\sigma^2$（已知）的正态分布总体，正如我们在 @sec-7_3 中所述，$\mu$ 的 $100(1 - \alpha)\%$ 置信区间为：
+
+  $\mu \in \left( \overline{X} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}}, \, \overline{X} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \right)$
+
+  其中 $\overline{X}$ 是观测到的样本均值。更正式地，前述置信区间等价于：
+
+  $P \left\{ \mu \in \left( \overline{X} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}}, \, \overline{X} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \right) \right\} = 1 - \alpha$
+
+  因此，如果 $\mu = \mu_0$，则 $\mu_0$ 落在区间
+
+  $\left( \overline{X} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}}, \, \overline{X} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \right)$
+
+  的概率是 $1 - \alpha$，这意味着显著性水平为 $\alpha$ 的假设——$H_0: \mu = \mu_0 \quad vs \quad H_1: \mu \neq \mu_0$ 的检验是：
+
+  当 $\mu_0 \notin \left( \overline{X} - z_{\alpha/2}\frac{\sigma}{\sqrt{n}}, \, \overline{X} + z_{\alpha/2}\frac{\sigma}{\sqrt{n}} \right)$ 时拒绝 $H_0$。
+
+  类似地，$\mu$ 的 $100(1 - \alpha)\%$ 单边置信区间由下式给出：
+
+  $\mu \in \left( \overline{X} - z_{\alpha}\frac{\sigma}{\sqrt{n}}, \, \infty \right)$
+
+  因此，显著性水平为 $\alpha$ 的假设——$H_0: \mu \leq \mu_0 \quad vs \quad H_1: \mu > \mu_0$ 的检验是：
+
+  当 $\mu_0 \notin \left( \overline{X} - z_{\alpha}\frac{\sigma}{\sqrt{n}}, \, \infty \right)$（即，$\mu_0 < \overline{X} - z_{\alpha}\frac{\sigma}{\sqrt{n}}$） 时拒绝 $H_0$。
+
+* **关于稳健性（*robustness*）的说明**：统计检验通常基于一些前提条件或假设（例如样本来自正态分布、方差是已知的等），当这些前提条件或假设并不满足的时候，某个检验仍能有良好的表现，那么我们认为该检验是稳健（*robust*）的。例如，@sec-8_3_1 和 @sec-8_3_1_1 中的检验都是基于如下的假设：总体分布是方差为 $\sigma^2$ 的正态分布。然而，在推导这些检验时，这个假设仅用于得出：$\overline{X}$ 也服从正态分布。但是，由中心极限定理（@thm-6_3_1）可知，当样本量足够大时，无论总体服从什么分布，$\overline{X}$ 都将近似服从正态分布。因此，我们可以得出结论，这些检验对于任何方差为 $\sigma^2$ 的总体分布都将是相对稳健的。
+:::
+
+@tbl-8_1 对本节的假设检验进行了总结。
+
+| $H_0$  | $H_1$  | 检验统计量（*Test Statistic*） $TS$ | 在显著性水平 $\alpha$ 下的检验 | $TS=t$ 时的 $p-\text{value}$ |
+|----|----|----|----|----|
+| $\mu = \mu_0$ | $\mu \neq \mu_0$ | $\sqrt{n}\frac{(\overline{X} - \mu_0)}{\sigma}$  | 拒绝 $H_0$ 如果 $|TS| > z_{\alpha/2}$  | $2P\{Z \geq |t|\}$ |
+| $\mu \leq \mu_0$ | $\mu > \mu_0$  | $\sqrt{n}\frac{(\overline{X} - \mu_0)}{\sigma}$  | 拒绝 $H_0$ 如果 $TS > z_{\alpha}$    | $P\{Z \geq t\}$ |
+| $\mu \geq \mu_0$ | $\mu < \mu_0$  | $\sqrt{n}\frac{(\overline{X} - \mu_0)}{\sigma}$  | 拒绝 $H_0$ 如果 $TS < -z_{\alpha}$ | $P\{Z \leq t\}$ |
+
+: $X_1, \dots, X_n$ 是来自 $(\mu, \sigma^2)$ 的总体，其中 $\sigma^2$ 是已知的，$\overline{X} = \frac{1}{n} \sum_{i=1}^n X_i$，$Z$ 是标准正态分布随机变量 {#tbl-8_1}
+
 ### 方差未知的场景：$t-\text{检验}$
