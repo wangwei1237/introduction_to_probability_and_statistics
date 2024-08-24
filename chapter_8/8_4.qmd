@@ -76,6 +76,154 @@ $$
 $$ {#eq-8_4_1_002}
 
 ### 方差未知的场景 {#sec-8_4_2}
+继续假设 $X_1, \dots, X_n$ 和 $Y_1, \dots, Y_m$ 是来自两个正态分布总体的独立样本，这两个总体的参数分别为 $(\mu_x, \sigma_x^2)$ 和 $(\mu_y, \sigma_y^2)$，现在我们假设这四个参数都是未知的。我们再次考虑以下的假设检验：
+
+$H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \neq \mu_y$
+
+为了确定显著性水平为 $\alpha$ 的检验，我们需要做额外的假设：方差 $\sigma_x^2$ 和 $\sigma_y^2$ 是相等的，记为 $\sigma^2$，即 $\sigma^2 = \sigma_x^2 = \sigma_y^2$。
+
+如 @eq-8_4_1，当 $\left |\overline{X} - \overline{Y} \right|$ 远大于零时，我们将拒绝 $H_0$。为了确定 $c$（@eq-8_4_1）的值，我们定义如下的样本方差：
+
+$\begin{align} S_x^2 &= \frac{1}{n-1} \sum_{i=1}^{n} (X_i - \overline{X})^2 \\ S_y^2 &= \frac{1}{m-1} \sum_{i=1}^{m} (Y_i - \overline{Y})^2 \end{align}$
+
+于是如 @sec-7_4_1 所述：
+
+$\frac{\overline{X} - \overline{Y} - (\mu_x - \mu_y)}{\sqrt{S_p^2 \left( \frac{1}{n} + \frac{1}{m} \right)}} \sim t_{n+m-2}$
+
+其中 $S_p^2$ 是两个样本的共同的方差的池化估计量（*pooled estimator*）：
+
+$S_p^2 = \frac{(n-1)S_x^2 + (m-1)S_y^2}{n + m - 2}$
+
+因此，当 $H_0$ 为真时，由于 $\mu_x - \mu_y = 0$，所以统计量 $T$：
+
+$T \equiv \frac{\overline{X} - \overline{Y}}{\sqrt{S_p^2 \left( \frac{1}{n} + \frac{1}{m} \right)}} \sim t_{n+m-2}$
+
+服从自由度为 $n + m - 2$ 的 $t-\text{分布}$，于是我们可以对 $\mu_x = \mu_y$ 的假设做如下的检验：
+
+$\begin{align} \text{接受} H_0&, \quad \text{如果} |T| \leq t_{\alpha/2, n+m-2} \\ \text{拒绝} H_0&, \quad \text{如果} |T| > t_{\alpha/2, n+m-2} \end{align}$
+
+其中，$t_{\alpha/2, n+m-2}$ 是自由度为 $n + m - 2$ 的 $t-\text{分布}$ 随机变量的 $100\ \alpha/2$ 百分位数（如 @fig-8_4 所示）。
+
+```{r}
+#| label: fig-8_4
+#| fig-cap: "自由度为 $k$ 的 $t-\text{分布}$ 随机变量的概率密度函数"
+#| warning: false
+#| 
+library(ggplot2)
+
+dfreedom <- 2
+x <- seq(-10, 10, 0.01) 
+y <- dt(x, dfreedom)
+df <- data.frame(x=x, y=y)
+
+ggplot(df, aes(x=x, y=y)) + 
+  geom_line() + 
+  geom_segment(x=-3, y=dt(-3, dfreedom), xend=-3, yend=0) +
+  geom_segment(x=3, y=dt(3, dfreedom), xend=3, yend=0) + 
+  geom_ribbon(data = subset(df, x >= 3), aes(ymin = 0, ymax = y), fill = "gray") + 
+  geom_ribbon(data = subset(df, x <= -3), aes(ymin = 0, ymax = y), fill = "gray") + 
+  annotate("text", x = 3.2, y = -0.01, label = TeX("$t_{\\alpha, k}$"), hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = -2.7, y = -0.01, label = TeX("$-t_{\\alpha, k}$"), hjust = 1, vjust = 0, size = 3) +
+  annotate("text", x = 6, y = 0.01, label = TeX("Area: $\\alpha$"), hjust = 1, vjust = 0, size = 3) + 
+  annotate("text", x = -5, y = 0.01, label = TeX("Area: $\\alpha$"), hjust = 1, vjust = 0, size = 3) + 
+  theme_minimal() +
+  theme(axis.text = element_blank(),axis.title = element_blank())
+```
+
+我们还可以通过计算 $p-\text{value}$ 来进行检验。如果 $T$ 的观测值为 $v$，那么对 $H_0 \ vs \ H_1$ 的检验的 $p-\text{value}$ 为：
+
+$p-\text{value} = P\{|T_{n+m-2}| \geq |v|\} = 2P\{T_{n+m-2} \geq |v|\}$
+
+其中，$T_{n+m-2}$ 是自由度为 $n + m - 2$ 的 $t-\text{分布}$ 随机变量。
+
+如果我们需要计算单边检验：$H_0: \mu_x \leq \mu_y \quad vs \quad H_1: \mu_x > \mu_y$，那么在 $T$ 较大时，我们会拒绝 $H_0$。因此，在显著性水平为 $\alpha$ 时的单边检验为：
+
+$\begin{align} \text{拒绝} H_0&, \quad \text{如果} T \geq t_{\alpha, n+m-2} \\ \text{接受} H_0&, \quad \text{否则} \end{align}$
+
+如果检验统计量 $T$ 的值为 $v$，那么 $p-\text{value}$ 为：
+
+$p-\text{value} = P\{T_{n+m-2} \geq v\}$
+
+可以用 R 来实现两个样本的 $t-\text{检验}$。假设 $x_1, \dots, x_n$ 和 $y_1, \dots, y_m$ 是来自两个不同的正态分布总体的独立样本，且这两个总体具有相同的方差。令 $\mu_x$ 表示第一个总体的均值，$\mu_y$ 表示第二个总体的均值。为了检验假设 $H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \neq \mu_y$，可以使用如下的代码：
+
+```{.r}
+x <- c(x1,...,xn)
+y <- c(y1,...,ym)
+t.test(x, y, var.equal = TRUE)
+```
+
+如上的代码会输出 $p-\text{value}$ 和 $\mu_x - \mu_y$ 的 95% 置信区间。例如：如果 $x = \{3, 5, 7, 9\}$，$y = \{6, 8, 12, 15\}$，则 $H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \neq \mu_y$ 的假设检验为：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+x <- c(3, 5, 7, 9)
+y <- c(6, 8, 12, 15)
+t.test(x, y, var.equal = TRUE)
+```
+
+我们可以通过 `t.test()` 的 `alternative` 参数来控制我们需要的检验类型（双边检验、单边检验）。如果我们想计算 $H_0: \mu_x \le \mu_y \quad vs \quad H_1: \mu_x \gt \mu_y$ 的假设检验，我们可以使用如下的代码：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+x <- c(3, 5, 7, 9)
+y <- c(6, 8, 12, 15)
+t.test(x, y, var.equal = TRUE, alternative = "greater")
+```
+
+同理，如果我们想计算 $H_0: \mu_x \ge \mu_y \quad vs \quad H_1: \mu_x \lt \mu_y$ 的假设检验，我们可以使用如下的代码：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+x <- c(3, 5, 7, 9)
+y <- c(6, 8, 12, 15)
+t.test(x, y, var.equal = TRUE, alternative = "less")
+```
+
+::: {#exr-8_4_b}
+在一个感冒研究所，22 名志愿者在暴露于各种感冒病毒后感染了感冒。从中随机选取 10 名志愿者服用含有 1 克维生素 C 的药片，并且每天复用四次。另外的 12 名志愿者作为对照组服用看起来、尝起来与维生素 C 药片完全相同的安慰剂药片。对于每一个志愿者而言，实验会持续到医生（不知道志愿者服用的是维生素 C 还是安慰剂）认为志愿者已经康复为止，并记录志愿者感冒的持续时间。实验结束时，得到了如下数据。
+
+| 复用维生素 C 的患者 | 复用安慰剂的患者 |
+|------------------------|---------------------|
+| 5.5                    | 6.5                 |
+| 6.0                    | 6.0                 |
+| 7.0                    | 8.5                 |
+| 6.0                    | 7.0                 |
+| 7.5                    | 6.5                 |
+| 6.0                    | 8.0                 |
+| 7.5                    | 7.5                 |
+| 5.5                    | 6.5                 |
+| 7.0                    | 7.5                 |
+| 6.5                    | 6.0                 |
+|                        | 8.5                 |
+|                        | 7.0                 |
+
+这些数据是否证明每天服用 4 克维生素 C 可以缩短感冒持续时间？在什么显著性水平下？
+:::
+
+::: {#sol-8_4_b}
+为了证明上述假设，我们需要在以下假设检验中拒绝原假设：
+
+$H_0 : \mu_C \geq \mu_P \quad vs \quad H_1 : \mu_C < \mu_P$
+
+其中，$\mu_C$ 是服用维生素 C 药片时感冒的平均持续时间，$\mu_P$ 是服用安慰剂时的平均持续时间。假设维生素 C 组和安慰剂组的方差相同，我们使用 R 进行上述检验。
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+x <- c(5.5, 6, 7, 6, 7.5, 6, 7.5, 5.5, 7, 6.5)
+y <- c(6.5, 6, 8.5, 7, 6.5, 8, 7.5, 6.5, 7.5, 6, 8.5, 7)
+t.test(x, y, alternative = "less", var.equal = TRUE)
+```
+
+由于 $p-\text{value}$ 为 0.036，因此可以在 5% 的显著性水平下确定维生素 C 可以缩短感冒的持续时间。此外，值得注意的是，除了输出 $p-\text{value}$ 外，R 还提供了 $\mu_x - \mu_y$ 的单边 95% 置信区间。$\blacksquare$
+:::
 
 ### 方差未知且不同的场景 {#sec-8_4_3}
 
