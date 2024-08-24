@@ -1,1 +1,83 @@
-## Testing the equality of means of two normal populations
+## 检验两个正态分布的均值是否相等 {#sec-8_4}
+确定两种不同的方法是否会得出相同的结果是工程师在实践中经常遇到的一个场景。通常可以通过 **假设检验** 来对这种场景建模——检验两个正态分布的总体是否具有相同的均值。
+
+### 方差已知的场景 {#sec-8_4_1}
+假设 $X_1, \dots, X_n$ 和 $Y_1, \dots, Y_m$ 是来自两个正态分布总体的、相互独立的样本，这两个总体的均值 $\mu_x$ 和 $\mu_y$ 均未知，但方差 $\sigma_x^2$ 和 $\sigma_y^2$ 已知。现在考虑检验以下假设：
+
+$H_0: \mu_x = \mu_y \quad vs \quad  H_1: \mu_x \neq \mu_y$
+
+由于 $\overline{X}$ 是 $\mu_x$ 的估计值，$\overline{Y}$ 是 $\mu_y$ 的估计值，因此 $\overline{X} - \overline{Y}$ 可以用来估计 $\mu_x - \mu_y$。因此，原假设可以写作：$H_0: \mu_x - \mu_y = 0$，并且当 $\overline{X} - \overline{Y}$ 远大于 0 时，拒绝原假设 $H_0$ 是合理的。因此，对于某个合适的 $c$ 而言，检验如下所示：
+
+$$
+\begin{align}
+\text{拒绝} H_0 &, \quad \text{如果} \left | \overline{X} - \overline{Y}\right | > c \\
+\text{接受} H_0 &, \quad \text{如果} \left | \overline{X} - \overline{Y}\right | \le c
+\end{align}
+$$ {#eq-8_4_1}
+
+为了确定令 @eq-8_4_1 可以满足显著性水平为 $\alpha$ 的 $c$ 的值，我们需要确定当 $H_0$ 为真时 $\overline{X} - \overline{Y}$ 的分布。如我们在 @sec-7_4 中所述：
+
+$$
+\overline{X} - \overline{Y} \sim \left(\mu_x - \mu_y, \frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}\right)
+$$
+
+即（@eq-7_4_1）：
+
+$$
+\frac{\overline{X} - \overline{Y} - (\mu_x - \mu_y)}{\sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}} \sim N(0, 1)
+$$ {#eq-8_4_2}
+
+因此，当 $H_0$ 为真时，$\mu_x - \mu_y = 0$，所以 $\frac{\overline{X} - \overline{Y}}{\sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}}$ 服从标准正态分布。于是：
+
+$$
+P_{H_0}\left\{-z_{\alpha/2} \leq \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}} \leq z_{\alpha/2}\right\} = 1 - \alpha
+$$ {#eq-8_4_3}
+
+由此，根据 @eq-8_4_3，我们可以得出显著性水平为 $\alpha$ 时，$H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \neq \mu_y$ 的检验标准为：
+
+$$
+\begin{align}
+\text{接受} H_0, &\quad \text{如果} \frac{\left|\overline{X} - \overline{Y}\right|}{\sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}} \leq z_{\alpha/2} \\
+\text{拒绝} H_0, &\quad \text{如果} \frac{\left|\overline{X} - \overline{Y}\right|}{\sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}} \geq z_{\alpha/2}
+\end{align}
+$$ {#eq-8_4_001}
+
+::: {#exr-8_4_a}
+如果现在新提出了两种轮胎生产方法，为了确定哪种生产方法更好，轮胎制造商使用第一种方法生产了 10 个轮胎，使用第二种方法生产了 8 个轮胎。使用第一种方法生产的轮胎在 A 地进行道路测试，使用第种方法生产的轮胎在 B 地测试。已知轮胎在这两个地点的寿命服从正态分布，其均值与轮胎质量有关，但方差主要由测试的地点决定。具体而言，A 地轮胎寿命的标准差为 4000 公里，B 地的标准差为 6000 公里。如果制造商希望检验这两种方法生产的轮胎的平均寿命是否无显著差异，那么在显著性水平为 5% 的情况下，我们可以从 @tbl-8_3 的数据中得出什么结论？
+
+| 在 A 地测试的轮胎寿命 | 在 B 地测试的轮胎寿命 |
+|-------------------|-------------------|
+| 61.1              | 62.2              |
+| 58.2              | 56.6              |
+| 62.3              | 66.4              |
+| 64.0              | 56.2              |
+| 59.7              | 57.4              |
+| 66.2              | 58.4              |
+| 57.8              | 57.6              |
+| 61.4              | 65.4              |
+| 62.2              |                   |
+| 63.6              |                   |
+
+: 不同地点轮胎的寿命（单位为100公里） {#tbl-8_3}
+
+:::
+
+::: {#sol-8_4_a}
+根据 @tbl-8_3 的数据可以计算得出检验统计量的值为 0.066。对于如此小的统计量值，显然我们应该接受原假设，即两种方法生产的轮胎的寿命没有显著的差异。$\blacksquare$
+:::
+
+根据 @eq-8_4_1，对于单边假设 $H_0: \mu_x = \mu_y$（或 $H_0: \mu_x \leq \mu_y$） $\quad vs \quad H_1: \mu_x > \mu_y$ 的检验为：
+
+$$
+\begin{align}
+\text{接受} H_0&, \quad \text{如果} \overline{X} - \overline{Y} \leq z_\alpha \sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}} \\
+\text{拒绝} H_0&, \quad \text{如果} \overline{X} - \overline{Y} \gt z_\alpha \sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}
+\end{align}
+$$ {#eq-8_4_1_002}
+
+### 方差未知的场景 {#sec-8_4_2}
+
+### 方差未知且不同的场景 {#sec-8_4_3}
+
+### 成对数据的 $t-\text{检验}$ {#sec-8_4_4}
+
