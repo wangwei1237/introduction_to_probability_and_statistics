@@ -236,7 +236,7 @@ $$
 \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{S_x^2}{n} + \frac{S_y^2}{m}}}
 $$ {#eq-8_4_4}
 
-然而，上述统计量的分布非常复杂，即使在 $H_0$ 为真时，@eq-8_4_4 的分布也依赖于未知参数，因此无法被广泛使用。唯一可以利用 @eq-8_4_4 这个统计量的场景是：$n$ 和 $m$ 都非常大。当 $n$ 和 $m$ 都非常大时，可以证明：在 $H_0$ 为真时，该统计量近似服从标准正态分布。因此，当 $n$ 和 $m$ 都很大时，$H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \ne \mu_y$ 在 **近似** 显著性水平 $\alpha$ 下的检验为：
+然而，上述统计量的分布非常复杂，即使在 $H_0$ 为真时，@eq-8_4_4 的分布也依赖于未知参数，因此无法被广泛使用。唯一可以利用 @eq-8_4_4 这个统计量的场景是：$n$ 和 $m$ 都非常大。当 $n$ 和 $m$ 都非常大时，可以证明：在 $H_0$ 为真时，该统计量近似服从标准正态分布。因此，当 $n$ 和 $m$ 都很大时，$H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \ne \mu_y$ 在显著性水平 $\alpha$ 下的 **近似** 检验为：
 
 $$
 \begin{align} \text{接受} H_0&, \quad \text{如果} -z_{\alpha/2} \leq \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{S_x^2}{n} + \frac{S_y^2}{m}}} \leq z_{\alpha/2} \\ \text{拒绝} H_0&, \quad \text{否则}\end{align}
