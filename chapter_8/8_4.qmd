@@ -40,7 +40,7 @@ $$
 \text{接受} H_0, &\quad \text{如果} \frac{\left|\overline{X} - \overline{Y}\right|}{\sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}} \leq z_{\alpha/2} \\
 \text{拒绝} H_0, &\quad \text{如果} \frac{\left|\overline{X} - \overline{Y}\right|}{\sqrt{\frac{\sigma_x^2}{n} + \frac{\sigma_y^2}{m}}} \geq z_{\alpha/2}
 \end{align}
-$$ {#eq-8_4_001}
+$$ {#eq-8_4_1_001}
 
 ::: {#exr-8_4_a}
 如果现在新提出了两种轮胎生产方法，为了确定哪种生产方法更好，轮胎制造商使用第一种方法生产了 10 个轮胎，使用第二种方法生产了 8 个轮胎。使用第一种方法生产的轮胎在 A 地进行道路测试，使用第种方法生产的轮胎在 B 地测试。已知轮胎在这两个地点的寿命服从正态分布，其均值与轮胎质量有关，但方差主要由测试的地点决定。具体而言，A 地轮胎寿命的标准差为 4000 公里，B 地的标准差为 6000 公里。如果制造商希望检验这两种方法生产的轮胎的平均寿命是否无显著差异，那么在显著性水平为 5% 的情况下，我们可以从 @tbl-8_3 的数据中得出什么结论？
@@ -100,13 +100,15 @@ $T \equiv \frac{\overline{X} - \overline{Y}}{\sqrt{S_p^2 \left( \frac{1}{n} + \f
 
 服从自由度为 $n + m - 2$ 的 $t-\text{分布}$，于是我们可以对 $\mu_x = \mu_y$ 的假设做如下的检验：
 
-$\begin{align} \text{接受} H_0&, \quad \text{如果} |T| \leq t_{\alpha/2, n+m-2} \\ \text{拒绝} H_0&, \quad \text{如果} |T| > t_{\alpha/2, n+m-2} \end{align}$
+$$
+\begin{align} \text{接受} H_0&, \quad \text{如果} |T| \leq t_{\alpha/2, n+m-2} \\ \text{拒绝} H_0&, \quad \text{如果} |T| > t_{\alpha/2, n+m-2} \end{align}
+$$ {#eq-8_4_2_001}
 
 其中，$t_{\alpha/2, n+m-2}$ 是自由度为 $n + m - 2$ 的 $t-\text{分布}$ 随机变量的 $100\ \alpha/2$ 百分位数（如 @fig-8_4 所示）。
 
 ```{r}
 #| label: fig-8_4
-#| fig-cap: "自由度为 $k$ 的 $t-\text{分布}$ 随机变量的概率密度函数"
+#| fig-cap: "自由度为 $k$ 的 $t-\\text{分布}$ 随机变量的概率密度函数"
 #| warning: false
 #| 
 library(ggplot2)
@@ -138,7 +140,9 @@ $p-\text{value} = P\{|T_{n+m-2}| \geq |v|\} = 2P\{T_{n+m-2} \geq |v|\}$
 
 如果我们需要计算单边检验：$H_0: \mu_x \leq \mu_y \quad vs \quad H_1: \mu_x > \mu_y$，那么在 $T$ 较大时，我们会拒绝 $H_0$。因此，在显著性水平为 $\alpha$ 时的单边检验为：
 
-$\begin{align} \text{拒绝} H_0&, \quad \text{如果} T \geq t_{\alpha, n+m-2} \\ \text{接受} H_0&, \quad \text{否则} \end{align}$
+$$
+\begin{align} \text{拒绝} H_0&, \quad \text{如果} T \geq t_{\alpha, n+m-2} \\ \text{接受} H_0&, \quad \text{否则} \end{align}
+$$ {#eq-8_4_2_002}
 
 如果检验统计量 $T$ 的值为 $v$，那么 $p-\text{value}$ 为：
 
@@ -226,6 +230,29 @@ t.test(x, y, alternative = "less", var.equal = TRUE)
 :::
 
 ### 方差未知且不同的场景 {#sec-8_4_3}
+现在，我们假设总体的方差 $\sigma_x^2$ 和 $\sigma_y^2$ 不仅未知，而且不能认为相等。在这种情况下，由于 $S_x^2$ 和 $S_y^2$ 分别是 $\sigma_x^2$ 和 $\sigma_y^2$ 的估计量，因此基于以下检验统计量进行 $H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \ne \mu_y$ 的假设检验似乎是合理的：
+
+$$
+\frac{\overline{X} - \overline{Y}}{\sqrt{\frac{S_x^2}{n} + \frac{S_y^2}{m}}}
+$$ {#eq-8_4_4}
+
+然而，上述统计量的分布非常复杂，即使在 $H_0$ 为真时，@eq-8_4_4 的分布也依赖于未知参数，因此无法被广泛使用。唯一可以利用 @eq-8_4_4 这个统计量的场景是：$n$ 和 $m$ 都非常大。当 $n$ 和 $m$ 都非常大时，可以证明：在 $H_0$ 为真时，该统计量近似服从标准正态分布。因此，当 $n$ 和 $m$ 都很大时，$H_0: \mu_x = \mu_y \quad vs \quad H_1: \mu_x \ne \mu_y$ 在 **近似** 显著性水平 $\alpha$ 下的检验为：
+
+$$
+\begin{align} \text{接受} H_0&, \quad \text{如果} -z_{\alpha/2} \leq \frac{\overline{X} - \overline{Y}}{\sqrt{\frac{S_x^2}{n} + \frac{S_y^2}{m}}} \leq z_{\alpha/2} \\ \text{拒绝} H_0&, \quad \text{否则}\end{align}
+$$ {#eq-8_4_3_001}
+
+确定两个具有未知且不一定相等方差的正态总体均值在 **精确** 显著性水平 $\alpha$ 下的检验的问题，我们称之为 Behrens-Fisher 问题。对于 Behrens-Fisher 问题而言，目前还没有完全令人满意的解决方案。
+
+@tbl-8_4 对本节的双边检验进行了总结。
+
+| **假设**          | 假设检验统计量 $TS$  | 在显著性水平 $\alpha$ 下的检验  | 当 $TS = t$ 时的 $p-\text{value}$ |
+|-----------------------|---------------|-------------------|--------------------------------|
+| $\sigma_1, \sigma_2$ 已知 | $\frac{\overline{X} - \overline{Y}}{\sqrt{\sigma_1^2/n + \sigma_2^2/m}}$ | 拒绝 $H_0$，如果 $|TS| > z_{\alpha/2}$  | $2P\{Z \geq |t|\}$  |
+| $\sigma_1 = \sigma_2$      | $\frac{\overline{X} - \overline{Y}}{\sqrt{\frac{(n-1)S_1^2 + (m-1)S_2^2}{n+m-2}}\sqrt{1/n + 1/m}}$  | 拒绝 $H_0$，如果 $|TS| > t_{\alpha/2, n+m-2}$              | $2P\{T_{n+m-2} \geq |t|\}$         |
+| $n, m$ 较大       | $\frac{\overline{X} - \overline{Y}}{\sqrt{S_1^2/n + S_2^2/m}}$   | 拒绝 $H_0$，如果 $|TS| > z_{\alpha/2}$                     | $2P\{Z \geq |t|\}$                         |
+
+: $X_1, \dots, X_n$ 是来自 $(\mu_1, \sigma_1^2)$ 总体的样本；$Y_1, \dots, Y_m$ 是来自 $(\mu_2, \sigma_2^2)$ 总体的样本。两个总体的样本是独立的。$H_0: \mu_1 = \mu_2 \quad vs \quad H_0: \mu_1 \neq \mu_2$ 的假设检验 {#tbl-8_4}
 
 ### 成对数据的 $t-\text{检验}$ {#sec-8_4_4}
 
