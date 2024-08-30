@@ -1,4 +1,4 @@
-# Analysis of variance {#sec-10}
+# 方差分析 {#sec-10}
 
 {{< include 10_1.qmd >}}
 

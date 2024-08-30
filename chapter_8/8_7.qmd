@@ -1,1 +1,91 @@
-## Tests concerning the mean of a Poisson distribution
+## 关于泊松分布的均值的假设检验 {#sec-8_7}
+令 $X$ 表示一个均值为 $\lambda$ 的泊松分布随机变量，我们希望检验如下的假设：
+
+$H_0 : \lambda = \lambda_0 \quad vs \quad H_1 : \lambda \neq \lambda_0$
+
+如果观察到的 $X$ 的值为 $X = x$，那么当以下任一条件成立时，显著性水平为 $\alpha$ 时的检验将拒绝 $H_0$：
+
+$$
+P_{\lambda_0} \{ X \geq x \} \leq \alpha / 2 \quad \text{或} \quad P_{\lambda_0} \{ X \leq x \} \leq \alpha / 2
+$$ {#eq-8_7_1}
+
+其中，$P_{\lambda_0}$ 表示在泊松分布的均值为 $\lambda_0$ 的假设下计算的概率。根据 @eq-8_7_1，$p-\text{value}$ 的计算方式为：
+
+$\text{p-value} = 2 \min \left( P_{\lambda_0} \{ X \geq x \}, P_{\lambda_0} \{ X \leq x \} \right)$
+
+可以利用 R 中的 `ppois(x, lamda_0)` 计算 $P_{\lambda_0} \{ X \geq x \}$ 或者 P_{\lambda_0} \{ X \leq x \} 的概率。
+
+::: {#exr-8_7_a}
+某芯片制造商的管理层声称：每天生产的计算机芯片中，存在缺陷的芯片的平均数量不超过 25 个，但是有人质疑管理层的这一说法。为了检验管理层这一说法，抽取了 5 天生产的产品作为样本，样本显示这 5 天的缺陷芯片个数分别是：28、34、32、38、22。在 5% 的显著性水平下，检验管理层的说法是否成立。
+:::
+
+::: {#sol-8_7_a}
+对于每个计算机芯片而言，检测到其有缺陷的可能性非常小，因此，假设每天生产的芯片中存在缺陷的芯片数量近似服从均值为 $\lambda$ 的泊松分布是合理的。为了确定管理层的说法是否可靠，我们将检验如下假设：
+
+$H_0: \lambda \leq 25 \quad vs \quad H_1: \lambda > 25$
+
+在 $H_0$ 下，5 天内生产的芯片中存在缺陷的芯片总数也服从泊松分布（独立的泊松分布随机变量的和也服从泊松分布），并且其均值不超过 125。由于观察到 5 天的缺陷芯片数量总数为 154，因此 $p-\text{value}$ 为：
+
+$\begin{align} p-\text{value} &= P_{125}\{X \geq 154\} \\ &= 1 - P_{125}\{X \leq 153\} \\ &= 1 - \text{ppois}(153, 125) \\ &= 0.006664794 \end{align}$
+
+因此，在 5% 的显著性水平下（甚至在 1% 的显著性水平下），我们将拒绝管理层的说法。$\blacksquare$
+:::
+
+### 检验两个泊松分布的参数之间的关系 {#sec-8_7_1}
+令 $X_1$ 和 $X_2$ 为独立的泊松分布随机变量，其均值分别为 $\lambda_1$ 和 $\lambda_2$，考虑检验如下的假设：
+
+$H_0 : \lambda_2 = c\lambda_1 \quad vs \quad H_1 : \lambda_2 \neq c\lambda_1$
+
+其中，$c$ 为给定的常数。
+
+如上假设的检验是一个条件检验（*a conditional test*），其本质类似于 @sec-8_6_1 中的 Fisher-Irwin 检验。在给定 $X_1 + X_2$ 下，$X_1$ 的条件概率分布服从二项分布，基于这一事实，我们有 @prp-8_7_1。
+
+::: {#prp-8_7_1}
+$P\{X_1 = k \mid X_1 + X_2 = n\} = \binom{n}{k} \left[\frac{\lambda_1}{\lambda_1 + \lambda_2}\right]^k \left[\frac{\lambda_2}{\lambda_1 + \lambda_2}\right]^{n-k}$
+
+::: {.proof}
+
+$$
+\begin{align}
+P\{X_1 = k \mid X_1 + X_2 = n\} &= \frac{P\{X_1 = k, X_1 + X_2 = n\}}{P\{X_1 + X_2 = n\}} \\
+&= \frac{P\{X_1 = k, X_2 = n - k\}}{P\{X_1 + X_2 = n\}} \\
+&= \frac{P\{X_1 = k\} P\{X_2 = n - k\}}{P\{X_1 + X_2 = n\}} \quad \text{（由于独立性）} \\
+&= \frac{\exp\{-\lambda_1\} \lambda_1^k / k! \cdot \exp\{-\lambda_2\} \lambda_2^{n-k} / (n-k)!}{\exp\{-(\lambda_1 + \lambda_2)\} (\lambda_1 + \lambda_2)^n / n!} \\
+&= \frac{n!}{(n-k)!k!} \left[\frac{\lambda_1}{\lambda_1 + \lambda_2}\right]^k \left[\frac{\lambda_2}{\lambda_1 + \lambda_2}\right]^{n-k}
+\end{align}
+$$
+
+其中，倒数第二个等式成立的原因是：独立泊松随机变量的和也是泊松分布。$\blacksquare$
+:::
+:::
+
+根据 @prp-8_7_1 可知，如果 $H_0$ 为真，那么在给定 $X_1 + X_2$ 下，$X_1$ 的条件概率分布是参数为 $(n, p = \frac{1}{1 + c})$ 的二项分布。因此，我们可以得出结论：如果 $X_1 + X_2 = n$，如果我们观察到 $X_1$ 的值为 $x_1$，那么如果满足以下条件中的任何一个，则应拒绝 $H_0$：
+
+$$
+\begin{align}
+&P\{\text{B}(n, 1/(1+c)) \geq x_1\} \leq \alpha/2 \\
+&或 \\
+&P\{\text{B}(n, 1/(1+c)) \leq x_1\} \leq \alpha/2
+\end{align}
+$$ {#eq-8_7_001}
+
+::: {#exr-8_7_b}
+一家企业经营着两个大型的工厂。如果工厂 1 在过去 8 周内发生的事故数量分别为 16、18、9、22、17、19、24、8，工厂 2 在过去 6 周内发生的事故数量分别为 22、18、26、30、25、28，我们是否可以在 5% 的显著性水平下得出这两个工厂的安全条件存在差异的结论？
+:::
+
+::: {#sol-8_7_b}
+对于任何一分钟而言，发生工业事故的概率很小，因此每周发生的此类事故的数量应大致符合泊松分布。如果我们令 $X_1$ 表示工厂 1 在 8 周期间发生的事故总数，$X_2$ 表示工厂 2 在 6 周期间发生的事故总数，那么如果两个工厂的安全条件没有差异，我们将有：
+
+$\lambda_2 = \frac{3}{4}\lambda_1$
+
+其中 $\lambda_i \equiv E[X_i],\ i = 1, 2$。
+
+由于 $X_1 = 133$, $X_2 = 149$，根据 @eq-8_7_001，该检验的 $p-\text{value}$ 为：
+
+$p-\text{value} = 2\min \left( P\{\text{B}(282, \frac{4}{7}) \geq 133\}, P\{\text{B}(282, \frac{4}{7}) \leq 133\} \right)$
+
+即，
+$p-\text{value} = 9.408 \times 10^{-4}$
+
+因此，我们将拒绝原假设：两个工厂的安全条件相同。 $\blacksquare$
+:::
