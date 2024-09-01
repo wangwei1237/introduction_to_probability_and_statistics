@@ -200,7 +200,7 @@ $TS = \frac{863.3335 / 2}{1991.5785/12} = 2.60$
 gas1 <- c(0, 31, 6, 26, 40)
 gas2 <- c(24, 15, 12, 22, 5)
 gas3 <- c(32, 52, 30, 18, 36)
-data <- matrix(c(gas1, gas2, gas3), ncol=5, byrow=TRUE)
+data <- matrix(c(gas1, gas2, gas3), ncol = 5, byrow = TRUE)
 x1. <- mean(data[1,])
 x2. <- mean(data[2,])
 x3. <- mean(data[3,])
@@ -213,3 +213,207 @@ TS = (SS_B / 2) / (SS_W / 12)
 ```
 由于 $p-\text{value}$ 大于 0.05，因此在 5% 的显著性水平下，我们不能拒绝汽品牌不会影响发动机里程的原假设。$\blacksquare$
 :::
+
+现在让我们证明：
+
+$E\left[\frac{SS_B}{m-1}\right] \geq \sigma^2$
+
+当且仅当 $H_0$ 为真时，等号成立。
+
+因此，我们必须证明：
+
+$E\left[\frac{\sum_{i=1}^{m} (X_{i.} - X_{..})^2}{m-1}\right] \geq \frac{\sigma^2}{n}$
+
+当且仅当 $H_0$ 为真时，等号成立。
+
+令 $\mu_. = \frac{\sum_{i=1}^{m} \mu_i}{m}$ 为 $m$ 个总体均值的平均值。此外，对于 $i = 1, \dots, m$，令：
+
+$Y_i = X_{i.} - \mu_i + \mu_.$
+
+由于 $X_{i.}$ 服从均值为 $\mu_i$、方差为 $\frac{\sigma^2}{n}$ 的正态分布，因此 $Y_i$ 服从均值为 $\mu_.$、方差为 $\frac{\sigma^2}{n}$ 的正态分布。因此，$Y_1, \dots, Y_m$ 构成了一个方差为 $\frac{\sigma^2}{n}$ 的正态分布总体的样本。
+
+令 $Y_{.}$ 为 $Y_i$ 的均值：
+
+$Y_{.} = \frac{\sum_{i=1}^{m} Y_i}{m} = X_{..} - \mu_. + \mu_. = X_{..}$
+
+则：
+
+$X_{i.} - X_{..} = Y_i + \mu_i - \mu_. - Y_{.}$
+
+因此，
+
+$\begin{align} E\left[\sum_{i=1}^{m} (X_{i.} - X_{..})^2\right] &= E\left[\sum_{i=1}^{m} (Y_i - Y_{.} + \mu_i - \mu_.)^2\right] \\ &= E\left[\sum_{i=1}^{m} \left[(Y_i - Y_{.})^2 + (\mu_i - \mu_.)^2 + 2(\mu_i - \mu_.)(Y_i - Y_{.})\right]\right] \\ &= E\left[\sum_{i=1}^{m} (Y_i - Y_{.})^2\right] + \sum_{i=1}^{m} (\mu_i - \mu_.)^2 + 2\sum_{i=1}^{m} (\mu_i - \mu_.) E[Y_i - Y_{.}] \\ &= (m-1)\frac{\sigma^2}{n} + \sum_{i=1}^{m} (\mu_i - \mu_.)^2 + 2\sum_{i=1}^{m} (\mu_i - \mu_.) E[Y_i - Y_{.}] \\ &= (m-1)\frac{\sigma^2}{n} + \sum_{i=1}^{m} (\mu_i - \mu_.)^2\end{align}$
+
+在倒数第二个等式中，$\sum_{i=1}^{m} \frac{(Y_i - Y_{.})^2}{(m-1)}$ 是总体方差 $\frac{\sigma^2}{n}$ 的无偏估计量，并且最后一个等式是因为 $E[Y_i - Y_{.}] = E[Y_i] - E[Y_{.}] = \mu_. - \mu_. = 0$。最后，在结果的等式两边都除以 $m-1$ 得到：
+
+$E\left[\frac{\sum_{i=1}^{m} (X_{i.} - X_{..})^2}{m-1}\right] = \frac{\sigma^2}{n} + \frac{\sum_{i=1}^{m} (\mu_i - \mu_.)^2}{(m-1)}$
+
+因为 $\sum_{i=1}^{m} (\mu_i - \mu_.)^2 \geq 0$，当且仅当所有 $\mu_i$ 相等时等号成立，所以 $E\left[\frac{SS_B}{m-1}\right] \geq \sigma^2$。
+
+@tbl-10_1 总结了本节的结果：
+
+| 变异来源 | 平方和 | 自由度 | 检验统计量的值 |
+|---------|---------|---------|----------------|
+| 组间 | $SS_B = n\sum_{i=1}^{m} (X_{i.} - X_{..})^2$ | $m-1$ |  |
+| 组内 | $SS_W = \sum_{i=1}^{m} \sum_{j=1}^{n} (X_{ij} - X_{i.})^2$ | $nm-m$ |  |
+|     |             |         | $TS = \frac{SS_B/(m-1)}{SS_W/(nm-m)}$ |
+
+: 单因素方差分析表；在显著性水平 $\alpha$ 下的检验，当 $TS \geq F_{\alpha, m-1, nm-m}$ 时拒绝 $H_0$，否则不拒绝 $H_0$；如果 $TS = v$，则 $p-\text{value} = P\{F_{m-1, nm-m} \geq v\}$ {#tbl-10_1}
+
+### 使用 R 计算统计量 {#sec-10_3_1}
+首先，需要注意的是：在 R 中定义矩阵时，矩阵元素默认按照列的方向来填充。例如，假设我们想要用 R 构建如下的矩阵并命名为 `A`：
+
+$$\begin{pmatrix}
+2 & 1 & 3 & 4 \\
+1 & 5 & 2 & 6 \\
+5 & 3 & 7 & 9
+\end{pmatrix}
+$$
+
+我们可以按如下方式进行：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+A <- matrix(c(2, 1, 5, 1, 5, 3, 3, 2, 7, 4, 6, 9), nrow = 3, ncol = 4)
+```
+
+R 中 `matrix()` 的定义是：在给出矩阵元素之后，给出行数，然后给出列数。因此，我们可以省略 `nrow =` 和 `ncol =`，直接定义 `A` 如下：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+A <- matrix(c(2, 1, 5, 1, 5, 3, 3, 2, 7, 4, 6, 9), 3, 4)
+```
+
+要显示矩阵，我们会输入：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+A <- matrix(c(2, 1, 5, 1, 5, 3, 3, 2, 7, 4, 6, 9), 3, 4)
+A
+```
+
+当然，也可以通过列向量来初始化一个矩阵，例如：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+v1 <- c(2, 1, 5)
+v2 <- c(1, 5, 3)
+v3 <- c(3, 2, 7)
+v4 <- c(4, 6, 9)
+A <- matrix(c(v1, v2, v3, v4), 3, 4)
+A
+```
+
+如果 $A$ 是一个矩阵，$x$ 是一个标量（*scalar*），那么 $A + x$ 是一个矩阵，其结果是将 $x$ 加到 $A$ 的每个元素上。矩阵的幂运算意味着矩阵中的每个元素都执行该幂次方运算。例如，如果 $A$ 是矩阵 $[a_{i,j}]$），那么 $A^2$ 就是矩阵 $[a_{i,j}^2]$。（此处的这种约定与“矩阵乘法”的概念并不一致。）
+
+要对矩阵 $A$ 的所有元素求和，只需输入 R 命令 `sum(A)`；要获得矩阵 $A$ 中所有元素的平均值，使用 `mean(A)`。例如，如果我们想要计算矩阵 $A$ 中所有元素的平方求和，并且想将结果命名为 `ss`，我们可以输入：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+A <- matrix(c(2, 1, 5, 1, 5, 3, 3, 2, 7, 4, 6, 9), 3, 4)
+ss <- sum(A^2)
+ss
+```
+
+如果我们想计算矩阵 $A$ 中的每一行、或者每一列的元素的和，可以使用 `rowSums()`、`colSums()`。例如：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+A <- matrix(c(2, 1, 5, 1, 5, 3, 3, 2, 7, 4, 6, 9), 3, 4)
+ss <- sum(A^2)
+ss
+
+rowSums(A)
+colSums(A)
+```
+
+如果想计算矩阵 $A$ 中的每一行、或者每一列的元素的平均值，可以使用 `rowMeans()`、`colMeans()`。
+
+假设 $A$ 是一个具有 $m$ 行和 $n$ 列的矩阵，并且对于 $b_1, \dots, b_m$，我们想要得到一个矩阵 $B$。矩阵 $B$ 是从 $A$ 的第一行的每个元素中减去 $b_1$，从 $A$ 的第二行的每个元素中减去 $b_2$，……可以使用 R 中的 `sweep()` 来完成该操作：
+
+```{.r}
+A <- matrix(...)
+b <- c(b1,...,bm)
+B <- sweep(A, 1, b)
+```
+
+例如：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+A <- matrix(c(2, 3, 3, 5, 1, 4), nrow = 2)
+
+# 对矩阵 A 的每一行中的所有元素，都减去该行对应的均值
+b <- rowMeans(A)
+B <- sweep(A, 1, b)
+B
+```
+
+同样，假设 $A$ 是一个具有 $m$ 行和 $n$ 列的矩阵，并且对于 $c_1, \dots, c_n$，我们想要得到一个矩阵 $C$。矩阵 $C$ 是从 $A$ 的第一列的每个元素中减去 $c_1$，从 $A$ 的第二列的每个元素中减去 $c_2$，……同样可以使用 R 中的 `sweep()` 来完成该操作：
+
+```{.r}
+A <- matrix(...)
+c <- c(c1,...,cn)
+C <- sweep(A, 2, c)
+```
+
+例如我们想让矩阵 $A$ 的每一列的所有元素都加上该列对应的均值：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+A <- matrix(c(2, 3, 3, 5, 1, 4), nrow = 2)
+
+# 对矩阵 A 的每一列中的所有元素，都加上该列对应的均值
+c <- colMeans(A)
+C <- sweep(A, 2, -c)
+C
+```
+
+接下来，我们将使用 R 来解决 @exr-10_3_a 中所示的单因素方差分析问题。
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+gas1 <- c(220, 251, 226, 246, 260)
+gas2 <- c(244, 235, 232, 242, 225)
+gas3 <- c(252, 272, 250, 238, 256)
+G <- matrix(c(gas1, gas2, gas3), nrow = 3, byrow = TRUE)
+
+rm <- rowMeans(G)
+mm <- mean(G)
+d <- rm - mm
+SS_B <- 5 * sum(d^2)
+SS_W <- sum(G^2) - 3 * 5 * mm^2 - SS_B
+TS = (SS_B / 2) / (SS_W / 12)
+1 - pf(TS, 2, 12)
+```
+
+### 样本均值的多重比较 {#sec-10_3_2}
+当我们拒绝了总体均值相等的原假设时，我们需要对不同总体的样本均值 $\mu_1, \dots, \mu_m$ 进行比较。实现这个目的常用方法是 $T-\text{方法}$（*T-method*）。对于指定的 $\alpha$ 值，$T-\text{方法}$ 为所有的 $\binom{m}{2}$ 个差异 $\mu_i - \mu_j$（$i \neq j, i, j = 1, \dots, m$）提供了 **联合置信区间**（*joint condifence intervals*），从而使得这些所有的置信区间都将以 $1 - \alpha$ 的概率包含其对应的 $\mu_i - \mu_j$。$T-\text{方法}$ 基于以下结果：
+
+对于任何 $i \neq j$，$\mu_i - \mu_j$ 都将以 $1 - \alpha$ 的概率包含于如下的区间：
+
+$X_i. - X_j. - W < \mu_i - \mu_j < X_i. - X_j. + W$
+
+其中，
+
+$W = \frac{1}{\sqrt{n}}C(m, nm - m, \alpha)\sqrt{\frac{SS_W}{nm - m}}$
+
+并且，附录中的 @tbl-A_2 给出了 $\alpha = 0.05$ 和 $\alpha = 0.01$ 时，$C(m, nm - m, \alpha)$ 的值。
