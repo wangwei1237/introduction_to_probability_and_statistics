@@ -1,1 +1,1 @@
-## Goodness of fit tests when some parameters are unspecified
+## Goodness of fit tests when some parameters are unspecified {#sec-11_3}

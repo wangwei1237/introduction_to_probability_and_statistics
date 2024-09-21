@@ -1,4 +1,4 @@
-# Goodness of fit tests and categorical data analysis {#sec-11}
+# 拟合优度检验和分类数据分析 {#sec-11}
 
 {{< include 11_1.qmd >}}
 

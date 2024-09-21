@@ -1,1 +1,1 @@
-## Tests of independence in contingency tables having fixed marginal totals
+## Tests of independence in contingency tables having fixed marginal totals {#sec-11_5}

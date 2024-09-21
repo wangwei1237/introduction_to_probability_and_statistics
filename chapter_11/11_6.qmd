@@ -1,1 +1,1 @@
-## The Kolmogorov–Smirnov goodness of fit test for continuous data
+## The Kolmogorov–Smirnov goodness of fit test for continuous data {#sec-11_6}
