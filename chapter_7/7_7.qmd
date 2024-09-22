@@ -1,1 +1,1 @@
-## Evaluating a point estimator {#sec-7_7}
+## Evaluating a point estimator $^*$ {#sec-7_7}

@@ -10,7 +10,7 @@ Introduction to Probability and Statistics for Engineers and Scientists (*Sixth 
 
 ## 翻译进度
 ```{.bash}
-7/16....-..-.-------
+9/16....-.....------
 ```
 
 ## 版权声明
