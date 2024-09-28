@@ -1,1 +1,81 @@
-## Goodness of fit tests when some parameters are unspecified {#sec-11_3}
+## 概率模型的参数未指定时的拟合优度检验 {#sec-11_3}
+对于概率模型 $\{p_i, i = 1, \dots, k\}$ 而言，如果并非所有的参数都是已知的，此时我们依然可以对 **原假设**（*null hypothesis*）进行拟合优度检验。例如，对于我们在 @sec-11_1 中介绍的某工厂每天事故数量的场景，现在，我们想检验该工厂每天发生的事故次数是否服参数为 $\lambda$ 的泊松分布，其中 $\lambda$ 是未知的。为了检验该假设，假设该工厂把 $n$ 天内每天发生的事故次数都记录了下来，并记作 $Y_1, \dots, Y_n$。
+
+要分析这些数据，我们必须首先处理这样一个问题，即 $Y_i$ 可以有无穷多个可能的值。不过，我们可以把 $Y_i$ 的无限种可能的取值划分为 $k$ 个有限数量的区间，然后用 $Y_i$ 落入的区域来解决该问题。例如，如果某天发生的事故数量为 0，则该天处于 **区间 1**；如果发生 1 次事故，则处于 **区间 2**；如果发生 2 次或 3 次事故，则处于 **区间 3**；如果发生 4 次或 5 次事故，则处于 **区间 4**；如果发生 5 次以上事故，则处于 **区间 5**。因此，如果该工厂每天发生的事故次数确实服从均值为 $\lambda$  的泊松分布，那么：
+
+$$
+\begin{align}
+p_1 &= P\{Y = 0\} = e^{-\lambda} \\
+p_2 &= P\{Y = 1\} = \lambda e^{-\lambda} \\
+p_3 &= P\{Y = 2\} + P\{Y = 3\} = \frac{e^{-\lambda} \lambda^2}{2} + \frac{e^{-\lambda} \lambda^3}{6} \\
+p_4 &= P\{Y = 4\} + P\{Y = 5\} = \frac{e^{-\lambda} \lambda^4}{24} + \frac{e^{-\lambda} \lambda^5}{120} \\
+p_5 &= P\{Y > 5\} = 1 - e^{-\lambda} - \lambda e^{-\lambda} - \frac{e^{-\lambda} \lambda^2}{2} - \frac{e^{-\lambda} \lambda^3}{6} - \frac{e^{-\lambda} \lambda^4}{24} - \frac{e^{-\lambda} \lambda^5}{120}
+\end{align}
+$$ {#eq-11_3_1}
+
+在进行拟合优度检验时，我们面临的第二个难题是：均值 $\lambda$ 的值是未知的。显然，最直接的做法是假设 $H_0$ 为真，然后从数据中估计 $\lambda$——并用 $\hat{\lambda}$ 作为 $\lambda$ 的估计值——然后用估计量 $\hat{\lambda}$ 来计算统计量：
+
+$T = \sum_{i=1}^{k} \frac{(X_i - n\hat{p_i})^2}{n\hat{p_i}}$
+
+其中，$X_i$ 是落在区间 $i$（$i = 1, \dots, k$ ）的 $Y_j$ 数量，$\hat{p_i}$ 是 $Y_j$ 落在区间 $i$ 的估计概率，用 $\lambda$ 的估计量来替代 $\hat{\lambda}$ 并代入 @eq-11_3_1 来计算 $\hat{p_i}$。
+
+通常，如果原假设中含有计算概率 $\{p_i, i = 1, \dots, k\}$ 所必需的未知参数时，我们可以使用如上的方法。假设有 $m$ 个未知参数，并且可以用最大似然法（maximum likelihood）对其进行估计。可以证明，当 $n$  足够大时，在 $H_0$  为真时，统计量 $T$ 近似服从自由度为 $k - 1 - m$ 的卡方分布。换句话说，自由度会随每个需要估计的参数而减一。因此，检验为：
+
+$\begin{align} \text{拒绝} \quad &H_0 \quad \text{如果} \quad T \geq \chi_{\alpha, k-1-m}^2 \\ \text{接受} \quad &H_0 \quad \text{否则} \end{align}$
+
+另一种等价的检验方法是首先确定统计量 $T$ 的值，记作 $T = t$，然后计算
+
+$p-\text{value} \approx P\left\{\chi^2_{k-1-m} \geq t\right\}$
+
+如果 $\alpha \geq p-\text{value}$，则拒绝原假设。
+
+::: {#exr-11_3_a}
+假设在过去的 30 周内，每周的事故数量如下所示：
+
+$$
+\begin{array}{ccccccccccccc}
+8 & 0 & 0 & 1 & 3 & 4 & 0 & 2 & 12 & 5 \\
+1 & 8 & 0 & 2 & 0 & 1 & 9 & 3 & 4 & 5 \\
+3 & 3 & 4 & 7 & 4 & 0 & 1 & 2 & 1 & 2
+\end{array}
+$$
+
+检验原假设：每周的事故数量服从泊松分布。
+:::
+
+::: {#sol-11_3_a}
+由于 30 周内的事故总数为 95，泊松分布均值的最大似然估计值为：
+
+$\hat{\lambda} = \frac{95}{30} = 3.16667$
+
+因此，$P\{Y = i\}$ 的估计值为：
+
+$P\{Y = i\} \stackrel{est}{=} \frac{e^{-\hat{\lambda}} \hat{\lambda}^i}{i!}$
+
+通过计算，我们得到：
+
+$\begin{align} \hat{p_1} &= 0.04214 \\ \hat{p_2} &= 0.13346 \\ \hat{p_3} &= 0.43434 \\ \hat{p_4} &= 0.28841 \\ \hat{p_5} &= 0.10164 \end{align}$
+
+使用数据值 $X_1 = 6, X_2 = 5, X_3 = 8, X_4 = 6, X_5 = 5$，我们可以使用 R 来计算检验统计量：
+
+$T = \sum_{i=1}^5 \frac{(X_i - 30\hat{p_i})^2}{30\hat{p_i}}$
+
+然后计算 $p-\text{value}$：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+x <- c(6, 5, 8, 6, 5)
+p <- c(.04214, .13346, .43434, .28841, .10164)
+y <- (x - 30 * p)^2
+s <- y / (30 * p)
+T = sum(s)
+T
+
+p_value <- 1 - pchisq(T, 3)
+p_value
+```
+
+因此，我们将拒绝工厂每周发生的事故数量服从泊松分布的假设。显然，有太多周事故数量为 0，因此不能假设事故数量服从均值为 3.167 的泊松分布。$\blacksquare$
+:::
