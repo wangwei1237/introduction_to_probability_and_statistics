@@ -1,1 +1,129 @@
-## The Kolmogorov–Smirnov goodness of fit test for continuous data {#sec-11_6}
+## 用于连续数据的 Kolmogorov–Smirnov 拟合优度检验 {#sec-11_6}
+假设 $Y_1,\ldots,Y_n$ 为来自连续分布的总体的样本数据，并且我们希望检验原假设 $H_0: \text{总体的分布函数为} F$，其中 $F$ 是一个指定的连续分布函数。
+
+一种检验 $H_0$ 的方法是：
+
+* 首先将 $Y_j$ 的可能取值划分为 $k$ 个不同的区间，即 $(y_0,y_1),(y_1,y_2),\ldots,(y_{k - 1},y_k)$，其中 $y_0 = -\infty$，$y_k = +\infty$。
+* 如果 $Y_j$ 落在区间 $(y_{i - 1},y_i)$ 中，则令 $Y_j^d = i$。于是我们得到一个离散随机变量 $Y_j^{d}$，$j = 1,\ldots,n$。
+
+原假设意味着 $P\{Y_j^{d} = i\} = F(y_i)-F(y_{i - 1})$，$i = 1,\ldots,k$，并且可以通过已经介绍过的卡方拟合优度检验来检验原假设。
+
+然而，还有另一种比如上的离散化方法更为有效的检验方法以检验 $Y_j$ 是否来自连续分布函数 $F$。接下来，我们将介绍这种更为有效的检验方法。
+
+在观察到 $Y_1,\ldots,Y_n$ 之后，令 $F_e$ 为 **经验分布函数**（*the empirical distribution function*）：
+
+$F_e(x)=\frac{\#i:Y_i\leq x}{n}$
+
+也就是说，$F_e(x)$ 是观察值中小于或等于 $x$ 的比例。因为 $F_e(x)$ 是一个观察值小于或等于 $x$ 的概率的自然估计量，所以如果原假设（$F$ 就是总体的分布函数）是正确的，那么 $F_e(x)$ 和 $F(x)$ 应该非常接近。由于对于所有的 $x$ 都是如此，所以检验 $H_0$ 的检验统计量为：
+
+$D\equiv\underset{x}{\text{Maximum}}|F_e(x)-F(x)|$
+
+其中在 $x \in (-\infty, +\infty)$ 上取 $|F_e(x)-F(x)|$ 的最大值作为统计量 $D$。我们称 $D$ 为 Kolmogorov–Smirnov 检验统计量。
+
+为了计算给定数据集 $Y_j = y_j$，$j = 1,\ldots,n$ 下的 $D$ 的值，我们令 $y_{(1)},y_{(2)},\ldots,y_{(n)}$ 表示 $y_j$ 的升序排列结果。也就是说，$y_{(j)}$ 是 $y_1,\ldots,y_n$ 中第 $j$ 小的值。
+
+例如，如果 $n =3$，$y_1 = 3$，$y_2 = 5$，$y_3 = 1$，那么 $y_{(1)} = 1$，$y_{(2)} = 3$，$y_{(3)} = 5$。所以，$F_e(x)$ 可以写作：
+
+$$
+F_e(x) = \begin{cases}
+0, \quad & \text{if} \quad x \lt y_{(1)} \\
+\frac{1}{n}, \quad & \text{if} \quad y_{(1)} \le x \lt y_{(2)} \\
+\vdots & \\
+\frac{j}{n}, \quad & \text{if} \quad y_{(j)} \le x \lt y_{(j + 1)} \\
+\vdots & \\
+1, \quad & \text{if} \quad y_{(n)} \le x
+\end{cases}
+$$
+
+所以，在区间 $(y_{(j - 1)},y_{(j)})$ 内，$F_e(x)$ 是常数，并在 $y_{(1)},\ldots,y_{(n)}$ 处跃增 $\frac{1}{n}$。由于 $F(x)$ 是 $x$ 的增函数且小于等于 $1$，所以 $F_e(x)-F(x)$ 的最大值是非负的，并且当 $x$ 等于 $y_{(j)}, j = 1,\ldots,n$ 中的一个时取得最大值（如 @fig-11_1）。
+
+![$n=5$](../images/chapter_11/f_11_1.png){#fig-11_1}
+
+也就是说，
+
+$$
+\underset{x}{\text{Maximum}} \left \{ F_e(x)-F(x) \right \} =\underset{j = 1,\ldots,n}{\text{Maximum}}\{\frac{j}{n}-F(y_{(j)})\}
+$$ {#eq-11_6_1}
+
+类似地，$F(x)-F_e(x)$ 的最大值也是非负的，并且出现在紧靠跳跃点 $y_{(j)}$ 的前一个的位置。所以：
+
+$$
+\underset{x}{\text{Maximum}}\{F(x)-F_e(x)\}=\underset{j = 1,\ldots,n}{\text{Maximum}}\{F(y_{(j)})-\frac{j - 1}{n}\}
+$$ {#eq-11_6_2}
+
+根据 @eq-11_6_1 和 @eq-11_6_2，我们得到：
+
+$$
+\begin{align*}
+D&=\underset{x}{\text{Maximum}}\vert F_e(x)-F(x)\vert\\
+&=\text{Maximum} \left \{\text{Maximum}\{F_e(x)-F(x)\},\text{Maximum}\{F(x)-F_e(x)\} \right \}\\
+&=\text{Maximum} \left \{\frac{j}{n}-F(y_{(j)}),F(y_{(j)})-\frac{j - 1}{n},j = 1,\ldots,n \right \}
+\end{align*}
+$$ {#eq-11_6_3}
+
+我们可以利用 @eq-11_6_3 来计算 $D$ 的值。
+
+假设已经观察到 $Y_j$，并且 $Y_j$ 的观察值使得 $D = d$。较大的 $D$ 值似乎与总体分布服从 $F$ 的原假设不一致，所以观察数据集的 $p-\text{value}$ 为：
+
+$p-\text{value}=P_F\{D\geq d\}$
+
+其中我们写作 $P_F$ 是为了表明如上的概率是在原假设 $H_0$ 为真（所以 $F$ 就是总体的分布函数）的情况下计算的。
+
+可以通过 @prp-11_6_1 的模拟来更简单的近似计算如上的 $p-\text{value}$。@prp-11_6_1 表明 $P_F\{D\geq d\}$ 不依赖于总体的假设分布函数 $F$，这允许我们可以选择任何的连续分布 $F$ 进行模拟来估计 $p-\text{value}$（因此，我们可以使用 $(0,1)$ 均匀分布）。
+
+::: {#prp-11_6_1}
+对于任意的连续分布函数 $F$，$P_F{D \ge d}$ 都是一样的。
+
+::: {.proof}
+$\begin{align*} P_F\{D\geq d\}&=P_F\left\{\underset{x}{\text{Maximum}}\left|\frac{\#\{i:Y_i\leq x\}}{n}-F(x)\right|\geq d\right\}\\ &=P_F\left\{\underset{x}{\text{Maximum}}\left|\frac{\#\{i:F(Y_i)\leq F(x)\}}{n}-F(x)\right|\geq d\right\}\\ &=P\left\{\underset{x}{\text{Maximum}}\left|\frac{\#\{i:U_i\leq F(x)\}}{n}-F(x)\right|\geq d\right\} \end{align*}$
+
+其中，$U_1,\ldots,U_n$ 是独立的 $(0,1)$ 均匀分布随机变量。
+
+* 第一个等式成立是因为 $F$ 是增函数，所以 $Y\leq x$ 等价于 $F(Y)\leq F(x)$
+* 第二个等式成立是因为如果 $Y$ 具有连续分布函数 $F$，那么随机变量 $F(Y)$ 为 $(0,1)$ 均匀分布（证明过程留作习题）。
+
+令 $y = F(x)$，并且当 $x$ 从 $-\infty$ 增加到 $+\infty$ 时，$F(x)$ 从 $0$ 增加到 $1$ ，于是我们得到：
+
+$P_F\{D\geq d\}=P\left\{\underset{0\leq y\leq1}{\text{Maximum}}\left|\frac{\#\{i:U_i\leq y\}}{n}-y\right|\geq d\right\}$
+
+这表明，当原假设 $H_0$ 为真时，$D$ 的分布不依赖于实际分布 $F$。$\blacksquare$
+:::
+:::
+
+由 @prp-11_6_1 可知，在根据观察数据确定 $D$ 的值（$D = d$）之后，可以使用 $(0,1)$ 均匀分布进行模拟来获得 $p-\text{value}$。也就是说，我们生成一个包含 $n$ 个随机数 $U_1,\ldots,U_n$ 的集合，然后检查 $\underset{0\leq y\leq1}{\text{Maximum}}\left|\frac{\#\{i:U_i\leq y\}}{n}-y\right|\geq d$ 是否成立。重复这个过程很多次，那么 $\underset{0\leq y\leq1}{\text{Maximum}}\left|\frac{\#\{i:U_i\leq y\}}{n}-y\right|\geq d$ 成立的次数比例就是对该数据集 $p-\text{value}$ 的估计。如前所述，可以通过对随机数排序，然后使用等式 
+
+$\text{Max}\left|\frac{\#\{i:U_i\leq y\}}{n}-y\right|=\text{Max}\left\{\frac{j}{n}-U_{(j)},U_{(j)}-\frac{j - 1}{n},j = 1,\ldots,n\right\}$
+
+来计算不等式的左边，其中 $U_{(j)}$ 是 $U_1,\ldots,U_n$ 中的第 $j$ 小的值。
+
+例如，如果 $n = 3$ 且 $U_1 = 0.7$，$U_2 = 0.6$，$U_3 = 0.4$，那么 $U_{(1)} = 0.4$，$U_{(2)} = 0.6$，$U_{(3)} = 0.7$，这个数据集的 $D$ 值为：
+
+$D=\text{Max}\left\{\frac{1}{3}-0.4,\frac{2}{3}-0.6,1 - 0.7,0.4,0.6-\frac{1}{3},0.7-\frac{2}{3}\right\}=0.4$ 。
+
+令 $D^{*}=(\sqrt{n}+0.12+\frac{0.11}{\sqrt{n}})D$，并令 $d_{\alpha}^{*}$ 满足 $P_F\{D^{*}\geq d_{\alpha}^{*}\}=\alpha$，则对于不同的 $\alpha$ 值，$d_{\alpha}^{*}$ 有以下的近似值：
+
+$d_{0.1}^{*}=1.224$
+
+$d_{0.05}^{*}=1.358$
+
+$d_{0.025}^{*}=1.480$
+
+$d_{0.01}^{*}=1.626$
+
+如果 $D^{*}$ 的观测值大于等于 $d_{\alpha}^{*}$，那么在显著性水平为 $\alpha$ 下，我们将拒绝总体分布函数为 $F$ 的原假设。
+
+::: {#exr-11_6_a}
+假设我们要检验一个给定的总体分布是均值为 100 的指数分布的假设，即 $F(x)=1-e^{-x/100}$。如果来自该分布的、大小为 10 的样本的有序值为：
+
+66、72、81、94、112、116、124、140、145、155
+
+那么可以得出什么结论？
+:::
+
+::: {#sol-11_6_a}
+首先，我们使用 @eq-11_6_3 来计算 Kolmogorov–Smirnov 检验统计量 $D$ 的值。经过计算，我们得到 $D = 0.4831487$，所以：
+
+$D^{*}=0.48315(\sqrt{10}+0.12+\frac{0.11}{\sqrt{10}})=1.603$。
+
+因为 1.603 超过了 $d_{0.025}^{*}=1.480$，所以在 2.5% 的显著性水平下，我们将拒绝样本数据来自均值为 100 的指数分布的原假设。另一方面，因为 1.603 小于 $d_{0.01}^{*}=1.626$，所以在 1% 的显著性水平下，我们不会拒绝原假设。$\blacksquare$
+:::
