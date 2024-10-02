@@ -1,4 +1,4 @@
-# Nonparametric hypothesis tests {#sec-12}
+# 非参数假设检验 {#sec-12}
 
 {{< include 12_1.qmd >}}
 
