@@ -1,1 +1,214 @@
-## The signed rank test
+## 符号秩检验 {#sec-12_3}
+**符号检验** 可用于检验连续分布 $F$ 的中位数等于某个特定值 $m_0$ 的假设。然而，在许多应用中，人们不仅希望检验中位数是否等于 $m_0$，还希望检验分布是否关于 $m_0$ 对称。也就是说，如果 $X$ 具有分布函数 $F$，那么对于所有的 $a \gt 0$，我们通常希望检验假设（参见 @fig-12_2）：
+
+$H_0:P\{X\lt m_0 - a\}=P\{X\gt m_0 + a\}$
+
+```{r}
+#| label: fig-12_2
+#| fig-cap: "关于 $m=3$ 对称的概率密度函数"
+#| warning: false
+#| 
+
+library(ggplot2)
+
+f <- function(x) {
+    ifelse(x <= 3,
+           max(0, 0.4 * (x - 3) + sqrt(0.4)),
+           max(0, -0.4 * (x - 3) + sqrt(0.4)))
+}
+
+x <- seq(0, 6, by = 0.1)
+y <- sapply(x, f)
+df <- data.frame(x = x, y = y)
+ggplot(df, aes(x = x, y = y)) + 
+  geom_line() +
+  scale_x_continuous(breaks = seq(0, 6, by = 1), limits = c(0, 6))
+```
+
+虽然仍然可以使用 **符号检验** 检验 $F$ 关于 $m_0$ 的对称性，但 **符号检验** 只比较了小于和大于 $m_0$ 的数据值的数量，而没有考虑这两组数据中是否有一组比另一组距离 $m_0$ 更远。一种考虑到这两组数据中是否有一组比另一组距离 $m_0$ 更远的非参数检验就是所谓的 **符号秩检验**（*signed rank test*）。
+
+令 $Y_i = X_i - m_0, i = 1,\ldots,n$，然后对 $|Y_1|,|Y_2|,\ldots,|Y_n|$ 进行排序（*rank*）。对于 $j = 1,\ldots,n$，令：
+
+$I_j=\begin{cases}1& \text{如果} |Y_i| \text{中第} j \text{最小值对应的} X_i \text{小于} m_0 \\0& \text{否则} \end{cases}$
+
+现在，$\sum_{j = 1}^{n}I_j$ 表示 **符号检验** 的检验统计量，而 $T=\sum_{j = 1}^{n}jI_j$ 表示 **符号秩检验** 的检验统计量。也就是说，**符号秩检验** 不但会像 **符号检验** 那样考虑小于 $m_0$ 的数据，而且会给那些距离 $m_0$ 最远的数据赋予更大的权重（**符号检验** 中这些权重都是相同的）。
+
+::: {#exm-12_3_a}
+如果 $n = 4$，$m_0 = 2$，并且观察数据值为 $X_1 = 4.2$、$X_2 = 1.8$、$X_3 = 5.3$、$X_4 = 1.7$，则 $|X_i - 2|$ 的排序结果为 $0.2, 0.3, 2.2, 3.3$。因为第一个数据 0.2 来自 $X_2$，而 $X_2 < 2$，所以 $I_1 = 1$。类似的，$I_2 = 1$，$I_3 = I_4 = 0$。因此，检验统计量 $T = 1 + 2 = 3$。$\blacksquare$
+:::
+
+::: {.callout-note}
+可以使用如下的 R 代码计算检验统计量。
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+TS <- function(X, m_0) {
+    Y <- abs(X - m_0)
+    rank <- order(Y)
+    I <- sapply(X[rank], function(x){ifelse(x < m_0, 1, 0)})
+    T <- sapply(seq_along(I), function(i) {i * I[[i]]})
+    return(sum(T))
+}
+
+t <- TS(c(4.2, 1.8, 5.3, 1.7), 2.0)
+t
+```
+:::
+
+当原假设 $H_0$ 为真时，可以比较容易的计算出检验统计量 $T$ 的均值和方差。当 $H_0$ 为真时，意味着 $Y_j = X_j - m_0$ 的分布关于 $0$ 对称，因此对于任何给定的 $\vert Y_j\vert$ 的值（比如说 $\vert Y_j\vert = y$ ），$Y_j = y$ 和 $Y_j = -y$ 的可能性是相等的。所以，在 $H_0$ 为真时，$I_1,\ldots,I_n$ 将是独立的随机变量，并且，
+
+$P\{I_j = 1\}=\frac{1}{2}=P\{I_j = 0\}, j = 1,\ldots,n$
+
+因此，在 $H_0$ 为真时，
+
+$$
+\begin{align*}
+E[T]&=E\left[\sum_{j = 1}^{n}jI_j\right]\\
+&=\sum_{j = 1}^{n}\frac{j}{2}=\frac{n(n + 1)}{4}
+\end{align*}
+$$ {#eq-12_3_1}
+
+$$
+\begin{align*}
+\mathrm{Var}(T)&=\mathrm{Var}\left(\sum_{j = 1}^{n}jI_j\right)\\
+&=\sum_{j = 1}^{n}j^{2}\mathrm{Var}(I_j)\\
+&=\sum_{j = 1}^{n}\frac{j^{2}}{4}=\frac{n(n + 1)(2n + 1)}{24}
+\end{align*}
+$$ {#eq-12_3_2}
+
+> 伯努利随机变量 $I_j$ 的方差为 $\frac{1}{2}(1-\frac{1}{2})=\frac{1}{4}$。
+
+可以证明，对于较大的 $n$（通常认为 $n\gt25$ 就足够大了），当 $H_0$ 为真时，$T$ 将近似服从均值为 @eq-12_3_1 和方差为 @eq-12_3_2 的正态分布。虽然可以通过 $T$ 的近似正态分布推导出在显著性水平 $\alpha$ 下 $H_0$ 的假设检验（在快速且便宜的算力出现之前，这一直是常用的方法），但我们不会采用这种方法。我们通过明确计算相关概率来确定给定观察数据下的 $p-\text{value}$，接下来我们将具体介绍如何实现该方法。
+
+假设我们需要对 $H_0$ 进行显著性水平为 $\alpha$ 的检验。由于备择假设是中位数不等于 $m_0$，所以我们需要进行双边检验。也就是说，如果 $T$ 的观测值等于 $t$ ，那么如果：
+
+$$
+P_{H_0}\{T\leq t\}\leq\frac{\alpha}{2} \quad \text{或者} \quad P_{H_0}\{T\geq t\}\leq\frac{\alpha}{2}
+$$ {#eq-12_3_3}
+
+我们就应该拒绝 $H_0$。
+
+当 $T = t$ 时，观察数据的 $p-\text{value}$ 为：
+
+$$
+p-\text{value}=2\min(P_{H_0}\{T\leq t\},P_{H_0}\{T\geq t\})
+$$ {#eq-12_3_4}
+
+也就是说，如果 $T = t$，**符号秩检验** 要求在显著性水平 $\alpha$ 大于等于 $p-\text{value}$ 时才会拒绝原假设。可以通过下式来减少计算 $p-\text{value}$ 时所需的计算量（我们将在本节的末尾给出其证明过程）：
+
+$P_{H_0}\{T\geq t\}=P_{H_0}\left\{T\leq\frac{n(n + 1)}{2}-t\right\}$
+
+根据 @eq-12_3_4，有：
+
+$$
+\begin{align*}
+p-\text{value}&=2\min\left(P_{H_0}\{T\leq t\},P_{H_0}\left\{T\leq\frac{n(n + 1)}{2}-t\right\}\right)\\
+&=2P_{H_0}\{T\leq t^{*}\}
+\end{align*}
+$$
+
+其中，$t^* = \min\left(t, \frac{n(n+1)}{2} - t\right)$
+
+现在还需要计算 $P_{H_0}\{T\leq t^{*}\}$ 。为此，令 $P_k(i)$ 表示在原假设 $H_0$ 为真时，当样本大小为 $k$ 时，**符号秩** 统计量 $T$ 小于或等于 $i$ 的概率。我们将从 $k = 1$ 开始确定 $P_k(i)$ 的递归公式。
+
+当 $k = 1$ 时，由于只有一个数据值，并且当 $H_0$ 为真时，这个数据值小于或大于 $m_0$ 的可能性是相等的，所以 $T$ 等于 $0$ 或 $1$ 的可能性也是相等的。因此
+
+$$
+P_{1}(i)=\begin{cases}0&i\lt0\\\frac{1}{2}&i = 0\\1&i\geq1\end{cases}
+$$ {#eq-12_3_5}
+
+假设样本大小为 $k$。为了计算 $P_k(i)$，我们以 $I_k$ 的值为条件进行如下计算：
+
+$$
+\begin{align*}
+P_{k}(i)&=P_{H_0}\left\{\sum_{j = 1}^{k}jI_j\leq i\right\}\\
+&=P_{H_0}\left\{\sum_{j = 1}^{k}jI_j\leq i\vert I_k = 1\right\}P_{H_0}\{I_k = 1\}\\
+&\quad +P_{H_0}\left\{\sum_{j = 1}^{k}jI_j\leq i\vert I_k = 0\right\}P_{H_0}\{I_k = 0\}\\
+&=P_{H_0}\left\{\sum_{j = 1}^{k - 1}jI_j\leq i - k\vert I_k = 1\right\}P_{H_0}\{I_k = 1\}\\
+&\quad +P_{H_0}\left\{\sum_{j = 1}^{k - 1}jI_j\leq i\vert I_k = 0\right\}P_{H_0}\{I_k = 0\}\\
+&=P_{H_0}\left\{\sum_{j = 1}^{k - 1}jI_j\leq i - k\right\}P_{H_0}\{I_k = 1\}+P_{H_0}\left\{\sum_{j = 1}^{k - 1}jI_j\leq i\right\}P_{H_0}\{I_k = 0\}
+\end{align*}
+$$
+
+其中最后一个等式利用了 $I_1,\ldots,I_{k - 1}$ 和 $I_k$ 在 $H_0$ 为真时相互独立的特性。现在 $\sum_{j = 1}^{k - 1}jI_j$ 与样本大小为 $k - 1$ 时的 **符号秩** 统计量具有相同的分布，并且由于：
+
+$P_{H_0}\{I_k = 1\}=P_{H_0}\{I_k = 0\}=\frac{1}{2}$
+
+所以，有：
+
+$$
+P_{k}(i)=\frac{1}{2}P_{k - 1}(i - k)+\frac{1}{2}P_{k - 1}(i)
+$$ {#eq-12_3_6}
+
+利用 @eq-12_3_5 和 @eq-12_3_6 给出的递归公式，我们可以一直计算出 $P_2(\cdot)$，$P_3(\cdot)$，……，直到得到我们所需的 $P_n(t^{*})$。
+
+::: {#exm-12_3_b}
+对于 @exm-12_3_a 中的数据，
+
+$t^* = \min\left(3, \frac{4 \cdot 5}{2} - 3\right) = 3$
+
+因此，$p-\text{value}$ 为 $2P_4(3)$，其计算如下：
+
+$P_2(0)=\frac{1}{2}[P_1(-2)+P_1(0)]=\frac{1}{4}$
+
+$P_2(1)=\frac{1}{2}[P_1(-1)+P_1(1)]=\frac{1}{2}$
+
+$P_2(2)=\frac{1}{2}[P_1(0)+P_1(2)]=\frac{3}{4}$
+
+$P_2(3)=\frac{1}{2}[P_1(1)+P_1(3)]=1$
+
+$P_3(0)=\frac{1}{2}[P_2(-3)+P_2(0)]=\frac{1}{8} \quad \because P_2(-3)=0$
+
+$P_3(1)=\frac{1}{2}[P_2(-2)+P_2(1)]=\frac{1}{4}$
+
+$P_3(2)=\frac{1}{2}[P_2(-1)+P_2(2)]=\frac{3}{8}$
+
+$P_3(3)=\frac{1}{2}[P_2(0)+P_2(3)]=\frac{5}{8}$
+
+$P_4(0)=\frac{1}{2}[P_3(-4)+P_3(0)]=\frac{1}{16}$
+
+$P_4(1)=\frac{1}{2}[P_3(-3)+P_3(1)]=\frac{1}{8}$
+
+$P_4(2)=\frac{1}{2}[P_3(-2)+P_3(2)]=\frac{3}{16}$
+
+$P_4(3)=\frac{1}{2}[P_3(-1)+P_3(3)]=\frac{5}{16}$ $\blacksquare$
+:::
+
+可以使用 R 来获得检验统计量 $T$ 和 $p-\text{value}$ 的值。但是需要注意的是，R 并没有直接给出 $T$ 的值，而是给出了 $V = n(n+1)/2 - T$ 的值。为了使用 R 执行 **符号秩检验**——有时也称为 **Wilcoxon 符号秩检验**（*Wilcoxon signed rank test*）——来检验假设：数据集 $x_1,...,x_n$ 关于 $m_0$ 对称，可以执行如下的代码：
+
+```{.r}
+x <- c(x_1, x_2,..., x_n)
+wilcox.test(x, mu = m_0)
+```
+
+`wilcox.test()` 将给出检验的 $p-\text{value}$，例如，对于 @exm-12_3_a 中的数据而言：
+
+```{r}
+#| code-fold: false
+#| warning: false
+
+x <- c(4.2, 1.8, 5.3, 1.7)
+wilcox.test(x, mu = 2)
+```
+
+在本节就要结束的时候，我们给出 $P_{H_0}\{T\geq t\}=P_{H_0}\left\{T\leq\frac{n(n + 1)}{2}-t\right\}$ 的证明。
+
+为了验证上述等式，首先注意到：如果 $\vert Y_1\vert,\ldots,\vert Y_n\vert$ 中第 $j$ 小的值来自一个大于 $m_0$ 的数据值，那么 $1 - I_j$ 将等于 $1$，否则 $1 - I_j$ 将等于 $0$。因此，如果我们令：
+
+$T^{1}=\sum_{j = 1}^{n}j(1 - I_j)$
+
+那么 $T^{1}$ 将表示大于 $m_0$ 的数据值的 $\vert Y_j\vert$ 的秩之和。根据对称性，在原假设 $H_0$ 为真时，$T^{1}$ 与 $T$ 具有相同的分布。此时：
+
+$T^{1}=\sum_{j = 1}^{n}j-\sum_{j = 1}^{n}jI_j=\frac{n(n + 1)}{2}-T$
+
+所以：
+
+$$
+\begin{align*}
+P\{T\geq t\}&=P\{T^{1}\geq t\} \quad \because T\text{ 和 }T^{1}\text{ 具有相同分布}\\
+&=P\{\frac{n(n + 1)}{2}-T\geq t\}\\
+&=P\{T\leq\frac{n(n + 1)}{2}-t\}
+\end{align*}
+$$
