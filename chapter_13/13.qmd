@@ -1,4 +1,4 @@
-# Quality control {#sec-13}
+# 质量控制 {#sec-13}
 
 {{< include 13_1.qmd >}}
 
