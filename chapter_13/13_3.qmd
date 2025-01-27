@@ -1,1 +1,129 @@
-## $\mathbf{S}$-control charts
+## $\text{S}$-控制图
+@sec-13_2 中介绍的基于 $\overline{X}$ 的控制图主要用于检测总体均值的变化。但有时候，我们也需要关注总体方差可能发生变化的情况下，此时可以使用 $\text{S}$-控制图。
+
+假设 **过程** 在受控状态下所生产的产品具有可测量的特性，这些特性服从均值为 $\mu$、方差为 $\sigma^2$ 的正态分布。若 $S_i$ 是第 $i$ 个子组的样本标准差，则：
+
+$S_i = \sqrt{\frac{\sum_{j=1}^n \left( X_{(i-1)n+j} - \overline{X}_i \right)^2}{n-1}}$
+
+如 @sec-13_2_1 所述：
+
+$$
+E[S_i] = c(n)\sigma
+$$ {#eq-13_3_1}
+
+此外，$S_i$ 的方差为：
+
+$$
+\begin{align}
+\text{Var}(S_i) &= E[S_i^2] - \left(E[S_i]\right)^2 \\
+&= \sigma^2 - c^2(n)\sigma^2 \\
+&= \sigma^2[1 - c^2(n)]
+\end{align}
+$$ {#eq-13_3_2}
+
+当 **过程** 处于受控状态时，$S_i$ 服从一个常数（$\sigma / \sqrt{n-1}$）乘以一个自由度为 $n-1$ 的卡方随机变量的平方根（$\sqrt{\chi^2_{n-1}}$）的分布（$\frac{\sigma}{\sqrt{n-1}}\sqrt{\chi^2_{n-1}}$）。
+
+可以证明，$S_i$ 落在其均值 3 个标准差范围内的概率接近于 1，即：
+
+$P\{E[S_i] - 3\sqrt{\text{Var}(S_i)} < S_i < E[S_i] + 3\sqrt{\text{Var}(S_i)}\} \approx 0.99$
+
+
+因此，利用 @eq-13_3_1 和 @eq-13_3_2 中的 $E[S_i]$ 和 $\text{Var}(S_i)$，$\text{S}$-控制图的上、下控制限可以设置为：
+
+$$
+\begin{align}
+\text{UCL} &= \sigma \left[c(n) + 3\sqrt{1 - c^2(n)}\right] \\
+\text{LCL} &= \sigma \left[c(n) - 3\sqrt{1 - c^2(n)}\right]
+\end{align}
+$$ {#eq-13_3_3}
+
+在图中连续绘制 $S_i$，以确认 $S_i$ 是否落在上、下控制限之内。当某个 $S_i$ 落在控制限之外时，应该停止 **过程**，并认为该 **过程** 已经处于失控状态。
+
+当我们从起始阶段开始绘制控制图时，$\sigma$ 还是未知的，此时可以使用 $\overline{S}/c(n)$ 来估计 $\sigma$。基于 @eq-13_3_3，估计的控制限为：
+
+$$
+\begin{align}
+\text{UCL} &= \overline{S} \left[1 + 3\sqrt{\frac{1 - c^2(n)}{c^2(n)}}\right] \\
+\text{LCL} &= \overline{S} \left[1 - 3\sqrt{\frac{1 - c^2(n)}{c^2(n)}}\right]
+\end{align}
+$$ {#eq-13_3_4}
+
+就像在刚开始绘制 $\overline{X}$ 控制图时那样，在绘制 $\text{S}$-控制图时，也应检查 $k$ 个子组的样本标准差 $S_1, S_2, \dots, S_k$ 是否都落在控制限内。如果任何一个子组的 $S_i$ 落在控制限之外，则应舍弃这些子组并重新计算 $\overline{S}$。
+
+::: {#exm-13_3_a}
+一个新启动的 **过程** 的 20 个子组（每组大小为 5）的 $\overline{X}$ 和 $S$ 值 如下表所示。
+
+| Sub-group | $\overline{X}$ | $S$ | Sub-group | $\overline{X}$ | $S$ | Sub-group | $\overline{X}$ | $S$ | Sub-group | $\overline{X}$ | $S$ |
+|-----------|-------------------|---------|-----------|-------------------|---------|-----------|-------------------|---------|-----------|-------------------|---------|
+| 1         | 35.1             | 4.2     | 6         | 36.4             | 4.5     | 11        | 38.1             | 4.2     | 16        | 41.3             | 8.2     |
+| 2         | 33.2             | 4.4     | 7         | 35.9             | 3.4     | 12        | 37.6             | 3.9     | 17        | 35.7             | 8.1     |
+| 3         | 31.7             | 2.5     | 8         | 38.4             | 5.1     | 13        | 38.8             | 3.2     | 18        | 36.3             | 4.2     |
+| 4         | 35.4             | 3.2     | 9         | 35.7             | 3.8     | 14        | 34.3             | 4.0     | 19        | 35.4             | 4.1     |
+| 5         | 34.5             | 2.6     | 10        | 27.2             | 6.2     | 15        | 43.2             | 3.5     | 20        | 34.6             | 3.7     |
+
+由于 $\overline{\overline{X}} = 35.94$，$\overline{S} = 4.35$，$c(5) = 0.9400$，根据 @eq-13_2_4 和 @eq-13_3_4 可以得出 $\overline{X}$ 和 $S$ 的初始上下控制限为：
+
+$\text{UCL}(\overline{X}) = 42.149$
+$\text{LCL}(\overline{X}) = 29.731$
+$\text{UCL}(S) = 9.087$
+$\text{LCL}(S) = -0.386$
+
+根据上述控制限绘制的 $S$ 控制图和 $\overline{X}$ 控制图分别如 @fig-13_2 (a) 和 @fig-13_2 (b)。由于 $\overline{X}_{10}$ 和 $\overline{X}_{15}$ 超出了 $\overline{X}$ 的控制限，必须剔除这些子组，并重新计算控制限（我们将必要的计算留作练习）。
+
+```{r}
+#| label: fig-13_2
+#| fig-subcap:
+#|   - $S$-控制图
+#|   - $\overline{X}$-控制图
+#| layout-ncol: 2
+#| fig-cap: ""
+#| warning: false
+
+library(ggplot2)
+
+# S control chart.
+x <- c(4.2, 4.4, 2.5, 3.2, 2.6, 4.5, 3.4, 5.1, 3.8, 6.2, 4.2, 3.9, 
+       3.2, 4.0, 3.5, 8.2, 8.1, 4.2, 4.1, 3.7)
+i <- seq_along(x)
+df <- data.frame(i=i, x=x)
+
+UCL <- 9.087   # 上控制限
+LCL <- -0.386  # 下控制限
+
+ggplot(df, aes(x = i, y = x)) +
+  geom_point(shape = 4, size = 2) +  # 绘制均值点
+  geom_hline(yintercept = UCL, color = "blue", linetype = "dashed", size = 1) +  # 上控制限
+  geom_hline(yintercept = LCL, color = "blue", linetype = "dashed", size = 1) +  # 下控制限
+  annotate("text", x = 11, y = UCL, label = "UCL", hjust = 0, vjust = -0.5, color = "blue") +  # 标注UCL
+  annotate("text", x = 11, y = LCL, label = "LCL", hjust = 0, vjust = 1.5, color = "blue") +  # 标注LCL
+  labs(title = "S Control Chart", x = "Subgroup", y = expression(S)) +  # 添加标题和轴标签
+  scale_x_continuous(limits = c(1, 20),
+                     breaks = seq(1, 20, by = 1)) + 
+  theme_minimal()  # 使用简洁主题
+
+
+# \overline{X} control chart.
+x <- c(35.1, 33.2, 31.7, 35.4, 34.5, 
+       36.4, 35.9, 38.4, 35.7, 27.2, 
+       38.1, 37.6, 38.8, 34.3, 43.2, 
+       41.3, 35.7, 36.3, 35.4, 34.6)
+i <- seq_along(x)
+df <- data.frame(i=i, x=x)
+
+UCL <- 42.149   # 上控制限
+LCL <- 29.731  # 下控制限
+
+ggplot(df, aes(x = i, y = x)) +
+  geom_point(shape = 4, size = 2) +  # 绘制均值点
+  geom_hline(yintercept = UCL, color = "blue", linetype = "dashed", size = 1) +  # 上控制限
+  geom_hline(yintercept = LCL, color = "blue", linetype = "dashed", size = 1) +  # 下控制限
+  annotate("text", x = 11, y = UCL, label = "UCL", hjust = 0, vjust = -0.5, color = "blue") +  # 标注UCL
+  annotate("text", x = 11, y = LCL, label = "LCL", hjust = 0, vjust = 1.5, color = "blue") +  # 标注LCL
+  labs(title = "bar{X} Control Chart", x = "Subgroup", y = expression(bar(X))) +  # 添加标题和轴标签
+  scale_x_continuous(limits = c(1, 20),
+                     breaks = seq(1, 20, by = 1)) + 
+  theme_minimal()  # 使用简洁主题
+```
+
+$\blacksquare$
+:::
