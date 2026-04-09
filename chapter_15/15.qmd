@@ -1,4 +1,4 @@
-# Simulation, bootstrap statistical methods, and permutation tests {#sec-15}
+# 模拟、自助法统计以及置换检验 {#sec-15}
 
 {{< include 15_1.qmd >}}
 
@@ -15,3 +15,4 @@
 {{< include 15_7.qmd >}}
 
 {{< include 15_8.qmd >}}
+    

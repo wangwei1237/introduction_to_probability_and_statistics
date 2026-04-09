@@ -1,4 +1,4 @@
-# Life testing {#sec-14}
+# 寿命测试 {#sec-14}
 
 {{< include 14_1.qmd >}}
 

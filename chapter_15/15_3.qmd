@@ -1,1 +1,205 @@
-## The bootstrap method
+## 自助法 {#sec-15_3}
+令 $X_1, \dots, X_n$ 是来自某个分布（$F$）的一个样本，假设我们希望使用该样本来估计该分布的某个参数 $\theta$。例如，$\theta$ 可以是 $X_i$ 的均值或方差。
+
+假设我们有一个 $\theta$ 的估计量 $d = d(X_1, \dots, X_n)$，我们希望评估 $d(X_1, \dots, X_n)$ 作为 $\theta$ 的估计量的优劣性。可以使用均方误差（*Mean Square Error, MSE*）指标来衡量 $d(X_1, \dots, X_n)$ 是否可以作为 $\theta$ 的估计量：
+
+$$
+{MSE}_F(d) = E_F[(d(X_1, \dots, X_n) - \theta)^2]
+$$
+
+也就是说，$MSE_F(d)$ 是估计量 $d(X_1, \dots, X_n)$ 与参数 $\theta$ 之间的距离的平方的期望。这里，我们使用 $MSE_F$ 和 $E_F$ 表示：在 $X_1, \dots, X_n$ 是分布函数为 $F$ 的独立随机变量的前提下计算的期望。
+
+那么，如何估计呢？
+
+::: {#exm-15_3_a}
+若 $\theta = E[X_i]$ 是分布 $F$ 的均值，且 $d(X_1,\ldots,X_n)=\overline{X}_n = \sum_{i = 1}^{n}X_i/n$ 是数据值 $X_1,\ldots,X_n$ 的样本均值，那么因为
+
+$$
+E_F[d(X_1,\ldots,X_n)] = E_F[\overline{X}_n]=E_F[X_i]=\theta
+$$
+
+由此可得
+
+$$
+MSE_F(\overline{X}_n)=E_F[(\overline{X}_n - \theta)^2]=\text{Var}_F(\overline{X}_n)=\sigma^2/n
+$$
+
+其中 $\sigma^2 = \text{Var}_F(X_i)$。因此，在这种情况下，可以用样本方差 $S_n^2$ 来估计总体方差 $\sigma^2$，并用 $S_n^2/n$ 来估计 $MSE_F(\overline{X}_n)$，其中
+
+$$
+S_n^2=\frac{1}{n - 1}\sum_{i = 1}^{n}(X_i - \overline{X}_n)^2
+$$
+
+为 $X_1,\cdots, X_n$ 的样本方差。
+$\blacksquare$
+:::
+
+在 @exm-15_3_a 中，当使用样本均值作为总体均值的估计量时，我们很容易就能估计其均方误差。然而，如果我们想要估计总体方差呢？也就是说，当 $\theta = \text{Var}_F(X_i)$ 时将会如何？此时，我们可以使用样本方差来估计总体方差。然而，虽然想到 $d(X_1,\ldots,X_n)=S_n^2$ 很简单，但如何估计 $E_F[(d(X_1,\ldots,X_n) - \theta)^2]$ 却并不简单。我们可以使用自助法统计来估计样本反差与总体方差之间的均方误差，接下来我们将对其进行介绍。
+
+为了估计参数 $\theta$ 与其估计量 $d(X_1,\ldots,X_n)$ 之间的均方误差，令 $X_i = x_i$，$i = 1,\ldots,n$ 为样本数据值。对于任意 $x$，令 $F_e(x)$ 表示小于或等于 $x$ 的数据值所占的比例。即，
+
+$$
+F_e(x)=\frac{\text{满足 }i\leq n\text{ 且 }x_i\leq x\text{ 的 }i\text{ 的个数}}{n}
+$$
+
+例如，若 $n = 5$ ，且 $X_1 = 5$，$X_2 = 3$，$X_3 = 9$，$X_4 = 2$，$X_5 = 6$，那么
+
+$$
+F_e(x)=\begin{cases}
+0 & \text{如果 } x < 2 \\
+1/5 & \text{如果 } 2\leq x < 3 \\
+2/5 & \text{如果 } 3\leq x < 5 \\
+3/5 & \text{如果 } 5\leq x < 6 \\
+4/5 & \text{如果 } 6\leq x < 9 \\
+1 & \text{如果 } x\geq 9
+\end{cases}
+$$
+
+我们称函数 $F_e(x)$ 为经验分布函数（*empirical distribution function*）。当 $x_1,\ldots,x_n$ 都不相同时，$F_e$ 是随机变量 $X_e$ 的分布函数，$X_e$ 取 $x_1,\ldots,x_n$ 中任意一个值的可能性均相等。也就是说，如果数据值都不相同，那么 $F_e$ 是随机变量 $X_e$ 的分布函数，使得
+
+$$
+P(X_e = x_i)=1/n, \quad i = 1,\ldots,n
+$$
+
+当数据值存在重复时，$F_e$ 是随机变量 $X_e$ 的分布函数，$X_e$ 取任意指定数据值的概率等于该值在数据集中出现的次数除以 $n$。例如，若 $n = 3$，且 $x_1 = x_2 = 1$，$x_3 = 2$，那么 $X_e$ 是一个随机变量，它取值为 $1$ 的概率是 $2/3$，取值为 $2$ 的概率是 $1/3$。基于对不同值所赋予权重的这种理解，我们仍可以说 $F_e$ 是一个随机变量的分布函数，该随机变量取 $x_1, x_2, \ldots, x_n$ 中任意一个值的可能性相等。
+
+现在，对于任意的 $x$ 值，每个数据值 $X_i$ （$i = 1, \ldots, n$ ）小于或等于 $x$ 的概率为 $F(x)$。因此，根据大数定律，当 $n$ 趋于无穷大时，小于或等于 $x$ 的数据值的比例以概率 $1$ 收敛到 $F(x)$。所以，当 $n$ 较大时，$F_e(x)$ 应接近 $F(x)$，这表明经验分布函数 $F_e$ 可以用作总体分布函数 $F$ 的一个估计量。
+
+现在，假设 $\theta_e$ 与分布 $F_e$ 的关系和 $\theta$ 与分布 $F$ 的关系相同。例如，如果 $\theta$ 是分布函数为 $F$ 的随机变量 $X$ 的方差，那么 $\theta_e$ 就是分布函数为 $F_e$ 的随机变量 $X_e$ 的方差。现在，如果 $F_e$ 接近 $F$，那么几乎可以肯定 $\theta_e$ 会接近 $\theta$（从技术层面讲，如果 $\theta$ 是分布 $F$ 的连续函数，那么如上的假设就是成立的）。基于这些原因，我们可以近似计算 $\theta$ 与其估计量 $d(X_1,\ldots,X_n)$ 之间的均方误差：
+
+$$
+MSE_F(d)=E_F[(d(X_1,\ldots,X_n)-\theta)^2]\approx E_{F_e}[(d(X_1,\ldots,X_n)-\theta_e)^2]
+$$
+
+其中 $E_{F_e}$ 表示在 $X_1,\ldots,X_n$ 是相互独立的随机变量，且每个随机变量都具有分布函数 $F_e$ 的假设下求期望。也就是说，$X_1,\ldots,X_n$ 中的每一个取 $x_1,\ldots,x_n$ 中任意一个值的可能性相等。
+
+$$
+MSE_{F_e}(d)=E_{F_e}[(d(X_1,\ldots,X_n)-\theta_e)^2]
+$$
+
+为 $\theta$ 与其估计量 $d(X_1,\ldots,X_n)$ 之间的均方误差的自助法估计值（*bootstrap estimate of the mean square error*）。
+
+现在让我们来看一下，在无需使用 $MSE(F_e)$ 估计 $MSE(F)$ 的情况下（当用样本均值来估计总体均值时），$MSE(F_e)$ 对 $MSE(F)$ 的估计效果如何。
+
+::: {#exm-15_3_b}
+对于 @exm-15_3_a，可以使用 $\overline{X}=\sum_{i=1}^{n}X_i/n$ 作为分布 $F$ 的均值的估计量。因为随机变量 $X_e$ 对于每个数据值 $x_1,\cdots,x_n$ 的权重都是一致的，所以当 $\theta_e$ 是 $X_e$ 的均值时，
+
+$$
+\theta_e = E[X_e] = \sum_{i=1}^{n}x_iP(X_e=x_i) = \frac{1}{n}\sum_{i=1}^{n}x_i = \overline{x}_n
+$$
+
+因为
+
+$$
+E_{F_e}\left[\sum_{i = 1}^{n}X_i/n\right]=E_{F_e}[X]=\theta_e=\overline{x}_n
+$$
+
+由此可得
+
+$$
+\begin{align*}
+MSE_{F_e}(\overline{X}_n)&=E_{F_e}\left[\left(\sum_{i = 1}^{n}X_i/n - \overline{x}_n\right)^2\right]\\
+&=\text{Var}_{F_e}\left(\sum_{i = 1}^{n}X_i/n\right)\\
+&=\frac{1}{n}\text{Var}_{F_e}(X)
+\end{align*}
+$$
+
+现在，
+
+$$
+\begin{align*}
+\text{Var}_{F_e}(X)&=E_{F_e}\left[(X - \overline{x}_n)^2\right]\\
+&=\sum_{i = 1}^{n}(x_i - \overline{x}_n)^2P_{F_e}(X = x_i)\\
+&=\frac{1}{n}\sum_{i = 1}^{n}(x_i - \overline{x}_n)^2
+\end{align*}
+$$
+
+因此，我们已经证明了
+
+$$
+MSE_{F_e}(\overline{X}_n)=\frac{1}{n^2}\sum_{i = 1}^{n}(x_i - \overline{x}_n)^2
+$$
+
+由于 $MSE_F(\overline{X}_n)=\frac{1}{n}\text{Var}_F(X)$ 的常用估计量是 $S_n^2/n$，其观测值为 $\frac{1}{n(n - 1)}\sum_{i = 1}^{n}(x_i - \overline{x}_n)^2$，我们可以看到，自助法估计值与常用估计值几乎相同。$\blacksquare$
+:::
+
+如前所述，如果数据值为 $X_i = x_i$，$i = 1,\ldots,n$，那么经验分布函数 $F_e$ 会给每个点 $x_i$ 赋予相同的权重 $1/n$，因此，通常很容易计算 $\theta_e$ 的值。为了用自助法来计算 $\theta$ 和其估计量 $d(X_1,\ldots,X_n)$ 之间的均方误差，我们需要计算
+
+$$
+MSE_{F_e}(d)=E_{F_e}[(d(X_1,\ldots,X_n)-\theta_e)^2]
+$$
+
+然而，由于如上的期望是在 $X_1,\ldots,X_n$ 都服从 $F_e$ 分布的假设下而计算的，所以向量 $(X_1,\ldots,X_n)$ 等可能地取 $n^n$ 个可能值 $(x_{i_1},x_{i_2},\ldots,x_{i_n})$ 中的任意一个，其中每个 $i_j$ 是 $1,\ldots,n$ 中的一个值。因此，除非 $n$ 很小，否则精确计算 $MSE_{F_e}(d)$ 是非常困难的。
+
+不过，通过模拟来近似 $MSE_{F_e}(d)$ 则非常容易。我们生成 $n$ 个相互独立且服从 $F_e$ 分布的随机变量 $X_1^1,\ldots,X_n^1$，并用它们来计算
+
+$$
+Y_1=(d(X_1^1,\ldots,X_n^1)-\theta_e)^2
+$$
+
+然后我们重复如上的过程，生成第二组 $n$ 个相互独立且服从 $F_e$ 分布的随机变量 $X_1^2,\ldots,X_n^2$，并用它们来计算
+
+$$
+Y_2=(d(X_1^2,\ldots,X_n^2)-\theta_e)^2
+$$
+
+重复该过程很多次，比如 $r$ 次，得到值 $Y_1,\ldots,Y_r$。$\sum_{i = 1}^{r}Y_i/r$ 将是 $MSE_{F_e}(d)$ 的近似值，这个近似值随后可作为 $MSE_F(d)$ 的估计值。
+
+生成一个服从 $F_e$ 分布的随机变量 $X$ 是很容易的。只需生成一个随机数 $U$，令 $I = \text{Int}(nU)+1$，$I$ 就等可能地取 $1,\ldots,n$ 中的任意一个值。然后令 
+
+$$
+X = x_I
+$$
+
+::: {#exm-15_3_c}
+假设我们使用来自分布 $F$ 的样本量为 $n$ 的样本方差 $S_n^2=\sum_{i = 1}^{n}(X_i - \overline{X}_n)^2/(n - 1)$ 作为分布 $F$ 的方差 $\sigma^2$ 的估计量。为了估计样本方差与 $\sigma^2$ 的均方误差，设观测数据为 $X_i = x_i$，$i = 1,\ldots,n$。
+
+因为经验分布函数 $F_e$ 对所有的值 $x_i$（$i = 1,\ldots,n$）赋予相等的权重，所以有
+
+$$
+E_{F_e}[X]=\sum_{i = 1}^{n}x_iP_{F_e}(X = x_i)=\sum_{i = 1}^{n}x_i/n=\overline{x}_n
+$$
+
+这表明分布 $F_e$ 的方差 $\theta_e$，可表示为
+
+$$
+\theta_e=\text{Var}_{F_e}(X)=E_{F_e}[(X - \overline{x}_n)^2]=\sum_{i = 1}^{n}(x_i - \overline{x}_n)^2/n
+$$
+
+因此，
+
+$$
+MSE_{F_e}(S_n^2)=E_{F_e}[(S_n^2 - \theta_e)^2]=E_{F_e}\left[\left(\frac{\sum_{i = 1}^{n}(X_i - \overline{X}_n)^2}{n - 1}-\theta_e\right)^2\right]
+$$
+
+我们使用模拟方法来近似 $MSE_{F_e}(S_n^2)$。
+
+例如，假设 $n = 8$，数据值为 $x_1 = 5$，$x_2 = 9$，$x_3 = 12$，$x_4 = 8$，$x_5 = 7$，$x_6 = 15$，$x_7 = 3$，$x_8 = 6$。那么
+
+$$
+\overline{x}_8 = 8.125, \quad \theta_e=\sum_{i = 1}^{8}(x_i - \overline{x}_8)^2/8\approx13.11
+$$
+
+总共会有 $r$ 次模拟运算，并且 $N$ 表示当前模拟运算的次数。每次运行中，我们生成 $8$ 个服从 $F_e$ 分布的随机变量 $X_M$（ $M = 1,\ldots,8$）。$S$ 和 $SS$ 分别表示到目前为止模拟过程中生成的 $X_M$ 的总和以及 $X_M$ 平方的总和。当一次运行完成时，使用以下等式计算样本方差 $SV$：
+
+$$
+\frac{\sum_{i = 1}^{8}(X_i - \overline{X}_8)^2}{7}=\frac{\sum_{i = 1}^{8}X_i^2 - 8\overline{X}_8^2}{7}=\frac{\sum_{i = 1}^{8}X_i^2 - (\sum_{i = 1}^{8}X_i)^2/8}{7}=\frac{SS - S^2/8}{7}
+$$
+
+计算 $SV$ 与 $\theta_e = 13.11$ 的差值的平方，然后将其加到 $T$ 中， $T$ 是之前 $N - 1$ 个差值平方的总和。当完成 $r$ 次运算后，模拟结束；样本方差与 $\theta_e$ 差值平方的平均值就是基于模拟对 $MSE_{F_e}(S_n^2)$ 的近似值。
+
+1. 令 $T = 0$，$N = 1$ 
+2. 令 $M = 1$ 
+3.  $S = 0$，$SS = 0$ 
+4. 生成一个随机数 $U$ 
+5. 令 $I=\text{Int}(8U)+1$ 
+6. $S = S + x_I$ 
+7. $SS = SS + x_I^2$ 
+8. 如果 $M < 8$ ，令 $M = M + 1$，然后转到步骤4
+9. $SV=(SS - S^2/8)/7$ 
+10. 令 $T = T+(SV - 13.11)^2$ 
+11. 如果 $N < r$，令 $N = N + 1$，然后转到步骤2
+12. 如果 $N = r$ 则返回 $T/r$ 作为对 $MSE_{F_e}(S_n^2)$ 的近似值
+
+$\blacksquare$
+:::

@@ -1,1 +1,108 @@
-## Hazardrate functions
+## 失效率函数 {#sec-14_2}
+
+考虑一个正值连续随机变量 $X$，我们将其解释为某个物品的寿命，其分布函数为 $F$，密度函数为 $f$。$F$ 的 **失效率函数**（*hazard rate function*，有时也称为 **故障率函数** *failure rate function*） $\lambda(t)$ 定义为：
+
+$$
+\lambda(t) = \frac{f(t)}{1 - F(t)}
+$$ {#eq-14_2_1}
+
+为了理解 $\lambda(t)$ 的含义，假设该物品已经存活了 $t$ 小时，我们想要知道它在接下来的 $dt$ 时间内失效的概率。也就是说，考虑 $P\{X \in (t, t + dt) | X > t\}$。注意到：
+
+$$
+\begin{align}
+P\{X \in (t, t + dt) | X > t\} &= \frac{P\{X \in (t, t + dt), X > t\}}{P\{X > t\}} \\
+&= \frac{P\{X \in (t, t + dt)\}}{P\{X > t\}} \\
+&\approx \frac{f(t) dt}{1 - F(t)}
+\end{align}
+$$
+
+也就是说，$\lambda(t)$ 表示一个年龄为 $t$ 的物品在下一时刻失效的 **条件概率强度**（*conditional probability intensity*）。
+
+假设现在的寿命分布是指数分布。那么，根据指数分布的无记忆性（*memoryless property*），一个 $t$ 岁的物品的剩余寿命分布与一个新物品的寿命分布相同。因此，$\lambda(t)$ 应该是常数，验证如下：
+
+$$
+\begin{align}
+\lambda(t) &= \frac{f(t)}{1 - F(t)} \\
+&= \frac{\lambda e^{-\lambda t}}{e^{-\lambda t}} \\
+&= \lambda
+\end{align}
+$$
+
+因此，指数分布的失效率函数是常数。参数 $\lambda$ 通常被称为该分布的 **速率**（*rate*）。
+
+我们现在证明失效率函数 $\lambda(t), t \geq 0$ 唯一确定了分布 $F$。为此，注意到根据定义：
+
+$$
+\begin{align}
+\lambda(s) &= \frac{f(s)}{1 - F(s)} \\
+&= \frac{\frac{d}{ds} F(s)}{1 - F(s)} \\
+&= \frac{d}{ds} \{-\log[1 - F(s)]\}
+\end{align}
+$$
+
+对该等式两边从 $0$ 到 $t$ 进行积分，得：
+
+$$
+\int_0^t \lambda(s) ds = -\log[1 - F(t)] + \log[1 - F(0)]
+$$
+
+由于 $F(0) = 0$，上式变为：
+
+$$
+\int_0^t \lambda(s) ds = -\log[1 - F(t)]
+$$
+
+即：
+
+$$
+1 - F(t) = \exp\left\{-\int_0^t \lambda(s) ds\right\}
+$$ {#eq-14_2_2}
+
+因此，可以通过给出正连续随机变量的失效率函数来指定其分布函数。例如，如果一个随机变量具有线性失效率函数，即 $\lambda(t) = a + bt$，那么其分布函数由下式给出：
+
+$$
+F(t) = 1 - e^{-(at + bt^2/2)}
+$$
+
+求导后可得其密度函数为：
+
+$$
+f(t) = (a + bt)e^{-(at + bt^2/2)}, \quad t \geq 0
+$$
+
+当 $a = 0$ 时，上述分布被称为 **瑞利密度函数**（*Rayleigh density function*）。
+
+::: {#exr-14_2_a}
+人们经常听说，吸烟者的死亡率在每个年龄段都是不吸烟者的两倍。这意味着什么？这是否意味着一个不吸烟者在给定年数内生存的概率是一个同龄吸烟者的两倍？
+:::
+
+::: {#sol-14_2_a}
+如果 $\lambda_s(t)$ 表示 $t$ 岁吸烟者的失效率，$\lambda_n(t)$ 表示 $t$ 岁不吸烟者的失效率，那么上述说法等同于 $\lambda_s(t) = 2\lambda_n(t)$。
+
+一个 $A$ 岁的不吸烟者生存到 $B$ 岁（$A < B$）的概率为：
+
+$$
+\begin{align}
+P\{A \text{ 岁不吸烟者达到 } B \text{ 岁}\} &= P\{\text{不吸烟者的寿命} > B | \text{不吸烟者的寿命} > A\} \\
+&= \frac{1 - F_{\text{non}}(B)}{1 - F_{\text{non}}(A)} \\
+&= \frac{\exp\left\{-\int_0^B \lambda_n(t) dt\right\}}{\exp\left\{-\int_0^A \lambda_n(t) dt\right\}} \\
+&= \exp\left\{-\int_A^B \lambda_n(t) dt\right\}
+\end{align}
+$$
+
+而对于吸烟者，同理可得相应的概率为：
+
+$$
+\begin{align}
+P\{A \text{ 岁吸烟者达到 } B \text{ 岁}\} &= \exp\left\{-\int_A^B \lambda_s(t) dt\right\} \\
+&= \exp\left\{-2 \int_A^B \lambda_n(t) dt\right\} \\
+&= \left[\exp\left\{-\int_A^B \lambda_n(t) dt\right\}\right]^2
+\end{align}
+$$
+
+换句话说，对于两个同龄的人，一个是吸烟者，另一个是不吸烟者，吸烟者生存到任何给定年龄的概率是不吸烟者相应概率的 **平方**（而不是一半）。例如，如果 $\lambda_n(t) = 1/20, 50 \leq t \leq 60$，那么一个 50 岁的不吸烟者活到 60 岁的概率是 $e^{-1/2} = .607$，而吸烟者相应的概率是 $e^{-1} = .368$。
+:::
+
+**关于术语的说明**
+
+当我们说 $X$ 具有失效率函数 $\lambda(t)$ 时，更准确的意思是指 $X$ 的分布函数具有失效率函数 $\lambda(t)$。
