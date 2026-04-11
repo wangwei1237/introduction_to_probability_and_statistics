@@ -1,1 +1,145 @@
-## The Weibull distribution in life testing
+## 威布尔分布在寿命测试中的应用 {#sec-14_5}
+
+虽然当假设**失效率函数**（*hazard rate function*）$\lambda(t)$ 随时间保持不变时，会导出**指数分布**（*exponential distribution*）作为寿命分布，但在许多实际情况中，假设 $\lambda(t)$ 随时间增加或减少往往更为现实。此类失效率函数的一个示例由下式给出：
+$$
+\lambda(t) = \alpha \beta t^{\beta-1}, \quad t > 0
+$$ {#eq-14_5_1}
+其中 $\alpha$ 和 $\beta$ 是正常数。其失效率函数由 @eq-14_5_1 给出的分布称为参数为 $(\alpha, \beta)$ 的**威布尔分布**（*Weibull distribution*）。注意，当 $\beta > 1$ 时，$\lambda(t)$ 递增；当 $\beta < 1$ 时，$\lambda(t)$ 递减；而当 $\beta = 1$ 时，$\lambda(t)$ 为常数（此时简化为指数分布）。
+
+根据 @eq-14_5_1 ，威布尔分布的分布函数如下：
+$$
+\begin{align}
+F(t) &= 1 - \exp \left\{ - \int_0^t \lambda(s) ds \right\}, \quad t > 0 \\
+     &= 1 - \exp \{ -\alpha t^\beta \}
+\end{align}
+$$ {#eq-14_5_2}
+对其求导可得其**密度函数**（*density function*）：
+$$
+f(t) = \alpha \beta t^{\beta-1} \exp \{ -\alpha t^\beta \}, \quad t > 0
+$$ {#eq-14_5_3}
+@fig-14_2 展示了不同 $\alpha$ 和 $\beta$ 取值下的该密度函数。
+
+```{r}
+#| label: fig-14_2
+#| fig-cap: "威布尔密度函数图"
+library(ggplot2)
+x_vals <- seq(0, 2.5, length.out = 500)
+# alpha = 1 for all plots, varying beta
+params <- c(0.5, 1, 2, 3)
+df_list <- lapply(params, function(b) {
+  # Weibull(alpha, beta) density is alpha * beta * t^(beta-1) * exp(-alpha * t^beta)
+  # R's dweibull(x, shape=beta, scale=alpha^(-1/beta))
+  data.frame(
+    x = x_vals, 
+    y = dweibull(x_vals, shape = b, scale = 1), 
+    param = paste0("alpha=1, beta=", b)
+  )
+})
+df <- do.call(rbind, df_list)
+ggplot(df, aes(x = x, y = y)) +
+  geom_line(color = "steelblue", size = 1) +
+  facet_wrap(~param) +
+  coord_cartesian(ylim = c(0, 1.5)) +
+  theme_minimal() +
+  labs(x = "t", y = "f(t)") +
+  theme(strip.text = element_text(face = "bold"))
+```
+
+假设 $X_1, \dots, X_n$ 是来自上述分布的一个样本。为了估计未知参数 $\alpha$ 和 $\beta$，我们可以采用**最大似然法**（*maximum likelihood method*）。由 @eq-14_5_3 可得其似然函数为：
+$$
+f(x_1, \dots, x_n) = \alpha^n \beta^n x_1^{\beta-1} \dots x_n^{\beta-1} \exp \left\{ -\alpha \sum_{i=1}^n x_i^\beta \right\}
+$$ {#eq-14_5_4}
+取对数得：
+$$
+\log f(x_1, \dots, x_n) = n \log \alpha + n \log \beta + (\beta - 1) \sum_{i=1}^n \log x_i - \alpha \sum_{i=1}^n x_i^\beta
+$$ {#eq-14_5_5}
+求偏导数：
+$$
+\frac{\partial}{\partial \alpha} \log f(x_1, \dots, x_n) = \frac{n}{\alpha} - \sum_{i=1}^n x_i^\beta
+$$
+$$
+\frac{\partial}{\partial \beta} \log f(x_1, \dots, x_n) = \frac{n}{\beta} + \sum_{i=1}^n \log x_i - \alpha \sum_{i=1}^n x_i^\beta \log x_i
+$$
+令偏导数为零，可得**最大似然估计量**（*maximum likelihood estimators*）$\hat{\alpha}$ 和 $\hat{\beta}$ 是下列方程组的解：
+$$
+\hat{\alpha} = \frac{n}{\sum_{i=1}^n x_i^{\hat{\beta}}}
+$$ {#eq-14_5_6}
+$$
+\frac{n}{\hat{\beta}} + \sum_{i=1}^n \log x_i = \hat{\alpha} \sum_{i=1}^n x_i^{\hat{\beta}} \log x_i
+$$ {#eq-14_5_7}
+或者将 @eq-14_5_6 代入 @eq-14_5_7 得：
+$$
+\frac{n + \hat{\beta} \sum_{i=1}^n \log x_i}{\hat{\beta}} = \frac{n \sum_{i=1}^n x_i^{\hat{\beta}} \log x_i}{\sum_{i=1}^n x_i^{\hat{\beta}}}
+$$ {#eq-14_5_8}
+后一个方程可以通过数值方法求解出 $\hat{\beta}$，进而确定 $\hat{\alpha}$。然而，与其深入研究这种方法，不如考虑第二种方法，它不仅计算上更简单，而且仿真研究表明，它往往能提供更准确的估计。
+
+### 基于最小二乘法的参数估计 {#sec-14_5_1}
+
+**最小二乘法**（*least squares method*）也可以用于估计参数。设 $X_1, \dots, X_n$ 是来自以下分布的一个样本：
+$$
+F(x) = 1 - e^{-\alpha x^\beta}, \quad x \geq 0
+$$
+注意，
+$$
+\log(1 - F(x)) = -\alpha x^\beta
+$$
+或
+$$
+\log \left( \frac{1}{1 - F(x)} \right) = \alpha x^\beta
+$$
+两边再取对数可得：
+$$
+\log \log \left( \frac{1}{1 - F(x)} \right) = \beta \log x + \log \alpha
+$$ {#eq-14_5_9}
+现在设 $X_{(1)} < X_{(2)} < \dots < X_{(n)}$ 表示**顺序统计量**（*ordered sample values*）——即对于 $i = 1, \dots, n$，
+$$
+X_{(i)} = X_1, \dots, X_n \text{ 中的第 } i \text{ 个最小观测值}
+$$
+并假设观测结果为 $X_{(i)} = x_{(i)}$。如果我们能够近似计算量 $\log \log (1 / [1 - F(x_{(i)})])$ —— 设其近似值为 $y_i$ —— 那么根据 @eq-14_5_9 ，我们可以得出：
+$$
+y_i \approx \beta \log x_{(i)} + \log \alpha, \quad i = 1, \dots, n
+$$ {#eq-14_5_10}
+然后我们可以选择 $\alpha$ 和 $\beta$ 来使误差平方和最小——即选择 $\alpha$ 和 $\beta$ 来使下式最小：
+$$
+\text{最小化 } \sum_{i=1}^n (y_i - \beta \log x_{(i)} - \log \alpha)^2
+$$
+事实上，利用命题 9.2.1，我们得到当 $\alpha = \hat{\alpha}$，$\beta = \hat{\beta}$ 时达到上述最小值，其中
+$$
+\hat{\beta} = \frac{\sum_{i=1}^n y_i \log x_{(i)} - n \overline{\log x} \bar{y}}{\sum_{i=1}^n (\log x_{(i)})^2 - n (\overline{\log x})^2}
+$$ {#eq-14_5_11}
+$$
+\log \hat{\alpha} = \bar{y} - \hat{\beta} \overline{\log x}
+$$ {#eq-14_5_12}
+其中
+$$
+\overline{\log x} = \sum_{i=1}^n (\log x_{(i)}) / n, \quad \bar{y} = \sum_{i=1}^n y_i / n
+$$
+为了利用上述方法，我们需要能够确定近似 $\log \log (1 / [1 - F(x_{(i)})]) = \log [-\log (1 - F(x_{(i)}))]$ 的值 $y_i$，$i = 1, \dots, n$。我们现在介绍两种不同的方法。
+
+**方法 1**：该方法利用以下事实：
+$$
+E[F(X_{(i)})] = \frac{i}{n + 1}
+$$ {#eq-14_5_13}
+然后用 $E[F(X_{(i)})]$ 来近似 $F(x_{(i)})$。因此，该方法建议使用：
+$$
+\begin{align}
+y_i &= \log \{ -\log (1 - E[F(X_{(i)})]) \} \\
+    &= \log \left\{ -\log \left( 1 - \frac{i}{n + 1} \right) \right\} \\
+    &= \log \left\{ -\log \left( \frac{n + 1 - i}{n + 1} \right) \right\}
+\end{align}
+$$ {#eq-14_5_14}
+
+**方法 2**：该方法利用以下事实：
+$$
+E[-\log (1 - F(X_{(i)}))] = \frac{1}{n} + \frac{1}{n-1} + \frac{1}{n-2} + \dots + \frac{1}{n-i+1}
+$$ {#eq-14_5_15}
+然后用上述期望值来近似 $-\log(1 - F(x_{(i)}))$。因此，这第二种方法建议设置：
+$$
+y_i = \log \left[ \frac{1}{n} + \frac{1}{n-1} + \dots + \frac{1}{n-i+1} \right]
+$$ {#eq-14_5_16}
+
+**附注**
+
+（a） 目前尚不清楚哪种方法对威布尔分布的参数提供了更优的估计，需要进行大量的**仿真研究**（*simulation studies*）来确定。
+
+（b） 等式 @eq-14_5_13 和 @eq-14_5_15 的证明（这些等式对于来自任何连续分布 $F$ 的大小为 $n$ 的样本中的第 $i$ 个顺序统计量 $X_{(i)}$ 均成立）见习题 28-30。
