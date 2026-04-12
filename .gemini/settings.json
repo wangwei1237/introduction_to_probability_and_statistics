@@ -1,0 +1,23 @@
+{
+  "skills": {
+    "disabled": [
+      "writing-plans"
+    ]
+  },
+  "hooks": {
+    "AfterTool": [
+      {
+        "matcher": "write_file|replace",
+        "hooks": [
+          {
+            "name": "post-tool-validation",
+            "type": "command",
+            "command": "scripts/validate_edit.sh",
+            "timeout": 30000,
+            "description": "Validates translation content after edit"
+          }
+        ]
+      }
+    ]
+  }
+}

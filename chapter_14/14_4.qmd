@@ -15,7 +15,7 @@ $$
 由 **$F$-分布** (*F-distribution*) 的定义可以得出：
 $$
 \frac{\frac{2}{2n\theta_1} \sum_{i=1}^n X_i}{\frac{2}{2m\theta_2} \sum_{i=1}^m Y_i} \sim F_{2n,2m}
-$$
+$$ {#eq-14_4_1}
 
 也就是说，如果 $\bar{X}$ 和 $\bar{Y}$ 分别是两个样本的均值，那么 $\frac{\theta_2 \bar{X}}{\theta_1 \bar{Y}}$ 服从自由度为 $2n$ 和 $2m$ 的 $F$-分布。
 
