@@ -1,1 +1,47 @@
-## The logistics distribution
+## 逻辑分布 {#sec-5_9}
+
+如果一个随机变量 $X$ 的分布函数由下式给出，则称其服从参数为 $\mu$ 和 $v > 0$ 的**逻辑分布**（*logistics distribution*）：
+
+$$
+F(x) = \frac{e^{(x-\mu)/v}}{1 + e^{(x-\mu)/v}}, \quad -\infty < x < \infty
+$$
+
+对 $F(x) = 1 - 1/(1 + e^{(x-\mu)/v})$ 求导得出密度函数：
+
+$$
+f(x) = \frac{e^{(x-\mu)/v}}{v(1 + e^{(x-\mu)/v})^2}, \quad -\infty < x < \infty
+$$
+
+为了计算逻辑随机变量的均值：
+
+$$
+E[X] = \int_{-\infty}^{\infty} x \frac{e^{(x-\mu)/v}}{v(1 + e^{(x-\mu)/v})^2} dx
+$$
+
+进行变量替换 $y = (x - \mu)/v$。得到：
+
+$$
+\begin{align}
+E[X] &= v \int_{-\infty}^{\infty} y \frac{e^y}{(1 + e^y)^2} dy + \mu \int_{-\infty}^{\infty} \frac{e^y}{(1 + e^y)^2} dy \\
+&= v \int_{-\infty}^{\infty} y \frac{e^y}{(1 + e^y)^2} dy + \mu
+\end{align}
+$$ {#eq-5_9_1}
+
+其中最后一个等号利用了 $e^y/(1 + e^y)^2$ 是参数为 $\mu = 0, v = 1$ 的逻辑随机变量（这种随机变量被称为**标准逻辑分布** (*standard logistic*)）的密度函数，因此其积分为 1。现在：
+
+$$
+\begin{align}
+\int_{-\infty}^{\infty} y \frac{e^y}{(1 + e^y)^2} dy &= \int_{-\infty}^{0} y \frac{e^y}{(1 + e^y)^2} dy + \int_{0}^{\infty} y \frac{e^y}{(1 + e^y)^2} dy \\
+&= -\int_{0}^{\infty} x \frac{e^{-x}}{(1 + e^{-x})^2} dx + \int_{0}^{\infty} y \frac{e^y}{(1 + e^y)^2} dy \\
+&= -\int_{0}^{\infty} x \frac{e^x}{(e^x + 1)^2} dx + \int_{0}^{\infty} y \frac{e^y}{(1 + e^y)^2} dy \\
+&= 0
+\end{align}
+$$ {#eq-5_9_2}
+
+其中第二个等号是通过变量替换 $x = -y$ 获得的，第三个等号是通过分子分母同乘 $e^{2x}$ 获得的。由 @eq-5_9_1 和 @eq-5_9_2 得到：
+
+$$
+E[X] = \mu
+$$
+
+因此 $\mu$ 是逻辑分布的均值；$v$ 被称为尺度参数。

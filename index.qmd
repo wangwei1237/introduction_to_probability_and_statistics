@@ -8,11 +8,6 @@ Introduction to Probability and Statistics for Engineers and Scientists (*Sixth 
 
 关于书中的各章最后的 **习题** 部分，可以参见：[www.chegg.com/homework-help](https://www.chegg.com/homework-help/introduction-to-probability-and-statistics-for-engineers-and-scientists-6th-edition-solutions-9780128243466)。
 
-## 翻译进度
-```{.bash}
-11/16....-.......----
-```
-
 ## 版权声明
 本翻译稿是笔者在阅读原书过程中的笔记，采用“保持署名—非商用”创意共享 4.0 许可证。只要保持署名和非商用，您可以自由地阅读、分享本书。
 

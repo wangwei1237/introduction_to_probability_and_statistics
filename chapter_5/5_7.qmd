@@ -1,1 +1,151 @@
-## The gamma distribution
+## 伽马分布 {#sec-5_7}
+
+如果一个随机变量其密度函数由下式给出，则称其服从参数为 $(\alpha, \lambda)$ 的**伽马分布**（*gamma distribution*）（$\alpha > 0, \lambda > 0$）：
+
+$$
+f(x) =
+\begin{cases}
+\frac{lambda e^{-\lambda x}(\lambda x)^{\alpha-1}}{\Gamma(\alpha)}, & \text{如果 } x \geq 0 \\
+0, & \text{如果 } x < 0
+\end{cases}
+$$
+
+其中：
+
+$$
+\begin{align}
+\Gamma(\alpha) &= \int_0^\infty \lambda e^{-\lambda x}(\lambda x)^{\alpha-1} dx \\
+&= \int_0^\infty e^{-y} y^{\alpha-1} dy \quad (\text{通过令 } y = \lambda x)
+\end{align}
+$$
+
+利用分部积分法 $\int u dv = uv - \int v du$，取 $u = y^{\alpha-1}, dv = e^{-y} dy, v = -e^{-y}$，可得对于 $\alpha > 1$：
+
+$$
+\begin{align}
+\int_0^\infty e^{-y} y^{\alpha-1} dy &= -e^{-y} y^{\alpha-1} \Big|_0^\infty + \int_0^\infty e^{-y} (\alpha - 1) y^{\alpha-2} dy \\
+&= (\alpha - 1) \int_0^\infty e^{-y} y^{\alpha-2} dy
+\end{align}
+$$
+
+或：
+
+$$
+\Gamma(\alpha) = (\alpha - 1) \Gamma(\alpha - 1)
+$$ {#eq-5_7_1}
+
+当 $\alpha$ 为整数（假设 $\alpha = n$）时，我们可以对上式进行迭代得到：
+
+$$
+\begin{align}
+\Gamma(n) &= (n - 1) \Gamma(n - 1) \\
+&= (n - 1)(n - 2) \Gamma(n - 2)  \\
+&= (n - 1)(n - 2)(n - 3) \Gamma(n - 3) \\
+&\vdots \\
+&= (n - 1)! \Gamma(1)
+\end{align}
+$$
+
+由于：
+
+$$
+\Gamma(1) = \int_0^\infty e^{-y} dy = 1
+$$
+
+我们看到：
+
+$$
+\Gamma(n) = (n - 1)!
+$$
+
+函数 $\Gamma(\alpha)$ 被称为 **伽马函数** (*gamma function*)。
+
+应当指出，当 $\alpha = 1$ 时，伽马分布退化为均值为 $1/\lambda$ 的指数分布。
+
+参数为 $(\alpha, \lambda)$ 的伽马随机变量 $X$ 的矩母函数获得如下：
+
+$$
+\begin{align}
+\phi(t) &= E[e^{tX}] \\
+&= \frac{\lambda^\alpha}{\Gamma(\alpha)} \int_0^\infty e^{tx} e^{-\lambda x} x^{\alpha-1} dx \\
+&= \frac{\lambda^\alpha}{\Gamma(\alpha)} \int_0^\infty e^{-(\lambda - t)x} x^{\alpha-1} dx \\
+&= \left(\frac{\lambda}{\lambda - t}\right)^\alpha \frac{1}{\Gamma(\alpha)} \int_0^\infty e^{-y} y^{\alpha-1} dy \\
+&= \left(\frac{\lambda}{\lambda - t}\right)^\alpha
+\end{align}
+$$ {#eq-5_7_2}
+
+其中最后一个等号利用了 $e^{-y} y^{\alpha-1}/\Gamma(\alpha)$ 是一个密度函数，因此其积分为 1。
+
+对 @eq-5_7_2 求导得：
+
+$$
+\phi'(t) = \frac{\alpha \lambda^\alpha}{(\lambda - t)^{\alpha+1}}
+$$
+$$
+\phi''(t) = \frac{\alpha(\alpha + 1) \lambda^\alpha}{(\lambda - t)^{\alpha+2}}
+$$
+
+因此：
+
+$$
+E[X] = \phi'(0) = \alpha/\lambda
+$$ {#eq-5_7_3}
+$$
+\begin{align}
+Var(X) &= E[X^2] - (E[X])^2 \\
+&= \phi''(0) - (\alpha/\lambda)^2 \\
+&= \frac{\alpha(\alpha + 1)}{\lambda^2} - \frac{\alpha^2}{\lambda^2} = \frac{\alpha}{\lambda^2}
+\end{align}
+$$ {#eq-5_7_4}
+
+伽马分布的一个重要性质是：如果 $X_1$ 和 $X_2$ 是参数分别为 $(\alpha_1, \lambda)$ 和 $(\alpha_2, \lambda)$ 的独立伽马随机变量，那么 $X_1 + X_2$ 是参数为 $(\alpha_1 + \alpha_2, \lambda)$ 的伽马随机变量。该结果很容易得出，因为：
+
+$$
+\begin{align}
+\phi_{X_1+X_2}(t) &= E[e^{t(X_1+X_2)}] \\
+&= \phi_{X_1}(t) \phi_{X_2}(t) \\
+&= \left(\frac{\lambda}{\lambda - t}\right)^{\alpha_1} \left(\frac{\lambda}{\lambda - t}\right)^{\alpha_2}  \\
+&= \left(\frac{\lambda}{\lambda - t}\right)^{\alpha_1 + \alpha_2}
+\end{align}
+$$
+
+可以看到这是参数为 $(\alpha_1 + \alpha_2, \lambda)$ 的伽马随机变量的矩母函数。由于矩母函数唯一地表征了分布，该结果成立。
+
+上述结果很容易推广到如下命题：
+
+::: {#thm-5_7_1}
+如果 $X_i, i = 1, \dots, n$ 是独立伽马随机变量，参数分别为 $(\alpha_i, \lambda)$，那么 $\sum_{i=1}^n X_i$ 是参数为 $(\sum_{i=1}^n \alpha_i, \lambda)$ 的伽马分布。
+:::
+
+由于参数为 $(1, \lambda)$ 的伽马分布退化为率为 $\lambda$ 的指数分布，我们因此证明了如下有用的结果：
+
+::: {#cor-5_7_2}
+如果 $X_1, \dots, X_n$ 是率均为 $\lambda$ 的独立指数随机变量，那么 $\sum_{i=1}^n X_i$ 是参数为 $(n, \lambda)$ 的伽马随机变量。
+:::
+
+::: {#exm-5_7_1}
+电池的寿命服从率为 $\lambda$ 的指数分布。如果一个立体声收录机需要一节电池才能运行，那么总共 $n$ 节电池可提供的总播放时间是一个参数为 $(n, \lambda)$ 的伽马随机变量。
+$\blacksquare$
+:::
+
+ @fig-5_10 展示了 $\alpha$ 取不同值时参数为 $(\alpha, 1)$ 的伽马密度图形。应当指出，随着 $\alpha$ 变大，密度开始类似于正态密度。这在理论上可以由中心极限定理解释，该定理将在下一章介绍。
+
+```{r}
+#| label: fig-5_10
+#| fig-cap: "Graphs of the gamma ($\\alpha$, 1) density."
+#| fig-subcap:
+#|   - "Small alpha"
+#|   - "Large alpha"
+#| layout-ncol: 2
+
+x <- seq(0, 15, 0.01)
+plot(x, dgamma(x, 0.5, 1), type = "l", col = "blue", ylim = c(0, 0.6), xlab = "x", ylab = "f(x)", main = "(A)")
+lines(x, dgamma(x, 2, 1), col = "red")
+lines(x, dgamma(x, 3, 1), col = "green")
+lines(x, dgamma(x, 4, 1), col = "orange")
+lines(x, dgamma(x, 5, 1), col = "purple")
+legend("topright", legend = c("0.5", "2", "3", "4", "5"), col = c("blue", "red", "green", "orange", "purple"), lty = 1, title = "alpha")
+
+x2 <- seq(20, 80, 0.1)
+plot(x2, dgamma(x2, 50, 1), type = "l", xlab = "x", ylab = "f(x)", main = "(B)")
+```

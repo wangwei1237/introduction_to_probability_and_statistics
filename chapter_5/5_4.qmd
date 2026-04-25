@@ -1,1 +1,341 @@
-## The uniform random variable {#sec-5_4}
+## 均匀随机变量 {#sec-5_4}
+
+如果一个随机变量 $X$ 的概率密度函数由下式给出，则称其在区间 $[\alpha, \beta]$ 上服从**均匀分布**（*uniformly distributed*）：
+
+$$
+f(x) = 
+\begin{cases} 
+\frac{1}{\beta - \alpha}, & \text{如果 } \alpha \leq x \leq \beta \\
+0, & \text{否则}
+\end{cases}
+$$
+
+该函数的图形如 @fig-5_3 所示。注意，上述函数满足概率密度函数的要求，因为：
+
+$$
+\frac{1}{\beta - \alpha} \int_{\alpha}^{\beta} dx = 1
+$$
+
+均匀分布出现在以下实际情况中：当我们假设某个随机变量在区间 $[\alpha, \beta]$ 内的任何值附近出现的可能性相等时。
+
+$X$ 落在 $[\alpha, \beta]$ 的任何子区间内的概率等于该子区间的长度除以整个区间 $[\alpha, \beta]$ 的长度。这是因为当 $[a, b]$ 是 $[\alpha, \beta]$ 的子区间时（见 @fig-5_4）：
+
+$$
+\begin{align}
+P\{a < X < b\} &= \frac{1}{\beta - \alpha} \int_a^b dx \\
+&= \frac{b - a}{\beta - \alpha}
+\end{align}
+$$
+
+```{r}
+#| label: fig-5_4
+#| fig-cap: "Probabilities of a uniform random variable."
+alpha <- 2
+beta <- 8
+a <- 4
+b <- 6
+x <- seq(0, 10, 0.01)
+f <- ifelse(x >= alpha & x <= beta, 1/(beta - alpha), 0)
+plot(x, f, type = "l", ylim = c(0, 0.2), xlab = "x", ylab = "f(x)", main = "")
+abline(h = 0)
+# Highlight area between a and b
+x_sub <- seq(a, b, 0.01)
+polygon(c(a, x_sub, b), c(0, rep(1/(beta-alpha), length(x_sub)), 0), col = "skyblue")
+segments(alpha, 0, alpha, 1/(beta - alpha), lty = 2)
+segments(beta, 0, beta, 1/(beta - alpha), lty = 2)
+text(alpha, -0.01, expression(alpha))
+text(beta, -0.01, expression(beta))
+text(a, -0.01, "a")
+text(b, -0.01, "b")
+text((a+b)/2, 0.05, expression(frac(b-a, beta-alpha)))
+```
+
+```{r}
+#| label: fig-5_3
+#| fig-cap: "Graph of $f(x)$ for a uniform $[\\alpha, \\beta]$."
+alpha <- 2
+beta <- 8
+x <- seq(0, 10, 0.01)
+f <- ifelse(x >= alpha & x <= beta, 1/(beta - alpha), 0)
+plot(x, f, type = "l", ylim = c(0, 0.2), xlab = "x", ylab = "f(x)", main = "")
+abline(h = 0)
+segments(alpha, 0, alpha, 1/(beta - alpha), lty = 2)
+segments(beta, 0, beta, 1/(beta - alpha), lty = 2)
+text(alpha, -0.01, expression(alpha))
+text(beta, -0.01, expression(beta))
+```
+
+::: {#exr-5_4_1}
+如果 $X$ 在区间 $[0, 10]$ 上服从均匀分布，计算以下概率：(a) $2 < X < 9$, (b) $1 < X < 4$, (c) $X < 5$, (d) $X > 6$。
+:::
+
+::: {#sol-5_4_1}
+相应的答案分别是 (a) $7/10$, (b) $3/10$, (c) $5/10$, (d) $4/10$。 $\blacksquare$
+:::
+
+::: {#exr-5_4_2}
+公交车从早上 7:00 开始每隔 15 分钟到达一个特定的站点。也就是说，它们分别在 7:00, 7:15, 7:30, 7:45 等时间到达。如果一名乘客到达该站点的时刻在 7:00 到 7:30 之间均匀分布，求他等车时间满足以下条件的概率：
+(a) 少于 5 分钟；
+(b) 至少 12 分钟。
+:::
+
+::: {#sol-5_4_2}
+令 $X$ 表示乘客到达站点的时刻（7:00 之后的分钟数）。由于 $X$ 是区间 $(0, 30)$ 上的均匀随机变量，因此如果乘客在 7:10 到 7:15 之间或 7:25 到 7:30 之间到达，他等车的时间将少于 5 分钟。因此，(a) 的概率为：
+
+$$
+P\{10 < X < 15\} + P\{25 < X < 30\} = \frac{5}{30} + \frac{5}{30} = \frac{1}{3}
+$$
+
+同样地，如果他在 7:00 到 7:03 之间或 7:15 到 7:18 之间到达，他将不得不等待至少 12 分钟，因此 (b) 的概率为：
+
+$$
+P\{0 < X < 3\} + P\{15 < X < 18\} = \frac{3}{30} + \frac{3}{30} = \frac{1}{5}
+$$ $\blacksquare$
+:::
+
+均匀分布随机变量 $X \sim U[\alpha, \beta]$ 的均值为：
+
+$$
+\begin{align}
+E[X] &= \int_{\alpha}^{\beta} \frac{x}{\beta - \alpha} dx \\
+&= \frac{\beta^2 - \alpha^2}{2(\beta - \alpha)} \\
+&= \frac{(\beta - \alpha)(\beta + \alpha)}{2(\beta - \alpha)}
+\end{align}
+$$
+
+即：
+
+$$
+E[X] = \frac{\alpha + \beta}{2}
+$$
+
+换句话说，均匀 $[\alpha, \beta]$ 随机变量的期望值等于区间的中心点，这显然符合预期。（为什么？）
+
+其方差计算如下：
+
+$$
+\begin{align}
+E[X^2] &= \frac{1}{\beta - \alpha} \int_{\alpha}^{\beta} x^2 dx \\
+&= \frac{\beta^3 - \alpha^3}{3(\beta - \alpha)} \\
+&= \frac{\beta^2 + \alpha \beta + \alpha^2}{3}
+\end{align}
+$$
+
+其中最后一个等号利用了 $\beta^3 - \alpha^3 = (\beta^2 + \alpha \beta + \alpha^2)(\beta - \alpha)$。
+
+因此：
+
+$$
+\begin{align}
+Var(X) &= \frac{\beta^2 + \alpha \beta + \alpha^2}{3} - \left(\frac{\alpha + \beta}{2}\right)^2 \\
+&= \frac{4(\beta^2 + \alpha \beta + \alpha^2) - 3(\alpha^2 + 2\alpha \beta + \beta^2)}{12} \\
+&= \frac{\alpha^2 + \beta^2 - 2\alpha \beta}{12} \\
+&= \frac{(\beta - \alpha)^2}{12}
+\end{align}
+$$
+
+::: {#exr-5_4_3}
+半导体二极管中的电流通常使用 Shockley 方程测量：
+
+$$
+I = I_0 (e^{aV} - 1)
+$$
+
+其中 $V$ 是二极管两端的电压；$I_0$ 是反向电流；$a$ 是一个常数；$I$ 是产生的二极管电流。如果 $a = 5, I_0 = 10^{-6}$，且 $V$ 在 $(1, 3)$ 上均匀分布，求 $E[I]$。
+:::
+
+::: {#sol-5_4_3}
+$$
+\begin{align}
+E[I] &= E[I_0 (e^{aV} - 1)] \\
+&= I_0 E[e^{aV} - 1] \\
+&= I_0 (E[e^{aV}] - 1) \\
+&= 10^{-6} \int_1^3 e^{5x} \frac{1}{2} dx - 10^{-6} \\
+&= 10^{-7} (e^{15} - e^5) - 10^{-6} \\
+&\approx .3269
+\end{align}
+$$ $\blacksquare$
+:::
+
+均匀 $(0, 1)$ 随机变量的值被称为**随机数**（*random number*）。大多数计算机系统都有一个内置子程序，用于生成（高度近似的）独立随机数序列——例如，@tbl-5_1 给出了的一组独立随机数。随机数在概率和统计学中非常有用，因为它们的使用使人能够通过经验估算出各种概率和期望值。
+
+| | | | | |
+| :---: | :---: | :---: | :---: | :---: |
+| .0483 | .9273 | .0308 | .5971 | .8167 |
+| .3612 | .1630 | .7517 | .6899 | .1190 |
+| .2735 | .4373 | .1974 | .2917 | .0810 |
+| .5671 | .3562 | .0123 | .4235 | .9308 |
+| .6371 | .0035 | .1600 | .3320 | .1120 |
+
+: 一组独立随机数 {#tbl-5_1}
+
+作为随机数应用的一个例子，假设一个医学中心正计划测试一种旨在降低使用者血液胆固醇水平的新药。为了测试其有效性，医学中心招募了 1000 名志愿者作为试验对象。考虑到受试者的胆固醇水平可能受到试验之外因素（如天气条件变化）的影响，决定将志愿者分为两组，每组 500 人——一组为**治疗组**（*treatment group*），给予该药物；另一组为**对照组**（*control group*），给予安慰剂。志愿者和药物管理人员都不会被告知谁在哪个组（这种试验被称为**双盲试验**（*double-blind test*））。剩下要做的就是确定哪些志愿者应该组成治疗组。显然，人们希望治疗组和对照组在各方面尽可能相似，唯一的区别是第一组将接受药物，而另一组将接受安慰剂；这样就可以得出结论，反应中的任何差异确实是由药物引起的。大家普遍认为，实现这一点的最佳方法是以完全随机的方式选择 500 名志愿者进入治疗组。也就是说，选择应当使得这 1000 个人中每一个包含 500 名志愿者的子集都有同等的可能性被选为治疗组。这该如何实现呢？
+
+::: {#exr-5_4_4}
+[选择随机子集] 从 $n$ 个元素（编号为 $1, 2, \dots, n$）的集合中，假设我们想要生成一个大小为 $k$ 的随机子集，其选择方式使得 $\binom{n}{k}$ 个子集中的每一个被选为该子集的可能性都相等。我们该如何实现？
+:::
+
+::: {#sol-5_4_4}
+为了回答这个问题，让我们倒过来思考，假设我们已经随机生成了这样一个大小为 $k$ 的子集。现在对于每一个 $j = 1, \dots, n$，我们设：
+
+$$
+I_j = 
+\begin{cases} 
+1, & \text{如果元素 } j \text{ 在子集中} \\
+0, & \text{否则}
+\end{cases}
+$$
+
+并计算 $I_j$ 在给定 $I_1, \dots, I_{j-1}$ 条件下的条件分布。首先，注意元素 1 在大小为 $k$ 的子集中的概率显然是 $k/n$（这可以通过注意元素 1 成为第 $j$ 个被选中元素的概率为 $1/n$, $j = 1, \dots, k$ 来看出；或者通过注意导致元素 1 被选中的随机选择结果的比例为 $\binom{1}{1}\binom{n-1}{k-1} / \binom{n}{k} = k/n$ 来看出）。因此，我们有：
+
+$$
+P\{I_1 = 1\} = k/n
+$$ {#eq-5_4_1}
+
+为了计算在已知 $I_1$ 的条件下元素 2 在子集中的条件概率，注意如果 $I_1 = 1$，那么除了元素 1 之外，子集剩下的 $k - 1$ 个成员将从剩下的 $n - 1$ 个元素中“随机”选出（意思是编号为 $2, \dots, n$ 的大小为 $k - 1$ 的每个子集都有同等的可能性成为子集的其他元素）。因此，我们有：
+
+$$
+P\{I_2 = 1 | I_1 = 1\} = \frac{k - 1}{n - 1}
+$$ {#eq-5_4_2}
+
+同样地，如果元素 1 不在该子集中，那么该子集的 $k$ 个成员将从另外 $n - 1$ 个元素中“随机”选出，因此：
+
+$$
+P\{I_2 = 1 | I_1 = 0\} = \frac{k}{n - 1}
+$$ {#eq-5_4_3}
+
+从 @eq-5_4_2 和 @eq-5_4_3，我们可以看到：
+
+$$
+P\{I_2 = 1 | I_1\} = \frac{k - I_1}{n - 1}
+$$
+
+一般而言，我们有：
+
+$$
+P\{I_j = 1 | I_1, \dots, I_{j-1}\} = \frac{k - \sum_{i=1}^{j-1} I_i}{n - j + 1}, \quad j = 2, \dots, n
+$$ {#eq-5_4_4}
+
+前述公式成立是因为 $\sum_{i=1}^{j-1} I_i$ 代表了包含在子集中的前 $j - 1$ 个元素的数量，因此在已知 $I_1, \dots, I_{j-1}$ 的条件下，剩下 $k - \sum_{i=1}^{j-1} I_i$ 个元素将从剩下的 $n - (j - 1)$ 个元素中选出。
+
+由于当 $U$ 是均匀 $(0, 1)$ 随机变量时，$P\{U < a\} = a$, $0 \leq a \leq 1$，@eq-5_4_1 和 @eq-5_4_4 引导出了从 $n$ 个元素的集合中生成大小为 $k$ 的随机子集的如下方法：即生成一个（最多包含 $n$ 个）随机数序列 $U_1, U_2, \dots$ 并设：
+
+$$
+I_1 = 
+\begin{cases} 
+1, & \text{如果 } U_1 < \frac{k}{n} \\
+0, & \text{否则}
+\end{cases}
+$$
+
+$$
+I_2 = 
+\begin{cases} 
+1, & \text{如果 } U_2 < \frac{k - I_1}{n - 1} \\
+0, & \text{否则}
+\end{cases}
+$$
+
+$$
+\vdots
+$$
+
+$$
+I_j = 
+\begin{cases} 
+1, & \text{如果 } U_j < \frac{k - I_1 - \dots - I_{j-1}}{n - j + 1} \\
+0, & \text{否则}
+\end{cases}
+$$
+
+当 $\sum_{i=1}^j I_i = k$ 时，该过程停止，随机子集由 $I$ 值为 1 的 $k$ 个元素组成。也就是说，$S = \{i : I_i = 1\}$ 即为该子集。
+
+例如，如果 $k = 2, n = 5$，那么 @fig-5_5 的树状图说明了上述技术。随机子集 $S$ 由树上的最终位置给出。注意，停在任何给定最终位置的概率等于 1/10，这可以通过将穿过该树到达所需终点的概率相乘来看出。例如，停在标记为 $S = \{2, 4\}$ 的点的概率是 $P\{U_1 > .4\} P\{U_2 < .5\} P\{U_3 > 1/3\} P\{U_4 > 1/2\} = (.6)(.5)(2/3)(1/2) = .1$。
+
+正如树状图中所指出的（见导致 $S = \{4, 5\}$ 的最右侧分支），当待选子集的剩余空位数量等于剩余元素数量时，我们可以停止生成随机数。也就是说，一旦 $\sum_{i=1}^j I_i = k$ 或者 $\sum_{i=1}^j I_i = k - (n - j)$，通用程序就会停止。在后一种情况下，$S = \{i \leq j : I_i = 1\} \cup \{j + 1, \dots, n\}$。 $\blacksquare$
+
+```{r}
+#| label: fig-5_5
+#| fig-cap: "Tree diagram for choosing a random subset of size $k=2$ from $n=5$ elements."
+# Using igraph to create a tree diagram
+library(igraph)
+nodes <- c("Root", 
+           "I1=1", "I1=0", 
+           "I2=1", "I2=0 ", "I2=1 ", "I2=0  ",
+           "S={1,2}", "S={1,3}", "S={1,4}", "S={1,5}",
+           "S={2,3}", "S={2,4}", "S={2,5}",
+           "S={3,4}", "S={3,5}", "S={4,5}")
+edges <- c("Root", "I1=1", "Root", "I1=0",
+           "I1=1", "I2=1", "I1=1", "I2=0 ",
+           "I1=0", "I2=1 ", "I1=0", "I2=0  ")
+# This is a simplified tree for visualization
+g <- make_graph(edges)
+plot(g, layout = layout_as_tree(g))
+```
+:::
+
+::: {#exr-5_4_5}
+如果随机向量 $(X, Y)$ 的联合密度函数在区域 $R$ 内为常数，而在 $R$ 之外为 0，则称其在二维区域 $R$ 上服从均匀分布。也就是说，如果：
+
+$$
+f(x, y) = 
+\begin{cases} 
+c, & \text{如果 } (x, y) \in R \\
+0, & \text{否则}
+\end{cases}
+$$
+:::
+
+::: {#sol-5_4_5}
+因为：
+
+$$
+\begin{align}
+1 &= \iint_R f(x, y) dx dy \\
+&= \iint_R c dx dy \\
+&= c \times R \text{ 的面积}
+\end{align}
+$$
+
+由此得出：
+
+$$
+c = \frac{1}{R \text{ 的面积}}
+$$
+
+对于任何区域 $A \subset R$：
+
+$$
+\begin{align}
+P\{(X, Y) \in A\} &= \iint_{A} f(x, y) dx dy \\
+&= \iint_{A} c dx dy \\
+&= \frac{A \text{ 的面积}}{R \text{ 的面积}}
+\end{align}
+$$
+
+现在假设 $(X, Y)$ 在如下矩形区域 $R$ 上均匀分布：
+
+其联合密度函数为：
+
+$$
+f(x, y) = 
+\begin{cases} 
+c, & \text{如果 } 0 \leq x \leq a, 0 \leq y \leq b \\
+0, & \text{否则}
+\end{cases}
+$$
+
+其中 $c = \frac{1}{\text{矩形面积}} = \frac{1}{ab}$。在这种情况下，$X$ 和 $Y$ 是独立的均匀随机变量。为了证明这一点，注意对于 $0 \leq x \leq a, 0 \leq y \leq b$：
+
+$$
+P\{X \leq x, Y \leq y\} = c \int_0^x \int_0^y dy dx = \frac{xy}{ab}
+$$ {#eq-5_4_5}
+
+在上述公式中先令 $y = b$，然后令 $x = a$，可得：
+
+$$
+P\{X \leq x\} = \frac{x}{a}, \quad P\{Y \leq y\} = \frac{y}{b}
+$$ {#eq-5_4_6}
+
+因此，从 @eq-5_4_5 和 @eq-5_4_6 我们可以得出结论，$X$ 和 $Y$ 是独立的，其中 $X$ 在 $(0, a)$ 上服从均匀分布，$Y$ 在 $(0, b)$ 上服从均匀分布。 $\blacksquare$
+:::
