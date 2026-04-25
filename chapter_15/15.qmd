@@ -10,9 +10,8 @@
 
 {{< include 15_5.qmd >}}
 
-{{< include 15_6.qmd >}} 
+{{< include 15_6.qmd >}}
 
 {{< include 15_7.qmd >}}
 
 {{< include 15_8.qmd >}}
-    
