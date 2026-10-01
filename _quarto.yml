@@ -38,7 +38,7 @@ book:
     - chapter_16/16.qmd
     - test.qmd
     - references.qmd
-  appendices: 
+  appendices:
     - appendices.qmd
   site-url: https://wangwei1237.github.io/introduction_to_probability_and_statistics/
   navbar:
@@ -50,7 +50,7 @@ book:
         href: "https://wangwei1237.github.io/"
       - text: "书籍"
         icon: "bookshelf"
-        menu: 
+        menu:
           - text: "动手学深度学习"
             href: "https://zh.d2l.ai/"
           - text: "Learn Prompting"
@@ -66,14 +66,21 @@ csl: acm-sig-proceedings.csl
 
 format:
   html:
-    theme: 
+    theme:
       light: [cosmo, theme.scss]
     code-copy: true
     code-overflow: wrap
     code-fold: true
     cover-image: cover.png
-
-comments:
-  utterances:
-    repo: wangwei1237/introduction_to_probability_and_statistics
-    label: comment
+    include-after-body:
+      text: |
+        <script src="https://cdn.jsdelivr.net/npm/twikoo@2.0.12/dist/twikoo.all.min.js"></script>
+        <div id="twikoo" class="twikoo"></div>
+        <script>
+          const comments = document.getElementById('twikoo');
+          const content = document.querySelector('main.content');
+          if (content) content.appendChild(comments);
+          twikoo.init({
+            envId: 'blog-d3gu9b4oo05897e3f'
+          });
+        </script>
