@@ -1,6 +1,9 @@
 project:
   type: book
   output-dir: public
+  resources:
+    - assets/twikoo-cloudbase-2.0.12.js
+    - assets/twikoo-LICENSE
 
 lang: zh
 
