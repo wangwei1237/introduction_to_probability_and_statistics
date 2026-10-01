@@ -74,7 +74,7 @@ format:
     cover-image: cover.png
     include-after-body:
       text: |
-        <script src="https://cdn.jsdelivr.net/npm/twikoo@2.0.12/dist/twikoo.all.min.js"></script>
+        <script src="/introduction_to_probability_and_statistics/assets/twikoo-cloudbase-2.0.12.js"></script>
         <div id="twikoo" class="twikoo"></div>
         <script>
           const comments = document.getElementById('twikoo');
